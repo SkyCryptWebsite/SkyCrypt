@@ -325,6 +325,8 @@ export async function updateLeaderboardData(
       multi.zadd(`lb_${key}`, values[key], uuid);
     }
 
+    await multi.exec();
+
     console.log(`${options.debugId}: updateLeaderboardData returned. (${Date.now() - timeStarted}ms)`);
   } catch (e) {
     const req = { params: { player: uuid } };

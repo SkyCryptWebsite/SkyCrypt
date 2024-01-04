@@ -61,10 +61,10 @@ export class SkillComponent extends LitElement {
         ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
       </div>
       <div class="skill-bar" data-skill="${skillName}">
-        <div class="skill-progress-bar" style="--progress: ${level.level == level.levelCap ? 1 : level.progress}"></div>
+        <div class="skill-progress-bar" style="--progress: ${this.getProgress(level)}"></div>
         ${this.isAPIEnabled()
           ? html`<div class="skill-progress-text">
-              ${this.hovering ? this.getHoverText(level, this.type) : this.getMainText(level, this.type)}
+              ${this.hovering ? this.getHoverText(level) : this.getMainText(level)}
             </div>`
           : undefined}
       </div>
@@ -101,36 +101,16 @@ export class SkillComponent extends LitElement {
   /**
    * @returns the text to be displayed when the user is not hovering
    */
-  private getMainText(level: Level, type: string): string {
+  private getMainText(level: Level): string {
     let mainText = formatNumber(level.xpCurrent, true);
-
-    if (type === "skyblock_level") {
-      level.progress =
-        level.level === level.maxLevel && level.maxExperience
-          ? level.xpCurrent / level.maxExperience
-          : level.xpCurrent / level.xpForNext;
-
-      const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`);
-      if (skillBar) {
-        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty(
-          "--progress",
-          level.progress.toString()
-        );
-      }
+    if (
+      level.xpForNext &&
+      level.xpForNext != Infinity &&
+      (level.level == level.levelCap && level.xpCurrent === level.maxExperience) === false
+    ) {
+      mainText += ` / ${formatNumber(level.xpForNext, true)}`;
     }
-
-    if (level.xpForNext && level.xpForNext !== Infinity) {
-      if (level.level === level.maxLevel && level.xpCurrent === level.maxExperience) {
-        return mainText;
-      }
-
-      if (level.level === level.maxLevel && level.maxExperience) {
-        mainText += ` / ${level.maxExperience.toLocaleString()} XP`;
-        return mainText;
-      }
-
-      mainText += ` / ${formatNumber(level.xpForNext, true)} XP`;
-    }
+    mainText += " XP";
 
     return mainText;
   }
@@ -138,26 +118,23 @@ export class SkillComponent extends LitElement {
   /**
    * @returns the text to be displayed when the user is hovering
    */
-  private getHoverText(level: Level, type: string): string {
+  private getHoverText(level: Level): string {
     let hoverText = level.xpCurrent.toLocaleString();
-    if (type === "skyblock_level") {
-      hoverText = `${level.level} / ${level.maxLevel} Level`;
-      level.progress = level.xpCurrent / level.xpForNext;
-
-      const skillBar = document.querySelector(`.skill-bar[data-skill="Skyblock Level"]`) as HTMLElement;
-      if (skillBar) {
-        (skillBar.querySelector(".skill-progress-bar") as HTMLElement).style.setProperty(
-          "--progress",
-          level.progress.toString()
-        );
-      }
-    } else if (level.xpForNext && level.xpForNext != Infinity) {
-      hoverText += ` / ${level.xpForNext.toLocaleString()} XP`;
+    if (
+      level.xpForNext &&
+      level.xpForNext != Infinity &&
+      (level.level == level.levelCap && level.xpCurrent === level.maxExperience) === false
+    ) {
+      hoverText += ` / ${level.xpForNext.toLocaleString()}`;
     }
+    hoverText += " XP";
 
     return hoverText;
   }
 
+  /**
+   * @returns whether the API is enabled for the current skill
+   */
   private isAPIEnabled(): boolean {
     if (this.type === "skill" && "runecrafting" in calculated.skills.skills === false) {
       return false;
@@ -176,6 +153,17 @@ export class SkillComponent extends LitElement {
     }
 
     return true;
+  }
+
+  /*
+   * @returns the progress of the skill as a number between 0 and 1
+   */
+  private getProgress(level: Level): number {
+    if (this.type === "skyblock_level" && level.level == level.levelCap && level.maxExperience) {
+      return level.xpCurrent / level.maxExperience;
+    }
+
+    return level.level == level.levelCap ? 1 : level.progress;
   }
 
   // disable shadow root
