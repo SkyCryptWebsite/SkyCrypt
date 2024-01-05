@@ -352,6 +352,10 @@ export async function getProfile(
   const profiles = [];
 
   for (const profile of skyBlockProfiles) {
+    if (profile.members === undefined) {
+      continue;
+    }
+
     let memberCount = 0;
 
     for (let i = 0; i < Object.keys(profile.members).length; i++) {
