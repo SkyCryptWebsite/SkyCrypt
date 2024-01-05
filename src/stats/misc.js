@@ -233,8 +233,8 @@ export function getMisc(profile, userProfile, hypixelProfile) {
     userProfile.player_stats.deaths?.corrupted_protector !== undefined
   ) {
     misc.endstone_protector = {
-      kills: userProfile.player_stats.kills.corrupted_protector ?? 0,
-      deaths: userProfile.player_stats.deaths.corrupted_protector ?? 0,
+      kills: userProfile.player_stats.kills?.corrupted_protector ?? 0,
+      deaths: userProfile.player_stats.deaths?.corrupted_protector ?? 0,
     };
   }
 
