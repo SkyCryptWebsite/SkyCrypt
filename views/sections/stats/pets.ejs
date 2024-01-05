@@ -125,14 +125,16 @@
       <% } %>
 
       <!-- Missing Pets -->
-      <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
-      <div class="pieces extendable" id="missing-pets">
-        <% for (const [index, pet] of calculated.pets.missing.entries()) { %>
-          <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
-            <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
-          </div>
-        <% } %>
-      </div>
+      <% if (calculated.pets.missing.length > 0) { %>
+        <button class="stat-sub-header extender" aria-controls="missing-pets" aria-expanded="false">Missing Pets</button>
+        <div class="pieces extendable" id="missing-pets">
+          <% for (const [index, pet] of calculated.pets.missing.entries()) { %>
+            <div tabindex="0" data-missing-pet-index="<%= index %>" class="rich-item piece piece-<%= pet.rarity %>-bg missing-pet">
+              <div style='background-image: url("<%= pet.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
     </p>
 </div>
 <% } %>
