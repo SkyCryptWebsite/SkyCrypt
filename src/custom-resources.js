@@ -592,6 +592,13 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
     }
 
     for (const texture of pack.textures) {
+      if (
+        texture.weight < outputTexture.weight ||
+        (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
+      ) {
+        continue;
+      }
+
       if (!ignore_id && texture.id != item.id) {
         continue;
       }
@@ -633,13 +640,6 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
       debugStats.processed_textures++;
 
       if (matches == texture.match.length) {
-        if (
-          texture.weight < outputTexture.weight ||
-          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
-        ) {
-          continue;
-        }
-
         outputTexture = Object.assign(
           { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
           texture
