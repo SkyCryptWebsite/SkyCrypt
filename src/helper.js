@@ -39,6 +39,7 @@ import {
 } from "./constants.js";
 
 import credentials from "./credentials.js";
+import { SkyCryptError } from "./constants/error.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hypixel = axios.create({
@@ -244,7 +245,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
         if (isUuid) {
           return { uuid, display_name: uuid, skin_data: skinData };
         } else {
-          throw new Error(e?.response?.data?.reason ?? "Failed resolving username.");
+          throw new SkyCryptError(e?.response?.data?.reason ?? "Failed resolving username.");
         }
       }
     }
