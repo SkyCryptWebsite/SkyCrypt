@@ -522,24 +522,24 @@ export function getCompletePacks() {
 
 const textureMap = new Map();
 const allTextures = new Map();
-setTimeout(async () => {
-  if (resourcePacks.length > 0) {
-    if (!resourcesReady) {
-      await readyPromise;
-    }
+const timeoutId = setTimeout(async () => {
+  if (!resourcesReady) {
+    await readyPromise;
+  }
 
-    for (const pack of resourcePacks) {
-      for (const texture of pack.textures) {
-        if ("skyblock_id" in texture === false) {
-          continue;
-        }
-
-        textureMap.set(`${pack.config.id}:${texture.skyblock_id}`, texture);
-        allTextures.set(texture.skyblock_id, true);
+  for (const pack of resourcePacks) {
+    for (const texture of pack.textures) {
+      if ("skyblock_id" in texture === false) {
+        continue;
       }
+
+      textureMap.set(`${pack.config.id}:${texture.skyblock_id}`, texture);
+      allTextures.set(texture.skyblock_id, true);
     }
   }
-}, 1000);
+
+  clearTimeout(timeoutId);
+}, 100);
 
 /**
  * Processes all textures that could potentially be connected to an item, then throws the one with biggest priority
