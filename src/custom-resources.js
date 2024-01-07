@@ -533,17 +533,19 @@ const timeoutId = setTimeout(async () => {
   for (const pack of resourcePacks) {
     for (const texture of pack.textures) {
       if ("skyblock_id" in texture === false) {
-        if (texture.data) {
-          const damage = texture.damage ?? 0;
-          const itemId = texture.id;
-
-          if (textureIdDamageMap.has(`${pack.config.id}:${itemId}:${damage}`) === false) {
-            textureIdDamageMap.set(`${pack.config.id}:${itemId}:${damage}`, []);
-          }
-
-          textureIdDamageMap.get(`${pack.config.id}:${itemId}:${damage}`).push(texture);
-          allTexturesIdDamage.set(`${itemId}:${damage}`, true);
+        if (pack.config.id === "RNBW_PLUS" && texture.file.startsWith("heart_")) {
+          // console.log(texture);
         }
+
+        const damage = texture.damage ?? 0;
+        const itemId = texture.id;
+
+        if (textureIdDamageMap.has(`${pack.config.id}:${itemId}:${damage}`) === false) {
+          textureIdDamageMap.set(`${pack.config.id}:${itemId}:${damage}`, []);
+        }
+
+        textureIdDamageMap.get(`${pack.config.id}:${itemId}:${damage}`).push(texture);
+        allTexturesIdDamage.set(`${itemId}:${damage}`, true);
 
         continue;
       }
@@ -565,10 +567,11 @@ const timeoutId = setTimeout(async () => {
  * @param {boolean} [options.debug]
  * @returns {object} Item's texture
  */
-export async function getTexture(item, { ignore_id = false, pack_ids = [], debug = false } = {}) {
+export function getTexture(item, { ignore_id = false, pack_ids = [], debug = false, hotm = false } = {}) {
   if (
-    (allTextures.has(getId(item)) === false && allTexturesIdDamage.has(`${item.id}:${item.Damage ?? 0}`) === false) ||
-    getId(item) === ""
+    ((allTextures.has(getId(item)) === false && allTexturesIdDamage.has(`${item.id}:${item.Damage ?? 0}`) === false) ||
+      getId(item) === "") &&
+    hotm === false
   ) {
     return null;
   }

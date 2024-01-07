@@ -112,10 +112,11 @@ export function getHotmItems(userProfile, packs) {
   }
 
   // Processing textures
-  output.forEach(async (item) => {
-    const customTexture = await getTexture(item, {
+  output.forEach((item) => {
+    const customTexture = getTexture(item, {
       ignore_id: false,
       pack_ids: packs,
+      hotm: true,
     });
 
     if (customTexture) {
