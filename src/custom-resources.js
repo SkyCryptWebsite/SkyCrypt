@@ -336,13 +336,8 @@ async function loadResourcePacks() {
           const item = mcData.itemsByName[properties[property].trim().replace("minecraft:", "")];
 
           if (item) {
-            texture.data = {
-              minecraftId: properties[property],
-              cleanMinecraftId: item.name,
-              id: `${item.id}:${item.damage ?? 0}`,
-            };
-
             texture.id = item.id;
+            texture.damage = item.damage ?? 0;
           }
         }
 
@@ -528,7 +523,8 @@ export function getCompletePacks() {
 
 const textureMap = new Map();
 const allTextures = new Map();
-const textureItemIdDamage = new Map();
+const textureIdDamageMap = new Map();
+const allTexturesIdDamage = new Map();
 const timeoutId = setTimeout(async () => {
   if (!resourcesReady) {
     await readyPromise;
@@ -538,11 +534,15 @@ const timeoutId = setTimeout(async () => {
     for (const texture of pack.textures) {
       if ("skyblock_id" in texture === false) {
         if (texture.data) {
-          if (textureItemIdDamage.has(`${pack.config.id}:${texture.data.id}`) === false) {
-            textureItemIdDamage.set(`${pack.config.id}:${texture.data.id}`, []);
+          const damage = texture.damage ?? 0;
+          const itemId = texture.id;
+
+          if (textureIdDamageMap.has(`${pack.config.id}:${itemId}:${damage}`) === false) {
+            textureIdDamageMap.set(`${pack.config.id}:${itemId}:${damage}`, []);
           }
 
-          textureItemIdDamage.get(`${pack.config.id}:${texture.data.id}`).push(texture);
+          textureIdDamageMap.get(`${pack.config.id}:${itemId}:${damage}`).push(texture);
+          allTexturesIdDamage.set(`${itemId}:${damage}`, true);
         }
 
         continue;
@@ -566,7 +566,10 @@ const timeoutId = setTimeout(async () => {
  * @returns {object} Item's texture
  */
 export async function getTexture(item, { ignore_id = false, pack_ids = [], debug = false } = {}) {
-  if (allTextures.has(getId(item)) === false || getId(item) === "") {
+  if (
+    (allTextures.has(getId(item)) === false && allTexturesIdDamage.has(`${item.id}:${item.Damage ?? 0}`) === false) ||
+    getId(item) === ""
+  ) {
     return null;
   }
 
@@ -606,9 +609,16 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
       break;
     }
 
-    const cachedTextureItemIdDamage = textureItemIdDamage.get(`${pack.config.id}:${item.id}:${item.Damage ?? 0}`);
-    if (cachedTextureItemIdDamage) {
-      for (const texture of cachedTextureItemIdDamage) {
+    const cachedtextureIdDamageMap = textureIdDamageMap.get(`${pack.config.id}:${item.id}:${item.Damage ?? 0}`);
+    if (cachedtextureIdDamageMap) {
+      for (const texture of cachedtextureIdDamageMap) {
+        if (
+          texture.weight < outputTexture.weight ||
+          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
+        ) {
+          continue;
+        }
+
         if (!ignore_id && texture.id != item.id) {
           continue;
         }
@@ -618,13 +628,6 @@ export async function getTexture(item, { ignore_id = false, pack_ids = [], debug
         }
 
         if (!ignore_id && texture.match === undefined && !("skyblock_id" in texture)) {
-          continue;
-        }
-
-        if (
-          texture.weight < outputTexture.weight ||
-          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
-        ) {
           continue;
         }
 
