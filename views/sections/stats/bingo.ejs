@@ -4,23 +4,23 @@
   <div class="stat-content">
     <p class="stat-raw-values">  
       <!-- Bingo Profiles -->
-      <% if (calculated.bingo.total_profiles !== undefined) { %>
+      <% if (calculated.bingo.profiles !== undefined) { %>
         <span class="stat-name">Bingo Profiles:</span>
-        <span class="stat-value"><%= calculated.bingo.total_profiles.toLocaleString() %></span>
+        <span class="stat-value"><%= calculated.bingo.profiles.toLocaleString() %></span>
         <br>
       <% } %>
 
       <!-- Completed Goals -->
-      <% if (calculated.bingo.total_completed_goals !== undefined) { %>
+      <% if (calculated.bingo.completed_goals !== undefined) { %>
         <span class="stat-name">Completed Goals:</span>
-        <span class="stat-value"><%= calculated.bingo.total_completed_goals.toLocaleString() %></span>
+        <span class="stat-value"><%= calculated.bingo.completed_goals.toLocaleString() %></span>
         <br>
       <% } %>
 
       <!-- Total Bingo Points -->
-      <% if (calculated.bingo.total_points !== undefined) { %>
+      <% if (calculated.bingo.points !== undefined) { %>
         <span class="stat-name">Total Points:</span>
-        <span class="stat-value" data-tippy-content="<span class='stat-value'>Total points earned, not current balance.</span><br>"><%= calculated.bingo.total_points.toLocaleString() %></span>
+        <span class="stat-value" data-tippy-content="<span class='stat-value'>Total points earned, not current balance.</span><br>"><%= calculated.bingo.points.toLocaleString() %></span>
         <br>
       <% } %>
     </p>
