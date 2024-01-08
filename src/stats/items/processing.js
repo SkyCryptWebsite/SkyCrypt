@@ -175,7 +175,7 @@ export async function processItems(base64, source, customTextures = false, packs
     if (item.tag?.ExtraAttributes?.timestamp != undefined) {
       const timestamp = item.tag.ExtraAttributes.timestamp;
 
-      if (!isNaN(timestamp)) {
+      if (!isNaN(Number(timestamp))) {
         item.extra.timestamp = timestamp;
       } else {
         item.extra.timestamp = Date.parse(timestamp + " EDT");
