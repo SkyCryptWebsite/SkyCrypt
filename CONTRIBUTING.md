@@ -56,7 +56,7 @@ If you're not sure what code editor to use VS-Code is a great option. Here are s
 | JavaScript › Validate: Enable | unchecked                 |
 | Files: Eol                    | \n                        |
 
-you can also apply all these settings by creating a file called `settings.json` inside `.vscode` and copying the following into it:
+You can also apply all these settings by creating a file called `settings.json` inside `.vscode` and copying the following into it:
 
 ```json
 {
