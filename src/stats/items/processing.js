@@ -280,7 +280,7 @@ export async function processItems(base64, source, customTextures = false, packs
     }
 
     if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
-      const customTexture = await getTexture(item, {
+      const customTexture = getTexture(item, {
         ignore_id: false,
         pack_ids: packs,
       });

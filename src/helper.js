@@ -1098,7 +1098,7 @@ export function addToItemLore(item, lore) {
  * @returns {Promise<Item>} A Promise that resolves with the modified item.
  */
 export async function applyResourcePack(item, packs) {
-  const customTexture = await getTexture(item, {
+  const customTexture = getTexture(item, {
     ignore_id: false,
     pack_ids: packs,
   });
