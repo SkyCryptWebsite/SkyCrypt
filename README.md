@@ -50,5 +50,5 @@ You can now run `pnpm start` to start it. You will be able to access the site on
   - [Vanilla+](https://hypixel.net/threads/2147652) by TBlazeWarriorT
   - [Worlds and Beyond](https://hypixel.net/threads/3597207) by Skeletony\_
   - [Default Minecraft Textures](https://www.minecraft.net/) by Mojang
-- **Player Heads**: [SkyBlock](https://hypixel.net/forums/skyblock.157/) by Hypixel.
+- **Player Heads**: [SkyBlock](https://hypixel.net/forums/skyblock.157/) by Hypixel
 - **Original Site**: [sky.lea.moe](https://sky.lea.moe/) by LeaPhant
