@@ -60,7 +60,12 @@ export async function getStats(
   allProfiles,
   items,
   packs,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getStats`, updateLeaderboards: true }
+  options = {
+    cacheOnly: false,
+    debugId: `${helper.getClusterId()}/unknown@getStats`,
+    updateLeaderboards: false,
+    updateGuild: false,
+  }
 ) {
   const output = {};
 
@@ -124,7 +129,9 @@ export async function getStats(
   }
 
   // fetches the guild and stores it in the database, on the front end it will be fetched from the database if the button is clicked
-  getGuild(db, profile.uuid, options);
+  if (options.updateGuild === true) {
+    getGuild(db, profile.uuid, options);
+  }
 
   output.rank_prefix = helper.renderRank(hypixelProfile);
   output.uuid = profile.uuid;
@@ -546,6 +553,7 @@ export async function getBingoProfile(
       );
     } catch (e) {
       if (e?.response?.data?.cause === "No bingo data could be found") {
+        console.debug(`${options.debugId}: getBingoProfile returned. (${Date.now() - timeStarted}ms)`);
         return null;
       }
 
