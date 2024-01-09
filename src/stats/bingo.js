@@ -146,7 +146,7 @@ export function getBingoData(bingoProfile) {
   }
 
   return {
-    total: bingoProfile.events.length,
+    profiles: bingoProfile.events.length,
     points: bingoProfile.events.reduce((a, b) => a + b.points, 0),
     completed_goals: bingoProfile.events.reduce((a, b) => a + b.completed_goals.length, 0),
   };

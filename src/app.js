@@ -285,6 +285,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       cacheOnly,
       debugId,
       updateLeaderboards: true,
+      updateGuild: true,
     });
 
     if (isFoolsDay) {

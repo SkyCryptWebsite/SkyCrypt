@@ -3,7 +3,6 @@ import * as lib from "../../lib.js";
 import express from "express";
 
 import { db } from "../../mongo.js";
-import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -14,32 +13,19 @@ router.use((req, res, next) => {
 
 router.get("/:player/:profile", async (req, res, next) => {
   try {
-    const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
-
-    let output = {
-      error: "Invalid Profile Name!",
-    };
-
-    for (const singleProfile of allProfiles) {
-      const cuteName = singleProfile.cute_name;
-
-      if (cuteName.toLowerCase() != req.params.profile.toLowerCase()) {
-        continue;
-      }
-
-      const items = await getItems(singleProfile.members[profile.uuid], false, "", req.options);
-      const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
-
-      output = {
-        profile_id: singleProfile.profile_id,
-        cute_name: cuteName,
-        purse: data.purse,
-        bank: data.bank,
-      };
+    const { profile } = await lib.getProfile(db, req.params.player, req.params.profile, req.options);
+    if (profile.cute_name.toLowerCase() !== req.params.profile.toLowerCase()) {
+      throw new Error("Profile not found");
     }
 
     helper.sendMetric("endpoint_apiv2_coins_profile_success");
-    res.json(output);
+
+    res.json({
+      profile_id: profile.profile_id,
+      cute_name: profile.cute_name,
+      purse: profile.members[profile.uuid]?.currencies?.coin_purse ?? 0,
+      bank: profile.banking?.balance ?? 0,
+    });
   } catch (e) {
     next(e);
   }
@@ -47,22 +33,15 @@ router.get("/:player/:profile", async (req, res, next) => {
 
 router.get("/:player", async (req, res, next) => {
   try {
-    const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
-    const bingoProfile = await lib.getBingoProfile(db, req.params.player, req.options);
+    const { allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
     const output = { profiles: {} };
-
-    for (const singleProfile of allProfiles) {
-      const cuteName = singleProfile.cute_name;
-
-      const items = await getItems(singleProfile.members[profile.uuid], bingoProfile, false, "", req.options);
-      const data = await lib.getStats(db, singleProfile, bingoProfile, allProfiles, items, req.options);
-
-      output.profiles[singleProfile.profile_id] = {
-        profile_id: singleProfile.profile_id,
-        cute_name: cuteName,
-        purse: data.purse,
-        bank: data.bank,
+    for (const profile of allProfiles) {
+      output.profiles[profile.profile_id] = {
+        profile_id: profile.profile_id,
+        cute_name: profile.cute_name,
+        purse: profile.members[profile.uuid]?.currencies?.coin_purse ?? 0,
+        bank: profile.banking?.balance ?? 0,
       };
     }
 
