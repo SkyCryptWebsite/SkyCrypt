@@ -522,8 +522,8 @@ export function getCompletePacks() {
 }
 
 const textureMap = new Map();
-const allTextures = new Map();
 const textureIdDamageMap = new Map();
+const allTextures = new Map();
 const allTexturesIdDamage = new Map();
 const timeoutId = setTimeout(async () => {
   if (!resourcesReady) {
@@ -532,27 +532,40 @@ const timeoutId = setTimeout(async () => {
 
   for (const pack of resourcePacks) {
     for (const texture of pack.textures) {
-      if ("skyblock_id" in texture === false) {
-        if (pack.config.id === "RNBW_PLUS" && texture.file.startsWith("heart_")) {
-          // console.log(texture);
-        }
+      if (texture.skyblock_id !== undefined) {
+        const key = `${pack.config.id}:${texture.skyblock_id}`;
+        const data = textureMap.get(key) ?? [];
 
-        const damage = texture.damage ?? 0;
-        const itemId = texture.id;
-
-        if (textureIdDamageMap.has(`${pack.config.id}:${itemId}:${damage}`) === false) {
-          textureIdDamageMap.set(`${pack.config.id}:${itemId}:${damage}`, []);
-        }
-
-        textureIdDamageMap.get(`${pack.config.id}:${itemId}:${damage}`).push(texture);
-        allTexturesIdDamage.set(`${itemId}:${damage}`, true);
-
+        textureMap.set(key, [...data, texture]);
+        allTextures.set(texture.skyblock_id, true);
         continue;
       }
 
-      textureMap.set(`${pack.config.id}:${texture.skyblock_id}`, texture);
-      allTextures.set(texture.skyblock_id, true);
+      const itemId = texture.id;
+      const damage = texture.damage ?? 0;
+      if (itemId !== undefined && itemId !== 397) {
+        const key = `${pack.config.id}:${itemId}:${damage}`;
+        const data = textureIdDamageMap.get(key) ?? [];
+
+        textureIdDamageMap.set(key, [...data, texture]);
+
+        allTexturesIdDamage.set(`${itemId}:${damage}`, true);
+      }
     }
+  }
+
+  for (const [key, value] of textureMap) {
+    textureMap.set(
+      key,
+      value.sort((a, b) => b.weight - a.weight)
+    );
+  }
+
+  for (const [key, value] of textureIdDamageMap) {
+    textureIdDamageMap.set(
+      key,
+      value.sort((a, b) => b.weight - a.weight)
+    );
   }
 
   clearTimeout(timeoutId);
@@ -600,20 +613,55 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
 
   for (const pack of tempPacks) {
     const cachedTexture = textureMap.get(`${pack.config.id}:${getId(item)}`);
-    if (cachedTexture && cachedTexture.weight > outputTexture.weight) {
-      outputTexture = Object.assign(
-        {
-          pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config, skyblock_id: item.id },
-        },
-        cachedTexture
-      );
+    if (cachedTexture) {
+      for (const texture of cachedTexture) {
+        if (
+          texture.weight < outputTexture.weight ||
+          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
+        ) {
+          continue;
+        }
+
+        let matches = 0;
+        let matchValues = [];
+        for (const match of texture.match) {
+          let { value, regex } = match;
+
+          if (value.endsWith(".*")) {
+            value = value.slice(0, -2);
+          }
+
+          if (hasPath(item, "tag", ...value.split(".")) == false) {
+            continue;
+          }
+
+          matchValues = getPath(item, "tag", ...value.split("."));
+          matchValues = Array.isArray(matchValues) ? matchValues : [matchValues];
+
+          const slash = regex.lastIndexOf("/");
+          regex = new RegExp(regex.slice(1, slash), regex.slice(slash + 1));
+
+          if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
+            matches++;
+          }
+        }
+
+        debugStats.found_matches += matches;
+        debugStats.processed_textures++;
+
+        if (matches == texture.match.length) {
+          outputTexture = Object.assign(
+            { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
+            texture
+          );
+        }
+      }
 
       debugStats.found_matches++;
-      break;
     }
 
     const cachedtextureIdDamageMap = textureIdDamageMap.get(`${pack.config.id}:${item.id}:${item.Damage ?? 0}`);
-    if (cachedtextureIdDamageMap) {
+    if (cachedtextureIdDamageMap && cachedTexture === undefined) {
       for (const texture of cachedtextureIdDamageMap) {
         if (
           texture.weight < outputTexture.weight ||
