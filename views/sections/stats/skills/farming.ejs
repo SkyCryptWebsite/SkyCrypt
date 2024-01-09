@@ -100,21 +100,21 @@ function itemIcon(item, classes) { %>
   <% } %>
 
   <!-- Farming Tools -->
-  <% if (items.farming_tools.length > 0) { %>
+  <% if (items.farming_tools.tools.length > 0) { %>
     <p class="stat-sub-header">Farming Tools</p>
-    <% if (items.highest_rarity_farming_tool) { %>
+    <% if (items.farming_tools.highest_priority_tool) { %>
       <p class="stat-raw-values">
         <span class="stat-name">Active Tool: </span>
-        <span class="stat-active-hoe stat-value"><%- helper.renderLore(items.highest_rarity_farming_tool.tag.display.Name) %></span>
+        <span class="stat-active-hoe stat-value"><%- helper.renderLore(items.farming_tools.highest_priority_tool.tag.display.Name) %></span>
       </p>
-    <% } else{ %>
+    <% } else { %>
       <p class="stat-raw-values">
         <span class="stat-name">Active Tool: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
       </p>
     <% } %>
-
-    <div class="pieces">
-      <% for (const item of items.farming_tools.filter(a => !a.hidden)) { %>
+ 
+    <div class="pieces"> 
+      <% for (const item of items.farming_tools.tools) { %>
         <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
           <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
             <div class="piece-shine"></div>
