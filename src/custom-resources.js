@@ -522,8 +522,8 @@ export function getCompletePacks() {
 }
 
 const textureMap = new Map();
-const textureIdDamageMap = new Map();
 const allTextures = new Map();
+const textureIdDamageMap = new Map();
 const allTexturesIdDamage = new Map();
 const timeoutId = setTimeout(async () => {
   if (!resourcesReady) {
