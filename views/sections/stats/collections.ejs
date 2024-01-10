@@ -36,7 +36,7 @@
             }
           } %>
 
-          <div class="chip" data-tippy-content='<%= amountsTooltip %>' data-missing="<%= collection.totalAmount === 0 %>">
+          <div class="chip" data-tippy-content='<%= amountsTooltip %>' data-missing="<%= collection.rewards !== undefined ? collection.amount === 0 : collection.totalAmount === 0 %>">
             <div class="chip-icon-wrapper">
               <div style="background-image:url(<%= collection.texture %>)" class="item-icon custom-icon"></div>
             </div>
