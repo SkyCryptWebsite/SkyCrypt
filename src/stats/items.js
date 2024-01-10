@@ -94,7 +94,7 @@ export async function getItems(
       if (profile.inventory.backpack_contents[slot] && profile.inventory.backpack_icons[slot]) {
         const iconPromise = processItems(
           profile.inventory.backpack_icons[slot].data,
-          "storage",
+          "storage_icons",
           customTextures,
           packs,
           options.cacheOnly
