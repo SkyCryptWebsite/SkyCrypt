@@ -126,14 +126,14 @@ function itemIcon(item, classes) { %>
     </p>
   <% } %>
 
-  <% if (items.fishing_tools.length > 0) { %>
+  <% if (items.fishing_tools.tools.length > 0) { %>
     <p class="stat-sub-header">Fishing Rods</p>
-    <% if (items.highest_rarity_fishing_tool) { %>
+    <% if (items.fishing_tools.highest_priority_tool) { %>
       <p class="stat-raw-values">
         <span class="stat-name">Active Rod: </span>
-        <span class="stat-active-rod stat-value"><%- helper.renderLore(items.highest_rarity_fishing_tool.tag.display.Name) %></span>
+        <span class="stat-active-rod stat-value"><%- helper.renderLore(items.fishing_tools.highest_priority_tool.tag.display.Name) %></span>
       </p>
-    <% } else if (items.fishing_tools.length > 0) { %>
+    <% } else if (items.fishing_tools.tools.length > 0) { %>
       <p class="stat-raw-values">
         <span class="stat-name">Active Rod: </span>
         <span class="stat-active-rod stat-value piece-common-fg">None</span>
@@ -141,7 +141,7 @@ function itemIcon(item, classes) { %>
     <% } %>
 
     <div class="pieces">
-      <% for (const item of items.fishing_tools.filter(a => !a.hidden)) { %>
+      <% for (const item of items.fishing_tools.tools) { %>
         <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
           <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
             <div class="piece-shine"></div>
