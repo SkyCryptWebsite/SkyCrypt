@@ -27,12 +27,12 @@ You are free to report bugs or contribute to this project. Just open <a href="..
 - <a href="https://redis.io/">Redis</a>
 - <a href="https://api.hypixel.net/">Hypixel API Key</a>
 - <a href="https://www.nginx.com/">Nginx</a> (Optional for full/production deployment. Helps with web requests and load balancing.)
-- <a href="https://letsencrypt.org/">LetsEncrypt</a> (Optional for full/production deployment. Provision free HTTPS certifications.)
+- <a href="https://letsencrypt.org/">LetsEncrypt</a> (Optional for full/production deployment. Provision-free HTTPS certifications.)
 
 <h3>Installation</h3>
 A more explanatory guide can be found in <a href="/CONTRIBUTING.md">CONTRIBUTING.md</a>
 
-Clone the project and and run `pnpm i` to install the dependencies.
+Clone the project and run `pnpm i` to install the dependencies.
 
 Now open `credentials.json` and enter a valid Hypixel API Key. You can obtain one by going to `developer.hypixel.net/dashboard` and clicking `Create API Key`.
 
@@ -50,5 +50,5 @@ You can now run `pnpm start` to start it. You will be able to access the site on
   - [Vanilla+](https://hypixel.net/threads/2147652) by TBlazeWarriorT
   - [Worlds and Beyond](https://hypixel.net/threads/3597207) by Skeletony\_
   - [Default Minecraft Textures](https://www.minecraft.net/) by Mojang
-- **Player Heads**: [SkyBlock](https://hypixel.net/forums/skyblock.157/) by Hypixel.
+- **Player Heads**: [SkyBlock](https://hypixel.net/forums/skyblock.157/) by Hypixel
 - **Original Site**: [sky.lea.moe](https://sky.lea.moe/) by LeaPhant
