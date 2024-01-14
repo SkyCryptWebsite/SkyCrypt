@@ -73,9 +73,8 @@ function getMiscUncategorized(userProfile) {
   }
 
   if ("favorite_arrow" in userProfile.item_data) {
-    const favoriteArrow = userProfile.item_data.favorite_arrow.split('_').join(' ')
+    const favoriteArrow = userProfile.item_data.favorite_arrow.split("_").join(" ");
 
-    
     output.favorite_arrow = {
       raw: favoriteArrow,
       formatted: `${helper.titleCase(favoriteArrow)}`,
