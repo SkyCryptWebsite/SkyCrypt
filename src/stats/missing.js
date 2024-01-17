@@ -141,28 +141,40 @@ export async function getMissingAccessories(calculated, items, packs) {
   }
 
   const accessories = items.accessories.accessories;
+  const activeAccessories = accessories.filter((a) => a.isInactive === false);
 
   output.unique = accessories.filter((a) => a.isUnique === true).length;
   output.total = constants.UNIQUE_ACCESSORIES_COUNT;
 
-  output.recombobulated = accessories.filter((a) => a?.extra?.recombobulated === true).length;
+  output.recombobulated = activeAccessories.filter((a) => a?.extra?.recombobulated === true).length;
   output.total_recombobulated = constants.RECOMBABLE_ACCESSORIES_COUNT;
 
-  const activeAccessories = accessories.filter((a) => a.isUnique === true && a.isInactive === false);
+  const hegemonyArtifact = accessoryIds.find((a) => a.id === "HEGEMONY_ARTIFACT");
+  const abiphoneContacts = calculated.crimson_isle?.abiphone?.active;
+  const riftPrism = accessoryIds.find((a) => a.id === "RIFT_PRISM");
+  if (riftPrism) {
+    output.unique += 1;
+  }
 
   output.magical_power = {
     accessories: activeAccessories.reduce((a, b) => a + helper.getMagicalPower(b.rarity, helper.getId(b)), 0),
-    abiphone: calculated.crimson_isle?.abiphone?.active ? Math.floor(calculated.crimson_isle.abiphone.active / 2) : 0,
-    rift_prism: accessoryIds.find((a) => a.id === "RIFT_PRISM") ? 11 : 0,
+    abiphone: abiphoneContacts ? Math.floor(abiphoneContacts / 2) : 0,
+    rift_prism: riftPrism ? 11 : 0,
+    hegemony: hegemonyArtifact ? helper.getMagicalPower(hegemonyArtifact.rarity, hegemonyArtifact.id) : 0,
   };
 
-  output.magical_power.total = Object.values(output.magical_power).reduce((a, b) => a + b, 0);
+  output.magical_power.total = Object.keys(output.magical_power)
+    .filter((a) => a !== "hegemony")
+    .reduce((a, b) => a + output.magical_power[b], 0);
 
   output.magical_power.rarities = {};
   for (const rarity in constants.MAGICAL_POWER) {
-    output.magical_power.rarities[rarity] = activeAccessories
-      .filter((a) => a.rarity === rarity)
-      .reduce((a, b) => a + helper.getMagicalPower(rarity, helper.getId(b)), 0);
+    const accessories = activeAccessories.filter((a) => a.rarity === rarity);
+
+    output.magical_power.rarities[rarity] = {
+      amount: accessories.length,
+      magical_power: accessories.reduce((a, b) => a + helper.getMagicalPower(rarity, helper.getId(b)), 0),
+    };
   }
 
   return output;

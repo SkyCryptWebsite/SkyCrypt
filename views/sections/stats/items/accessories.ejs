@@ -98,14 +98,14 @@ function itemIcon(item, classes) { %>
         <span data-tippy-content="
           Accessories Breakdown<br>
           <span style='color: var(--§8);' class='grey-text'>From your accessory bag</span><br><br>
-          <span style='color: var(--§6);' class='grey-text'>22 MP</span> × <span style='color: var(--§d);' class='grey-text'><%= rarities.mythic / 22 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.mythic.toLocaleString() %> MP</span><br>
-          <span style='color: var(--§6);' class='grey-text'>16 MP</span> × <span style='color: var(--§6);' class='grey-text'><%= rarities.legendary / 16 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.legendary.toLocaleString() %> MP</span><br>
-          <span style='color: var(--§6);' class='grey-text'>12 MP</span> × <span style='color: var(--§5);' class='grey-text'><%= rarities.epic / 12 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.epic.toLocaleString() %> MP</span><br>
-          <span style='color: var(--§6);' class='grey-text'>8 MP</span> × <span style='color: var(--§1);' class='grey-text'><%= rarities.rare / 8 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.rare.toLocaleString() %> MP</span><br>
-          <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§a);' class='grey-text'><%= rarities.uncommon / 5 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.uncommon.toLocaleString() %> MP</span><br>
-          <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§f);' class='grey-text'><%= rarities.common / 3 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.common.toLocaleString() %> MP</span><br>
-          <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.special /3 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.special.toLocaleString() %> MP</span><br>
-          <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special / 5 %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.very_special.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>22 MP</span> × <span style='color: var(--§d);' class='grey-text'><%= rarities.mythic.amount%> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.mythic.magical_power.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>16 MP</span> × <span style='color: var(--§6);' class='grey-text'><%= rarities.legendary.amount %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.legendary.magical_power.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>12 MP</span> × <span style='color: var(--§5);' class='grey-text'><%= rarities.epic.amount %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.epic.magical_power.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>8 MP</span> × <span style='color: var(--§1);' class='grey-text'><%= rarities.rare.amount %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.rare.magical_power.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§a);' class='grey-text'><%= rarities.uncommon.amount %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.uncommon.magical_power.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§f);' class='grey-text'><%= rarities.common.amount %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.common.magical_power.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>3 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.special.amount %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.special.magical_power.toLocaleString() %> MP</span><br>
+          <span style='color: var(--§6);' class='grey-text'>5 MP</span> × <span style='color: var(--§c);' class='grey-text'><%= rarities.very_special.amount %> Accs.</span> = <span style='color: var(--§6);' class='grey-text'><%= rarities.very_special.magical_power.toLocaleString() %> MP</span><br>
           <br>
           <% if (calculated.accessories.magical_power.abiphone) { %>
             <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= calculated.accessories.magical_power.abiphone %> MP</span><br>
@@ -113,6 +113,11 @@ function itemIcon(item, classes) { %>
           
           <% if (calculated.accessories.magical_power.rift_prism) { %>
             <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Rift Prism:</span> = <span style='color: var(--§6);' class='grey-text'>+<%= calculated.accessories.magical_power.rift_prism %> MP</span><br>
+          <% } %>
+
+          <% const hegemonyArtifact = items.accessories.accessory_ids.find((a) => a.id === "HEGEMONY_ARTIFACT"); %>
+          <% if (calculated.accessories.magical_power.hegemony) { %>
+            <span style='color: var(--§<%= constants.RARITY_COLORS[hegemonyArtifact.rarity] %>);' class='grey-text'>Hegemony Artifact:</span> = <span style='color: var(--§6);' class='grey-text'>+<%= calculated.accessories.magical_power.hegemony %> MP</span><br>
           <% } %>
           <br>
           Total: <span style='color: var(--§6);' class='grey-text'><%= calculated.accessories.magical_power.total.toLocaleString() %> Magical Power</span>
