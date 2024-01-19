@@ -296,10 +296,7 @@ export async function processItems(base64, source, customTextures = false, packs
 
     if (source !== undefined) {
       item.extra ??= {};
-      item.extra.source = source
-        .split(" ")
-        .map((a) => a.charAt(0).toUpperCase() + a.slice(1))
-        .join(" ");
+      item.extra.source = helper.titleCase(source.replace("_", " "));
     }
 
     // Lore stuff
@@ -496,15 +493,9 @@ export async function processItems(base64, source, customTextures = false, packs
       }
     }
 
-    if (item?.tag || item?.exp) {
+    if ((item?.tag || item?.exp) && item.extra?.source !== "Storage Icons") {
       try {
-        if (item.tag?.ExtraAttributes?.id === "PET") {
-          item.tag.ExtraAttributes.petInfo =
-            JSON.stringify(item.tag.ExtraAttributes.petInfo) ?? item.tag.ExtraAttributes.petInfo;
-        }
-
         const ITEM_PRICE = await getItemNetworth(item, { cache: true });
-
         if (ITEM_PRICE?.price > 0) {
           itemLore.push(
             "",
@@ -513,14 +504,8 @@ export async function processItems(base64, source, customTextures = false, packs
             )}§7)`
           );
         }
-
-        if (item.tag?.ExtraAttributes?.id === "PET") {
-          item.tag.ExtraAttributes.petInfo =
-            typeof item.tag.ExtraAttributes.petInfo === "string"
-              ? JSON.parse(item.tag.ExtraAttributes.petInfo)
-              : item.tag.ExtraAttributes.petInfo;
-        }
       } catch (error) {
+        console.log(error);
         itemLore.push("", `§7Item Value: §cAn error occurred while calculating the value of this item.`);
       }
     }

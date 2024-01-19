@@ -1,4 +1,5 @@
 import { processItems } from "./items/processing.js";
+import { getItemNetworth } from "skyhelper-networth";
 import * as items from "./items/items.js";
 import * as helper from "../helper.js";
 import { v4 } from "uuid";
@@ -188,6 +189,30 @@ export async function getItems(
   for (const item of allItems) {
     if (helper.getId(item) == "TRICK_OR_TREAT_BAG") {
       item.containsItems = candy_bag;
+    }
+
+    const itemLore = item.tag?.display?.Lore ?? [];
+    if (item.containsItems && item.containsItems.length > 0) {
+      try {
+        const filteredItems = item.containsItems.filter((item) => item.tag || item.exp);
+
+        const itemNetworthPromises = filteredItems.map(getItemNetworth).concat(getItemNetworth(item));
+        const itemNetworth = await Promise.all(itemNetworthPromises);
+
+        const totalNetworth = itemNetworth.reduce((total, itemNetworth) => total + itemNetworth.price, 0);
+
+        if (totalNetworth > 0) {
+          itemLore.push(
+            "",
+            `§7Item Value: §6${Math.round(totalNetworth).toLocaleString()} Coins §7(§6${helper.formatNumber(
+              totalNetworth
+            )}§7)`
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        itemLore.push("", `§7Item Value: §cAn error occurred while calculating the value of this item.`);
+      }
     }
   }
 
