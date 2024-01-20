@@ -441,6 +441,10 @@ export async function getPets(userProfile, calculated, items, profile) {
     pets.at(-1).active = false;
   }
 
+  if (pets.length === 0) {
+    return;
+  }
+
   for (const pet of pets) {
     await getItemNetworth(pet, { cache: true, returnItemData: false });
   }
