@@ -174,7 +174,7 @@ export async function getMuseumItems(profile, customTextures, packs, options = {
 
         // MISSING ITEM
         if (museumItem === undefined) {
-          const itemData = constants.MUSEUM.missing_item[inventoryType];
+          const itemData = _.cloneDeep(constants.MUSEUM.missing_item[inventoryType]);
           itemData.display_name = _.startCase(constants.MUSEUM.armor_to_id[itemId] ?? itemId);
 
           output[item.position].containsItems[slot + page * 54] = helper.generateItem(itemData);
@@ -183,7 +183,7 @@ export async function getMuseumItems(profile, customTextures, packs, options = {
 
         // DONATED HIGHER TIER
         if (museumItem.donated_as_child) {
-          const itemData = constants.MUSEUM.higher_tier_donated;
+          const itemData = _.cloneDeep(constants.MUSEUM.higher_tier_donated);
           itemData.display_name = _.startCase(constants.MUSEUM.armor_to_id[itemId] ?? itemId);
 
           output[item.position].containsItems[slot + page * 54] = helper.generateItem(itemData);

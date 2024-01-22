@@ -537,7 +537,7 @@ const metaDescription = getMetaDescription()
         <a class="nav-item" href="#Skills">Skills</a>
         <% if (calculated.dungeons !== undefined) { %> <a class="nav-item" href="#Dungeons">Dungeons</a> <% } %>
         <% if (calculated.slayer !== undefined) { %> <a class="nav-item" href="#Slayer">Slayer</a> <% } %>
-        <% if (calculated.minions.totalMinions > 0) { %> <a class="nav-item" href="#Minions">Minions</a> <% } %>
+        <% if (calculated.minions.unlockedTiers > 0) { %> <a class="nav-item" href="#Minions">Minions</a> <% } %>
         <% if (calculated.bestiary !== undefined) { %> <a class="nav-item" href="#Bestiary">Bestiary</a> <% } %>
         <% if (calculated.collections !== undefined) { %> <a class="nav-item" href="#Collections">Collections</a> <% } %>
         <% if (calculated.crimson_isle !== undefined) { %>  <a class="nav-item" href="#Crimson_Isle">Crimson Isle</a> <% } %>
@@ -645,7 +645,7 @@ const metaDescription = getMetaDescription()
       <% } %>
 
       <!-- Minions -->
-      <% if (calculated.minions.totalMinions > 0) { // Show only if player has unlocked a minion %> 
+      <% if (calculated.minions.unlockedTiers > 0) { %> 
         <%- include('./sections/stats/minions.ejs', { skillItems }); %>
       <% } %>
 

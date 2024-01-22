@@ -214,7 +214,7 @@ export async function getStats(
     user_data: { fn: stats.getUserData, args: { userProfile } },
     currencies: { fn: stats.getCurrenciesData, args: { userProfile, profile } },
     weight: { fn: stats.getWeight, args: { output }, promise: true },
-    accessories: { fn: stats.getMissingAccessories, args: { output, items, packs } },
+    accessories: { fn: stats.getMissingAccessories, args: { output, items, packs }, promise: true },
     temp_stats: { fn: stats.getTempStats, args: { userProfile } },
     rift: { fn: stats.getRift, args: { userProfile } },
     networth: { fn: getPreDecodedNetworth, args: { userProfile, networthItems, bank, networthOptions }, promise: true },
