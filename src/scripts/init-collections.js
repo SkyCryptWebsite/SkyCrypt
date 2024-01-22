@@ -36,6 +36,6 @@ await Promise.all([
   db.collection("guildCache").createIndex({ uuid: 1 }, { unique: true }),
   db.collection("guildCache").createIndex({ last_update: 1 }, { expireAfterSeconds: 1209600 }),
 
-  db.collection("museumCace").createIndex({ profile_id: 1 }, { unique: true }),
+  db.collection("museumCache").createIndex({ profile_id: 1 }, { unique: true }),
   db.collection("museumCache").createIndex({ last_update: 1 }, { expireAfterSeconds: 1209600 }),
 ]);
