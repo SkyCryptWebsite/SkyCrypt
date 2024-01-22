@@ -54,7 +54,7 @@
     "body-parser": "^1.20.0",
     "bowser": "^2.11.0",
     "canvas": "^2.11.0",
-    "connect-mongo": "^4.6.0",
+    "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "css": "^3.0.0",
