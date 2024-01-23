@@ -107,7 +107,7 @@ export const VOLATILE_CACHE_MAX_AGE = 12 * 60 * 60; // 12 hours
 export const CACHE_PATH = helper.getCacheFolderPath(folderPath);
 await fs.ensureDir(CACHE_PATH);
 
-if (credentials.hypixel_api_key.length == 0) {
+if (credentials.hypixel_api_key.length === 0) {
   throw new Error(
     "Please enter a valid Hypixel API Key. Go to developer.hypixel.net/dashboard and click Create API Key to obtain one."
   );
@@ -495,10 +495,10 @@ app.all("/manifest.webmanifest", async (req, res) => {
   }));
   res.json(Object.assign({ shortcuts }, manifest));
 });
-
-app.all("/:player/:profile?", async (req, res, next) => {
-  res.redirect(`/stats${req.path}`);
-});
+//
+// app.all("/:player/:profile?", async (req, res, next) => {
+//   res.redirect(`/stats${req.path}`);
+// });
 
 app.all("/", async (req, res, next) => {
   const timeStarted = Date.now();

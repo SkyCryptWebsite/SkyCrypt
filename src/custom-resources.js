@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
+import os from "os";
 import {
   getClusterId,
   getFolderPath,
@@ -726,7 +727,12 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
     return null;
   }
 
-  outputTexture.path = path.posix.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path);
+  if(os.platform() === "win32") {
+    outputTexture.path = path.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path).replace(/\\/g, "/");
+  }
+  else {
+    outputTexture.path = path.posix.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path);
+  }
   debugStats.time_spent_ms = Date.now() - timeStarted;
   outputTexture.debug = debugStats;
 
