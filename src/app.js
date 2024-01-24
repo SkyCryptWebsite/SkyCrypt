@@ -495,10 +495,6 @@ app.all("/manifest.webmanifest", async (req, res) => {
   }));
   res.json(Object.assign({ shortcuts }, manifest));
 });
-//
-// app.all("/:player/:profile?", async (req, res, next) => {
-//   res.redirect(`/stats${req.path}`);
-// });
 
 app.all("/", async (req, res, next) => {
   const timeStarted = Date.now();
