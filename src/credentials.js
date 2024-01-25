@@ -20,7 +20,7 @@ const defaultCredentials = {
     host: "redis://localhost:6379",
     username: "default",
     password: "password"
-  }
+  },
   get session_secret() {
     return randomBytes(32).toString("hex");
   },
