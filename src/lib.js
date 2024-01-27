@@ -449,7 +449,6 @@ export async function getProfile(
     throw new SkyCryptError("Couldn't find any Skyblock profile that belongs to this player.");
   }
 
-
   if (profileObject && "current_area" in profileObject) {
     userProfile.current_area = profileObject.current_area;
   }
