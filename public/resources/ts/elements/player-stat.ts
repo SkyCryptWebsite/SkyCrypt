@@ -49,7 +49,7 @@ export class PlayerStat extends LitElement {
     name: string | undefined,
     suffix: string,
     value: number,
-    special: { [key: string]: number } | undefined
+    special: { [key: string]: number } | undefined,
   ): string[] {
     const tooltip: string[] = [];
     const tooltipBonus: string[] = [];
@@ -62,7 +62,7 @@ export class PlayerStat extends LitElement {
       `<span class="stat-name">Base ${name}: </span>`,
       `<span class="stat-value">${helper.round(data.base, 1).toLocaleString()}${suffix}</span>`,
       "<br/>",
-      "<span class='tippy-explanation'>Base value every player has at the beginning of their SkyBlock adventure!</span>"
+      "<span class='tippy-explanation'>Base value every player has at the beginning of their SkyBlock adventure!</span>",
     );
 
     if (value - data.base > 0) {
@@ -72,7 +72,7 @@ export class PlayerStat extends LitElement {
         }
 
         tooltipBonus.push(
-          `- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${helper.round(val, 1).toLocaleString()}${suffix}`
+          `- ${this.getPrettyDataName(key)} ${val < 0 ? "" : "+"}${helper.round(val, 1).toLocaleString()}${suffix}`,
         );
       }
 
@@ -82,7 +82,7 @@ export class PlayerStat extends LitElement {
         `<span class="stat-name">Bonus ${name}: </span>`,
         `<span class="stat-value">${helper.round(value - data.base, 1).toLocaleString()}${suffix}</span>`,
         "<br/>",
-        `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltipBonus.join("<br>")}</span>`
+        `<span class='tippy-explanation'>Bonus value obtain from: <br>${tooltipBonus.join("<br>")}</span>`,
       );
     }
 

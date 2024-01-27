@@ -25,7 +25,7 @@ async function updateCollections() {
               maxTier: collection.items[id].maxTiers,
               tiers: collection.items[id].tiers,
             };
-          })
+          }),
         ),
       };
     }

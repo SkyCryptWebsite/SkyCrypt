@@ -11,7 +11,7 @@ console.log(
     "font-size: 16px",
     "font-weight: 700",
     "line-height: 1",
-  ].join(";")
+  ].join(";"),
 );
 
 // Alt+Click on any .rich-item to console.log the item object

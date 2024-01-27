@@ -46,7 +46,7 @@ export class SkillComponent extends LitElement {
         data-tippy-content="${ifDefined(
           level.rank && level.rank < 50000
             ? `<span class='stat-name'>Rank: </span><span class='stat-value'>#${level.rank}</span>`
-            : undefined
+            : undefined,
         )}"
       >
         ${this.icon.startsWith("head-")

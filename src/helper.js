@@ -388,14 +388,14 @@ export function parseRank(player) {
   const rankName = player.prefix
     ? getRawLore(player.prefix).replaceAll(/\[|\]/g, "")
     : player.rank && player.rank != "NORMAL"
-    ? player.rank
-    : player.monthlyPackageRank && player.monthlyPackageRank != "NONE"
-    ? player.monthlyPackageRank
-    : player.newPackageRank
-    ? player.newPackageRank
-    : player.packageRank
-    ? player.packageRank
-    : "NONE";
+      ? player.rank
+      : player.monthlyPackageRank && player.monthlyPackageRank != "NONE"
+        ? player.monthlyPackageRank
+        : player.newPackageRank
+          ? player.newPackageRank
+          : player.packageRank
+            ? player.packageRank
+            : "NONE";
 
   if (RANKS[rankName]) {
     const { tag, color, plus, plusColor } = RANKS[rankName];
@@ -545,7 +545,7 @@ export async function fetchMembers(profileId, db, returnUuid = false) {
         .replaceOne(
           { profile_id: profileId, uuid: profileMember.uuid },
           { profile_id: profileId, uuid: profileMember.uuid, username: profileMember.display_name },
-          { upsert: true }
+          { upsert: true },
         );
     }
 
@@ -830,8 +830,8 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
 export function parseItemTypeFromLore(lore, item) {
   const regex = new RegExp(
     `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${RARITIES.map((x) => x.replaceAll("_", " ").toUpperCase()).join(
-      "|"
-    )}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
+      "|",
+    )}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`,
   );
 
   // Executing the regex on every lore line
@@ -873,8 +873,8 @@ function getCategories(type, item) {
   const enchantments = item?.tag?.ExtraAttributes?.enchantments || {};
   Object.keys(enchantments).forEach((enchantment) =>
     Object.entries(ENCHANTMENTS_TO_CATEGORIES).forEach(
-      ([category, enchantmentList]) => enchantmentList.includes(enchantment) && categories.push(category)
-    )
+      ([category, enchantmentList]) => enchantmentList.includes(enchantment) && categories.push(category),
+    ),
   );
 
   return [...new Set(categories.concat(TYPE_TO_CATEGORIES[type]))];
@@ -919,7 +919,7 @@ export function generateDebugPets(type = "ALL") {
           heldItem: null,
           skin: null,
           uuid: generateUUID(),
-        }
+        },
       );
     }
   }

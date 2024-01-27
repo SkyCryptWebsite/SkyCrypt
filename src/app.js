@@ -109,7 +109,7 @@ await fs.ensureDir(CACHE_PATH);
 
 if (credentials.hypixel_api_key.length === 0) {
   throw new Error(
-    "Please enter a valid Hypixel API Key. Go to developer.hypixel.net/dashboard and click Create API Key to obtain one."
+    "Please enter a valid Hypixel API Key. Go to developer.hypixel.net/dashboard and click Create API Key to obtain one.",
   );
 }
 
@@ -126,7 +126,7 @@ const hypixelUUID = "f7c77d999f154a66a87dc4a51ef30d19";
 async function updateCacheOnly() {
   try {
     const response = await fetch(
-      `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`
+      `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`,
     );
     forceCacheOnly = false;
     // 429 = key throttle
@@ -172,7 +172,7 @@ app.use(
     store: MongoStore.create({
       client: mongo,
     }),
-  })
+  }),
 );
 
 function parseFavorites(cookie) {
@@ -335,7 +335,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
               res.set("X-Debug-ID", `${debugId}`);
               res.set("X-Process-Time", `${Date.now() - timeStarted}`);
               res.send(html);
-            }
+            },
           );
         }
 
@@ -343,7 +343,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         res.set("X-Debug-ID", `${debugId}`);
         res.set("X-Process-Time", `${Date.now() - timeStarted}`);
         res.send(html);
-      }
+      },
     );
   } catch (e) {
     if (e instanceof SkyCryptError === false) {
@@ -374,7 +374,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         res.set("X-Debug-ID", `${debugId}`);
         res.set("X-Process-Time", `${Date.now() - timeStarted}`);
         res.send(html);
-      }
+      },
     );
 
     return false;
@@ -388,7 +388,7 @@ app.all("/api", async (req, res, next) => {
     (err, html) => {
       res.set("X-Cluster-ID", `${helper.getClusterId()}`);
       res.send(html);
-    }
+    },
   );
 });
 
@@ -407,7 +407,7 @@ app.all("/robots.txt", async (req, res, next) => {
   res
     .type("text")
     .send(
-      `User-agent: *\nDisallow: /item /cape /head /leather /potion /resources\nSitemap: https://sky.shiiyu.moe/sitemap.xml`
+      `User-agent: *\nDisallow: /item /cape /head /leather /potion /resources\nSitemap: https://sky.shiiyu.moe/sitemap.xml`,
     );
 });
 
@@ -518,7 +518,7 @@ app.all("/", async (req, res, next) => {
       res.set("X-Cluster-ID", `${helper.getClusterId()}`);
       res.set("X-Process-Time", `${Date.now() - timeStarted}`);
       res.send(html);
-    }
+    },
   );
 });
 

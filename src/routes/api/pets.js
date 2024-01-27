@@ -46,8 +46,8 @@ router.use(async (req, res, next) => {
           a.xpForNext,
           a.progress,
           a.xpMaxLevel,
-        ])
-      )
+        ]),
+      ),
     );
   } catch (e) {
     next(e);

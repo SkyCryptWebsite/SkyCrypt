@@ -8,7 +8,7 @@ export async function getItems(
   paramBingo,
   customTextures = false,
   packs,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getItems` }
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getItems` },
 ) {
   const output = {};
 
@@ -41,7 +41,7 @@ export async function getItems(
         type.name,
         customTextures,
         packs,
-        options.cacheOnly
+        options.cacheOnly,
       );
     } else if (type.bagContents === true) {
       if (
@@ -57,7 +57,7 @@ export async function getItems(
         type.name,
         customTextures,
         packs,
-        options.cacheOnly
+        options.cacheOnly,
       );
     } else {
       if (profile.inventory === undefined || profile.inventory[type.property] === undefined) {
@@ -97,14 +97,14 @@ export async function getItems(
           "storage_icons",
           customTextures,
           packs,
-          options.cacheOnly
+          options.cacheOnly,
         );
         const itemsPromise = await processItems(
           profile.inventory.backpack_contents[slot].data,
           "storage",
           customTextures,
           packs,
-          options.cacheOnly
+          options.cacheOnly,
         );
 
         promises.push(iconPromise, itemsPromise);
@@ -167,7 +167,7 @@ export async function getItems(
     wardrobe_inventory,
     storage,
     hotm,
-    candy_bag
+    candy_bag,
   );
 
   for (const [index, item] of allItems.entries()) {
