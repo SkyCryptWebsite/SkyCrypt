@@ -132,7 +132,7 @@ export function getAccessories(userProfile, armor, accessoryBag, inventory, ende
       items = item.containsItems.slice(0);
     }
 
-    for (const accessory of items.filter((a) => a.categories.includes("accessory"))) {
+    for (const accessory of items.filter((a) => a.categories && a.categories.includes("accessory"))) {
       const insertAccessory = Object.assign({ isUnique: false, isInactive: true }, accessory);
 
       accessories.push(insertAccessory);
