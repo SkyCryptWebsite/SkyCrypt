@@ -304,7 +304,7 @@ class Eerie extends Pet {
       desc: [
         `§7Gives §a${round(
           (this.level / 2) * mult,
-          1
+          1,
         )} §5Fear §7for every §a10 §cPrimal Fears §7killed, up to §a150 §cPrimal Fears§7.`,
         `§cPrimal Fear Kills§7: (${killsFormatted}§7/§a150§7)`,
       ],
@@ -408,7 +408,7 @@ class Pig extends Pet {
       desc: [
         `§7While holding an §aEnchanted Carrot on a Stick§7, increase the speed of your mount by §a${round(
           this.level * mult,
-          1
+          1,
         )}%§7.`,
       ],
     };
@@ -572,7 +572,7 @@ class Bat extends Pet {
       desc: [
         `§7During night, gain §a${round(this.level * multIntel, 1)} §b${SYMBOLS.intelligence} Intelligence§7, §a${round(
           this.level * multSpeed,
-          1
+          1,
         )} §f${SYMBOLS.speed} Speed §7and §aNight Vision§7.`,
       ],
     };
@@ -627,7 +627,7 @@ class Endermite extends Pet {
       desc: [
         `§7Gain more exp orbs for breaking end stone and gain a +§a${round(
           this.level * mult,
-          1
+          1,
         )}% §7chance to get an extra block dropped.`,
       ],
     };
@@ -658,7 +658,7 @@ class Endermite extends Pet {
       desc: [
         `§7Increases the odds of rolling for bonus items in the §cDraconic Altar §7by §a${round(
           this.level * 0.1,
-          1
+          1,
         )}%§7.`,
       ],
     };
@@ -719,7 +719,7 @@ class MithrilGolem extends Pet {
       desc: [
         `§7Increases your §b${SYMBOLS.magic_find} Magic find §7by §a${round(
           this.level * mult,
-          1
+          1,
         )}% §7when on a Mining Island.`,
       ],
     };
@@ -897,7 +897,7 @@ class Slug extends Pet {
       desc: [
         `§7When fishing in the §cCrimson §cIsle§7, §aSlugfish §7take §a${round(
           this.level * mult,
-          1
+          1,
         )}% §7less time to catch.`,
       ],
     };
@@ -969,7 +969,7 @@ class WitherSkeleton extends Pet {
       desc: [
         `§7Upon hitting an enemy inflict the wither effect for §a${round(
           this.level * mult,
-          1
+          1,
         )}% §7damage over 3 seconds.`,
         `§8Does not stack`,
       ],
@@ -1010,7 +1010,7 @@ class Bal extends Pet {
       desc: [
         `§7Every §a5s §7while in combat on public islands, Bal will strike nearby enemies with his fire whip dealing §c${round(
           this.level * mult,
-          1
+          1,
         )}% §7of your damage as §ftrue damage§7.`,
       ],
     };
@@ -1395,7 +1395,7 @@ class Golem extends Pet {
       desc: [
         `§7Every 5 hits, throw the enemy up into the air and deal §a${round(
           200 + this.level * mult,
-          1
+          1,
         )}% §7damage (10s cooldown)`,
       ],
     };
@@ -1820,7 +1820,7 @@ class Rat extends Pet {
           SYMBOLS.magic_find
         } Magic Find §7for §a${round(
           20 + this.level * multTime,
-          0
+          0,
         )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7chance to get it too.`,
       ],
     };
@@ -1905,7 +1905,7 @@ class Skeleton extends Pet {
       desc: [
         `§7Gain a combo stack for every bow hit granting §c+3 ${SYMBOLS.strength} Strength§7. Max §a${round(
           this.level * mult,
-          1
+          1,
         )} §7stacks, stacks disappear after 8 seconds§7.`,
       ],
     };
@@ -1955,7 +1955,7 @@ class Snowman extends Pet {
       desc: [
         `§7Your freezing aura slows enemy attacks causing you to take §a${floor(
           this.level * mult,
-          1
+          1,
         )}% §7reduced damage.`,
       ],
     };
@@ -2402,7 +2402,7 @@ class Giraffe extends Pet {
       desc: [
         `§7Grants §c+${round(this.level * multStrength, 1)} ${SYMBOLS.strength} Strength §7and §9+${round(
           this.level * multCd + 20,
-          1
+          1,
         )} ${SYMBOLS.crit_damage} Crit Damage §7when mid air or jumping§7.`,
       ],
     };
@@ -2776,7 +2776,7 @@ class Ammonite extends Pet {
           SYMBOLS.fishing_speed
         } Fishing Speed§7, §f+${round(this.level * speed, 2)} ${SYMBOLS.speed} Speed §7and §a+${round(
           this.level * def,
-          2
+          2,
         )} ${SYMBOLS.defense} Defense§7.`,
       ],
     };
@@ -2973,7 +2973,7 @@ class Squid extends Pet {
       desc: [
         `§7Buffs the Ink Wand by §a${round(this.level * multDamage, 1)} §c${SYMBOLS.strength} Damage §7and §a${round(
           this.level * multStrength,
-          1
+          1,
         )} §c${SYMBOLS.strength} Strength§7.`,
       ],
     };
@@ -3019,7 +3019,7 @@ class Jellyfish extends Pet {
       desc: [
         `§7While in dungeons, for every §c2,000 HP §7you heal teammates the cooldown of §aWish §7is reduced by §a${round(
           this.level * mult,
-          2
+          2,
         )}s§7, up to §a30s§7.`,
       ],
     };
@@ -3087,7 +3087,7 @@ class Parrot extends Pet {
       desc: [
         `§7When summoned or in your pets menu, boost the duration of consumed §cGod Potions §7by §a${round(
           this.level * mult,
-          1
+          1,
         )}%§7.`,
       ],
     };
@@ -3257,7 +3257,7 @@ class Bingo extends Pet {
       desc: [
         `§7Upon death, your active potion effects will be retained with §c${round(
           25 + this.level * mult,
-          1
+          1,
         )}% §7of their time.`,
       ],
     };
@@ -3437,7 +3437,7 @@ class MooshroomCow extends Pet {
       desc: [
         `§7When breaking crops, there is a §a${round(
           this.level * mult + 1.01,
-          1
+          1,
         )}% §7chance that a mushroom will drop§7.`,
       ],
     };

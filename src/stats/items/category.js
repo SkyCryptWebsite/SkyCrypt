@@ -91,7 +91,7 @@ export function getPets(allItems) {
           heldItem: a.tag.ExtraAttributes.petInfo.heldItem || null,
           candyUsed: a.tag.ExtraAttributes.petInfo.candyUsed,
           skin: a.tag.ExtraAttributes.petInfo.skin || null,
-        }))
+        })),
     );
   }
 

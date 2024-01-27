@@ -19,7 +19,7 @@ const defaultCredentials = {
     port: 6379,
     host: "redis://localhost:6379",
     username: "default",
-    password: "password"
+    password: "password",
   },
   get session_secret() {
     return randomBytes(32).toString("hex");

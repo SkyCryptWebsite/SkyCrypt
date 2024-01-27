@@ -65,7 +65,7 @@ export class PackList extends LitElement {
               ?disabled="${pack.default}"
             />
           </label>
-        `
+        `,
       )}
       ${this.needsReload
         ? html`<button class="list-button" @click="${() => window.location.reload()}">Reload to apply changes</button>`

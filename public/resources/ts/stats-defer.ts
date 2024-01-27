@@ -27,7 +27,7 @@ if ("share" in navigator) {
           <path fill="white" d="${shareIcon}" />
         </svg>
       </button>
-    `
+    `,
   );
   favoriteElement.nextElementSibling?.addEventListener("click", () => {
     navigator.share({
@@ -51,13 +51,12 @@ if (calculated.skin_data) {
     height: playerModel.offsetHeight,
     model: calculated.skin_data.model,
     skin: calculated.skin_data.skinurl,
-    cape: calculated.skin_data.capeurl
+    cape: calculated.skin_data.capeurl,
   });
 
   playerModel.appendChild(skinViewer.canvas);
 
   skinViewer.camera.position.set(-18, -3, 58);
-
 
   skinViewer.canvas.removeAttribute("tabindex");
 
@@ -124,7 +123,7 @@ export const ALL_ITEMS = new Map(
         return item;
       }
     })
-    .map((item) => [item.itemId, item])
+    .map((item) => [item.itemId, item]),
 );
 
 const dimmer = document.querySelector("#dimmer") as HTMLElement;
@@ -282,7 +281,7 @@ function fillLore(element: HTMLElement) {
     itemLore.innerHTML = item.lore;
   } else if ("tag" in item && Array.isArray(item.tag.display?.Lore)) {
     itemLore.innerHTML = item.tag.display.Lore.map(
-      (line: string) => '<span class="lore-row">' + renderLore(line) + "</span>"
+      (line: string) => '<span class="lore-row">' + renderLore(line) + "</span>",
     ).join("");
   } else {
     itemLore.innerHTML = "";
@@ -399,7 +398,7 @@ function resize() {
 
 document.querySelectorAll(".extender").forEach((element) => {
   element.addEventListener("click", () =>
-    element.setAttribute("aria-expanded", (element.getAttribute("aria-expanded") != "true").toString())
+    element.setAttribute("aria-expanded", (element.getAttribute("aria-expanded") != "true").toString()),
   );
 });
 
@@ -545,7 +544,7 @@ function parseFavorites(cookie: string) {
 
 function checkFavorite() {
   const favorited = parseFavorites(getCookie("favorite") ?? "").includes(
-    favoriteElement.getAttribute("data-username") as string
+    favoriteElement.getAttribute("data-username") as string,
   );
   favoriteElement.setAttribute("aria-checked", favorited.toString());
   return favorited;
@@ -613,7 +612,7 @@ class ScrollMemory {
         this._loaded = true;
         this.isSmoothScrolling = true;
       },
-      { once: true }
+      { once: true },
     );
 
     window.addEventListener("hashchange", () => {
@@ -684,7 +683,7 @@ const sectionObserver = new IntersectionObserver(
       }
     }
   },
-  { rootMargin: "-100px 0px -25% 0px" }
+  { rootMargin: "-100px 0px -25% 0px" },
 );
 
 function scrollToTab(smooth = true, element?: HTMLElement) {
@@ -835,7 +834,7 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
   } else if (floor) {
     return (
       (Math.floor((number / 1000 / 1000 / 1000) * rounding * 10) / (rounding * 10)).toFixed(
-        rounding.toString().length
+        rounding.toString().length,
       ) + "B"
     );
   } else {
@@ -863,7 +862,7 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
       "value",
       Object.values(stats[stat])
         .reduce((a, b) => a + b, 0)
-        .toString()
+        .toString(),
     );
 
     node.data = stats[stat];
