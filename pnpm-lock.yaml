@@ -105,8 +105,8 @@ dependencies:
     specifier: ^2.2.1
     version: 2.2.1
   skyhelper-networth:
-    specifier: ^1.18.0
-    version: 1.18.0
+    specifier: ^1.18.4
+    version: 1.18.4
   tippy.js:
     specifier: ^6.3.7
     version: 6.3.7
@@ -4144,8 +4144,8 @@ packages:
       three: 0.136.0
     dev: false
 
-  /skyhelper-networth@1.18.0:
-    resolution: {integrity: sha512-EtEOVcQojfTf4Ltw4c6rQBs2SnDg7FUJLJWTp8FdNlCDsEQFDf7HVRjSpx3xzZo7/9aIg08RE9g7ThqJwrkJZw==}
+  /skyhelper-networth@1.18.4:
+    resolution: {integrity: sha512-dEoX5KI0a5UmXdct+M8dIgw8nEQTcLkJx3d52QSK+2oA+XRq0C+a37gvLEsFHkdG8g02WJ69/ngkFph74fx0LA==}
     dependencies:
       axios: 1.6.2
       prismarine-nbt: 2.2.1
