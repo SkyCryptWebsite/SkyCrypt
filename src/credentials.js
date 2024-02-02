@@ -15,12 +15,7 @@ const defaultCredentials = {
   hypixel_api_key: "",
   dbUrl: "mongodb://localhost:27017",
   dbName: "sbstats",
-  redisUrl: {
-    port: 6379,
-    host: "redis://localhost:6379",
-    username: "default",
-    password: "password",
-  },
+  redisUrl: "redis://localhost:6379",
   get session_secret() {
     return randomBytes(32).toString("hex");
   },
