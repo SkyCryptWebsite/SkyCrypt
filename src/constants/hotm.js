@@ -197,14 +197,14 @@ class HotM {
     if (this.status === "unlocked") {
       output.push(
         "§7You have unlocked this tier. All perks and abilities on this tier are available for unlocking with §5Token of the Mountain§7.",
-        ""
+        "",
       );
     } else {
       output.push(
         "§7Progress through your Heart of the Mountain by gaining §5HotM Exp§7, which is earned through completing §aCommissions§7.",
         "",
         "§7Commissions are tasks given by the §e§lKing§r§7 in the §bRoyal Palace§7. Complete them to earn bountiful rewards!",
-        ""
+        "",
       );
     }
 
@@ -216,9 +216,9 @@ class HotM {
       output.push(
         `§7Progress: §e${progress}%`,
         `${"§2-".repeat(greenBars)}${"§f-".repeat(
-          whiteBars
+          whiteBars,
         )} §e${this.xpCurrent.toLocaleString()} §6/ §e${this.xpForNext.toLocaleString()}`,
-        ""
+        "",
       );
     }
 
@@ -357,7 +357,7 @@ class Node {
         "§7Cost",
         `§${UPGRADE_TYPES[this.upgrade_type].color}${this.upgradeCost.toLocaleString()} ${
           UPGRADE_TYPES[this.upgrade_type].name
-        }`
+        }`,
       );
     }
 
@@ -371,7 +371,7 @@ class Node {
       output.push("", "§7Cost");
       for (const [upgradeId, upgradeQty] of Object.entries(this.unlockCost)) {
         output.push(
-          `§${UPGRADE_TYPES[upgradeId].color}${upgradeQty > 0 ? `${upgradeQty} ` : ""}${UPGRADE_TYPES[upgradeId].name}`
+          `§${UPGRADE_TYPES[upgradeId].color}${upgradeQty > 0 ? `${upgradeQty} ` : ""}${UPGRADE_TYPES[upgradeId].name}`,
         );
       }
     }
@@ -1362,7 +1362,7 @@ class HotmReset extends HotmItem {
       output.push(
         "",
         "§7§c§lWARNING: This is permanent.",
-        "§c§lYou can not go back after resetting your Heart of the Mountain!"
+        "§c§lYou can not go back after resetting your Heart of the Mountain!",
       );
     } else {
       const timeLeft = Math.abs(Date.now() - (this.last_reset + 24 * 60 * 60 * 1000)); // ms

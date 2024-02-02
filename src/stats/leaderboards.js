@@ -38,7 +38,7 @@ export async function updateLeaderboardData(
     cacheOnly: true,
     debugId: `${helper.getClusterId()}/unknown@updateLeaderboardData`,
     updateLeaderboards: false,
-  }
+  },
 ) {
   try {
     if (constants.BLOCKED_PLAYERS.includes(uuid)) {
@@ -92,7 +92,7 @@ export async function updateLeaderboardData(
             values[`slayer_${slayer}_${formattedTier}_kills`] = getMax(
               calculated,
               values[`slayer_${slayer}_${formattedTier}_kills`],
-              ["slayer", "slayers", slayer, "kills", tier]
+              ["slayer", "slayers", slayer, "kills", tier],
             );
           }
         }
@@ -205,7 +205,7 @@ export async function updateLeaderboardData(
               values[`dungeons_${key}_floor_${floor}_${stat}`] = getMax(
                 calculated,
                 values[`dungeons_${key}_floor_${floor}_${stat}`],
-                ["dungeons", key, "floors", floor, "stats", stat]
+                ["dungeons", key, "floors", floor, "stats", stat],
               );
             }
           }
@@ -218,13 +218,13 @@ export async function updateLeaderboardData(
         values["crimson_isle_factions_mages_reputation"] = getMax(
           calculated,
           values["crimson_isle_factions_mages_reputation"],
-          ["crimson_isle", "factions", "mages_reputation"]
+          ["crimson_isle", "factions", "mages_reputation"],
         );
 
         values["crimson_isle_factions_barbarians_reputation"] = getMax(
           calculated,
           values["crimson_isle_factions_barbarians_reputation"],
-          ["crimson_isle", "factions", "barbarians_reputation"]
+          ["crimson_isle", "factions", "barbarians_reputation"],
         );
 
         if (crimsonIsle?.kuudra?.tiers !== undefined) {
@@ -232,7 +232,7 @@ export async function updateLeaderboardData(
             values[`crimson_isle_kuudra_tier_${tier}_kills`] = getMax(
               calculated,
               values[`crimson_isle_kuudra_tier_${tier}_kills`],
-              ["crimson_isle", "kuudra", "tiers", tier, "completions"]
+              ["crimson_isle", "kuudra", "tiers", tier, "completions"],
             );
           }
         }

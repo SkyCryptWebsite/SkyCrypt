@@ -31,7 +31,7 @@ function formatBingOItemLore(item, bingoData, completed = false) {
       if (item.requiredAmount) {
         output.push("", "§7Progress:");
         output.push(
-          `§a${completed ? item.requiredAmount.toLocaleString() : "???"} §7/ §6${item.requiredAmount.toLocaleString()}`
+          `§a${completed ? item.requiredAmount.toLocaleString() : "???"} §7/ §6${item.requiredAmount.toLocaleString()}`,
         );
       }
 
@@ -52,13 +52,13 @@ function formatBingOItemLore(item, bingoData, completed = false) {
 
     const percentage = (total / nextTierAmount) * 100;
     output.push(
-      `§7Progress to ${item.name} ${helper.romanize(nextTier)}: §e${Math.min(percentage, 100).toFixed(2)}§6%`
+      `§7Progress to ${item.name} ${helper.romanize(nextTier)}: §e${Math.min(percentage, 100).toFixed(2)}§6%`,
     );
 
     output.push(
       `${helper.formatProgressBar(total, nextTierAmount)} §e${total.toLocaleString()} §6/ §e${helper.formatNumber(
-        nextTierAmount
-      )}`
+        nextTierAmount,
+      )}`,
     );
 
     const index = bingoData.filter((goal) => goal.tiers !== undefined).indexOf(item);
@@ -75,7 +75,7 @@ function formatBingOItemLore(item, bingoData, completed = false) {
       "§7§oBingo profile can help to reach",
       "§7§oThe more you contribute",
       "§7§otowards the goal, the more you",
-      "§7§owill be rewarded!"
+      "§7§owill be rewarded!",
     );
 
     if (percentage >= 100) {

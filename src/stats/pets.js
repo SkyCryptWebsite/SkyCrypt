@@ -273,8 +273,8 @@ function getProfilePets(pets, calculated) {
       `§7Total XP: §e${helper.formatNumber(pet.exp, true, 1)} §6/ §e${helper.formatNumber(
         pet.level.xpMaxLevel,
         true,
-        1
-      )} §6(${progress.toLocaleString()}%)`
+        1,
+      )} §6(${progress.toLocaleString()}%)`,
     );
 
     if (petData.obtainsExp !== "feed") {
@@ -284,7 +284,7 @@ function getProfilePets(pets, calculated) {
     if (pet.price > 0) {
       lore.push(
         "",
-        `§7Item Value: §6${Math.round(pet.price).toLocaleString()} Coins §7(§6${helper.formatNumber(pet.price)}§7)`
+        `§7Item Value: §6${Math.round(pet.price).toLocaleString()} Coins §7(§6${helper.formatNumber(pet.price)}§7)`,
       );
     }
 
@@ -441,6 +441,10 @@ export async function getPets(userProfile, calculated, items, profile) {
     pets.at(-1).active = false;
   }
 
+  if (pets.length === 0) {
+    return;
+  }
+
   for (const pet of pets) {
     await getItemNetworth(pet, { cache: true, returnItemData: false });
   }
@@ -459,9 +463,9 @@ function getMiscPetData(calculated, pets) {
     total_pets: _.uniqBy(
       Object.keys(constants.PET_DATA)
         .filter((pet) =>
-          calculated.profile.game_mode === "bingo" ? constants.PET_DATA[pet] : !constants.PET_DATA[pet].bingoExclusive
+          calculated.profile.game_mode === "bingo" ? constants.PET_DATA[pet] : !constants.PET_DATA[pet].bingoExclusive,
         )
-        .map((pet) => constants.PET_DATA[pet].typeGroup)
+        .map((pet) => constants.PET_DATA[pet].typeGroup),
     ).length,
     total_pet_skins: Object.keys(constants.PET_SKINS).length,
     amount_pet_skins: _.uniqBy(pets, "skin").length,

@@ -73,11 +73,11 @@ function getMiscUncategorized(userProfile) {
   }
 
   if ("favorite_arrow" in userProfile.item_data) {
-    const favoriteArrow = userProfile.item_data.favorite_arrow;
+    const favoriteArrow = userProfile.item_data.favorite_arrow.split("_").join(" ");
 
     output.favorite_arrow = {
       raw: favoriteArrow,
-      formatted: `${helper.titleCase(favoriteArrow.replace("_", " "))}`,
+      formatted: `${helper.titleCase(favoriteArrow)}`,
     };
   }
 
@@ -248,7 +248,7 @@ export function getMisc(profile, userProfile, hypixelProfile) {
     misc.pet_milestones = {
       sea_creatures_killed: getPetMilestone(
         "sea_creatures_killed",
-        userProfile.player_stats.pets.milestone.sea_creatures_killed
+        userProfile.player_stats.pets.milestone.sea_creatures_killed,
       ),
       ores_mined: getPetMilestone("ores_mined", userProfile.player_stats.pets.milestone.ores_mined),
     };

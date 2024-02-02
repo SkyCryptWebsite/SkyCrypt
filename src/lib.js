@@ -33,19 +33,19 @@ async function executeFunctions(functions) {
   }
 
   const promises = Object.entries(functions).map(([key, { fn, args, promise }]) =>
-    handlePromise(key, fn, args, promise, undefined, promise === undefined)
+    handlePromise(key, fn, args, promise, undefined, promise === undefined),
   );
 
   await Promise.all(promises);
 
   const promises2 = Object.entries(functions).map(([key, { fn, args, promise, awaitPromises }]) =>
-    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises === undefined)
+    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises === undefined),
   );
 
   await Promise.all(promises2);
 
   const promises3 = Object.entries(functions).map(([key, { fn, args, promise, awaitPromises }]) =>
-    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises !== undefined)
+    handlePromise(key, fn, args, promise, awaitPromises, promise !== undefined && awaitPromises !== undefined),
   );
 
   await Promise.all(promises3);
@@ -65,7 +65,7 @@ export async function getStats(
     debugId: `${helper.getClusterId()}/unknown@getStats`,
     updateLeaderboards: false,
     updateGuild: false,
-  }
+  },
 ) {
   const output = {};
 
@@ -103,7 +103,7 @@ export async function getStats(
         ...(await helper.resolveUsernameOrUuid(a, db, options.cacheOnly)),
         removed: profile.members[a]?.removed || false,
       };
-    })
+    }),
   );
 
   if (userInfo) {
@@ -214,7 +214,7 @@ export async function getStats(
     user_data: { fn: stats.getUserData, args: { userProfile } },
     currencies: { fn: stats.getCurrenciesData, args: { userProfile, profile } },
     weight: { fn: stats.getWeight, args: { output }, promise: true },
-    accessories: { fn: stats.getMissingAccessories, args: { output, items, packs } },
+    accessories: { fn: stats.getMissingAccessories, args: { output, items, packs }, promise: true },
     temp_stats: { fn: stats.getTempStats, args: { userProfile } },
     rift: { fn: stats.getRift, args: { userProfile } },
     networth: { fn: getPreDecodedNetworth, args: { userProfile, networthItems, bank, networthOptions }, promise: true },
@@ -247,7 +247,7 @@ export async function getProfile(
   db,
   paramPlayer,
   paramProfile,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` },
 ) {
   helper.sendMetric("function_getprofile_call");
   console.debug(`${options.debugId}: getProfile called.`);
@@ -311,7 +311,7 @@ export async function getProfile(
         async () => {
           return await hypixel.get("v2/skyblock/profiles", { params });
         },
-        { retries: 2 }
+        { retries: 2 },
       );
 
       const { data } = response;
@@ -496,7 +496,7 @@ export async function getProfile(
 export async function getBingoProfile(
   db,
   paramPlayer,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` },
 ) {
   helper.sendMetric("function_getbingoprofile_call");
   console.debug(`${options.debugId}: getBingoProfile called.`);
@@ -534,7 +534,7 @@ export async function getBingoProfile(
         async () => {
           return await hypixel.get("skyblock/bingo", { params });
         },
-        { retries: 2 }
+        { retries: 2 },
       );
 
       const { data } = response;
@@ -549,7 +549,7 @@ export async function getBingoProfile(
       db.collection("bingoProfilesCache").updateOne(
         { uuid: sanitize(paramPlayer) },
         { $set: profileData },
-        { upsert: true }
+        { upsert: true },
       );
     } catch (e) {
       if (e?.response?.data?.cause === "No bingo data could be found") {
@@ -573,7 +573,7 @@ export async function getBingoProfile(
 export async function getMuseum(
   db,
   paramProfile,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` }
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getProfile` },
 ) {
   console.debug(`${options.debugId}: getMuseum called.`);
   const timeStarted = Date.now();
@@ -595,7 +595,7 @@ export async function getMuseum(
         async () => {
           return await hypixel.get("skyblock/museum", { params });
         },
-        { retries: 2 }
+        { retries: 2 },
       );
 
       const { data } = response;
@@ -628,7 +628,7 @@ export async function getMuseum(
 export async function getGuild(
   db,
   paramPlayer,
-  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getGuild` }
+  options = { cacheOnly: false, debugId: `${helper.getClusterId()}/unknown@getGuild` },
 ) {
   console.debug(`${options.debugId}: getGuild called.`);
 
@@ -646,7 +646,7 @@ export async function getGuild(
         async () => {
           return await hypixel.get("guild", { params });
         },
-        { retries: 2 }
+        { retries: 2 },
       );
 
       const { data } = response;

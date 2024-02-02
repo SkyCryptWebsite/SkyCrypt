@@ -32,8 +32,8 @@ router.use(async (req, res, next) => {
       tableify(
         allItems
           .filter((a) => helper.getId(a).length > 0)
-          .map((a) => [helper.getId(a), a.Count, a.display_name, a.rarity, a.type])
-      )
+          .map((a) => [helper.getId(a), a.Count, a.display_name, a.rarity, a.type]),
+      ),
     );
   } catch (e) {
     next(e);

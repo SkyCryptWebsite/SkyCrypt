@@ -21,7 +21,7 @@ function validateURL(url: string) {
     }
     if (
       urlSegments[0].match(
-        /^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$/
+        /^([0-9a-fA-F]{8})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{4})-?([0-9a-fA-F]{12})$/,
       )
     ) {
       urlSegments[0] = urlSegments[0].replaceAll("-", "");
@@ -61,7 +61,7 @@ document.querySelectorAll<HTMLFormElement>(".lookup-player").forEach((form) => {
       const errorTip = tippy(form.querySelector("input") as HTMLInputElement, {
         trigger: "manual",
         content: escapeHtml(
-          error instanceof Error ? error.message : String(error ?? "please enter a valid Minecraft username or UUID")
+          error instanceof Error ? error.message : String(error ?? "please enter a valid Minecraft username or UUID"),
         ),
       });
       errorTip.show();

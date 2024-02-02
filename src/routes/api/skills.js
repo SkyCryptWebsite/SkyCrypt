@@ -32,7 +32,7 @@ router.use(async (req, res, next) => {
           calculated.skills.skills[skill].maxLevel,
           calculated.skills.skills[skill].xp,
           calculated.skills.skills[skill].xpCurrent,
-          calculated.skills.skills[skill].xpForNext
+          calculated.skills.skills[skill].xpForNext,
         );
       }
 
@@ -47,7 +47,7 @@ router.use(async (req, res, next) => {
           calculated.slayers[slayer].level.maxLevel,
           calculated.slayers[slayer].xp,
           calculated.slayers[slayer].xp,
-          calculated.slayers[slayer].level.xpForNext
+          calculated.slayers[slayer].level.xpForNext,
         );
       }
 

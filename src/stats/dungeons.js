@@ -130,7 +130,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
 
     output.classes.classes[className].level.rank = await getLeaderboardPosition(
       `dungeons_class_${className}_xp`,
-      data.experience
+      data.experience,
     );
 
     output.classes.classes[className].current = className == output.classes.selected_class;
