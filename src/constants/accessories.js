@@ -2,9 +2,12 @@
 import { db } from "../mongo.js";
 
 let items = await db.collection("items").find({ category: "accessory" }).toArray();
-setTimeout(async () => {
-  items = await db.collection("items").find({ category: "accessory" }).toArray();
-}, 60 * 60 * 1000); // 1 hour
+setTimeout(
+  async () => {
+    items = await db.collection("items").find({ category: "accessory" }).toArray();
+  },
+  60 * 60 * 1000,
+); // 1 hour
 
 const accessoryUpgrades = [
   ["WOLF_TALISMAN", "WOLF_RING"],
@@ -244,7 +247,7 @@ export const MAGICAL_POWER = {
 export const RECOMBABLE_ACCESSORIES_COUNT = new Set(
   getMaxAccessories()
     .filter((a) => SPECIAL_ACCESSORIES[a.id]?.allowsRecomb !== false)
-    .map((a) => a.id)
+    .map((a) => a.id),
 ).size;
 
 export function getUpgradeList(id) {

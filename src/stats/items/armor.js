@@ -49,7 +49,7 @@ export function getArmor(armor) {
       armor.filter(
         (a) =>
           a.tag?.ExtraAttributes?.modifier != undefined &&
-          a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier
+          a.tag?.ExtraAttributes?.modifier == armor[0].tag.ExtraAttributes.modifier,
       ).length == 4
     ) {
       reforgeName = armor[0].display_name

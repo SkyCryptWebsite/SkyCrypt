@@ -14,7 +14,7 @@ if (cluster.isPrimary) {
 
   cluster.on("exit", (w, c, s) => {
     console.log(
-      `${Date.now()}: Worker ${w.id} died with code ${c} ${s ? `and signal ${s}` : ""} (pid:${w.process.pid})`
+      `${Date.now()}: Worker ${w.id} died with code ${c} ${s ? `and signal ${s}` : ""} (pid:${w.process.pid})`,
     );
 
     const fw = cluster.fork();

@@ -10,7 +10,7 @@ function convertHex(code: string) {
   const hex = code.substring(1, 7);
   return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(
     hex.substring(4, 6),
-    16
+    16,
   )}`;
 }
 
@@ -125,7 +125,7 @@ export function sanitizeTheme(theme: unknown): Theme {
             }
           } else {
             throw new Error(
-              "Invalid theme: backgrounds must be an object of objects with a type property of either color or stripes"
+              "Invalid theme: backgrounds must be an object of objects with a type property of either color or stripes",
             );
           }
         }
@@ -251,7 +251,7 @@ window.addEventListener(
       }
     }
   },
-  { capture: false, passive: true }
+  { capture: false, passive: true },
 );
 
 // Load the theme from localStorage if it exists

@@ -336,7 +336,7 @@ export async function processItems(base64, source, customTextures = false, packs
         itemLore.push(
           "",
           "§7Applied Gemstones:",
-          ...helper.parseItemGems(item.extra.gems, item.rarity).map((gem) => `§7 - ${gem.lore}`)
+          ...helper.parseItemGems(item.extra.gems, item.rarity).map((gem) => `§7 - ${gem.lore}`),
         );
       }
 
@@ -483,7 +483,7 @@ export async function processItems(base64, source, customTextures = false, packs
       if (item.extra?.base_stat_boost) {
         itemLore.push(
           "",
-          `§7Dungeon Item Quality: ${item.extra.base_stat_boost == 50 ? "§6" : "§c"}${item.extra.base_stat_boost}/50%`
+          `§7Dungeon Item Quality: ${item.extra.base_stat_boost == 50 ? "§6" : "§c"}${item.extra.base_stat_boost}/50%`,
         );
       }
 
@@ -509,8 +509,8 @@ export async function processItems(base64, source, customTextures = false, packs
           itemLore.push(
             "",
             `§7Item Value: §6${Math.round(ITEM_PRICE.price).toLocaleString()} Coins §7(§6${helper.formatNumber(
-              ITEM_PRICE.price
-            )}§7)`
+              ITEM_PRICE.price,
+            )}§7)`,
           );
         }
 

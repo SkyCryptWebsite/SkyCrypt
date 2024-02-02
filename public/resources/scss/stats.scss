@@ -242,7 +242,11 @@
   opacity: 0;
   transform: translateX(-25px);
   pointer-events: none;
-  transition: visibility 0.2s, opacity 0.2s, transform 0.2s, left 0.1s;
+  transition:
+    visibility 0.2s,
+    opacity 0.2s,
+    transform 0.2s,
+    left 0.1s;
   visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
@@ -500,7 +504,9 @@
   background-color: rgba(var(--grey_background-rgb), 0.95);
   min-width: 260px;
   clip-path: ellipse(0% 0% at 0% 0%);
-  transition: clip-path 0.3s, visibility 0.3s;
+  transition:
+    clip-path 0.3s,
+    visibility 0.3s;
   visibility: hidden;
   border-radius: 17px;
   padding: 0;
@@ -838,7 +844,9 @@ a.additional-player-stat:hover {
       padding-bottom: 12px;
       margin-left: 8px;
       font-weight: 600;
-      transition: background-color 0.1s, color 0.1s;
+      transition:
+        background-color 0.1s,
+        color 0.1s;
       position: relative;
       color: rgba(var(--text-rgb), 0.8);
       text-decoration: none;
@@ -865,7 +873,9 @@ a.additional-player-stat:hover {
         top: 100%;
         background-color: var(--icon-hex);
         border-radius: 4px;
-        transition: height 0.1s, top 0.1s;
+        transition:
+          height 0.1s,
+          top 0.1s;
       }
 
       &[aria-current]::after {
@@ -1143,11 +1153,15 @@ a.additional-player-stat:hover {
       max-height: 360px;
       overflow: hidden;
       overflow: clip;
-      transition: max-height 0.2s, gap 0.2s;
+      transition:
+        max-height 0.2s,
+        gap 0.2s;
       .armor-placeholder {
         transition: height 0.2s;
         .piece-icon {
-          transition: mask-size 0.2s, -webkit-mask-size 0.2s;
+          transition:
+            mask-size 0.2s,
+            -webkit-mask-size 0.2s;
         }
       }
 
@@ -1675,7 +1689,9 @@ a.additional-player-stat:hover {
           top: 100%;
           background-color: var(--icon-hex);
           border-radius: 4px;
-          transition: height 0.1s, top 0.1s;
+          transition:
+            height 0.1s,
+            top 0.1s;
         }
 
         &.active-inventory {
@@ -2281,7 +2297,9 @@ inventory-view {
   z-index: 7500;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
   display: grid;
   place-items: center;
 
@@ -2385,7 +2403,9 @@ inventory-view {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
-    transition: opacity 0.2s, visibility 0.2s !important;
+    transition:
+      opacity 0.2s,
+      visibility 0.2s !important;
   }
 
   #stats_content.show-stats:not(.sticky-stats) {

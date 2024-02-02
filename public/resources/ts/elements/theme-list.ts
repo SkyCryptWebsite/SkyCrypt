@@ -61,13 +61,13 @@ export class ThemeList extends LitElement {
           <span class="name">Loading...</span>
           <div class="author">by <span>Loading...</span></div>
           <input type="radio" name="theme" class="loading" disabled />
-        </label>`
+        </label>`,
       );
     });
   }
 
   // disable shadow root
-  protected createRenderRoot(): Element | ShadowRoot {
+  protected createRenderRoot(): HTMLElement | ShadowRoot {
     return this;
   }
 }

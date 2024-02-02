@@ -202,7 +202,7 @@ export function getPlayerStats() {
     const bonusStats: ItemStats = getBonusStat(
       Math.min(calculated.dungeons?.catacombs?.level?.maxLevel, 50),
       "skill_dungeoneering",
-      calculated.dungeons.catacombs.level.maxLevel
+      calculated.dungeons.catacombs.level.maxLevel,
     );
 
     for (const [name, value] of Object.entries(bonusStats)) {
@@ -221,7 +221,7 @@ export function getPlayerStats() {
       const bonusStats: ItemStats = getBonusStat(
         data.level.currentLevel,
         `slayer_${slayer}` as BonusType,
-        data.level.maxLevel
+        data.level.maxLevel,
       );
 
       for (const [name, value] of Object.entries(bonusStats)) {
@@ -238,7 +238,7 @@ export function getPlayerStats() {
   // New year cake bag
   {
     const cakeBag = items.accessories.accessories.find(
-      (x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG"
+      (x) => (x as Item).tag?.ExtraAttributes?.id === "NEW_YEAR_CAKE_BAG",
     );
 
     if (cakeBag && (cakeBag as Backpack).containsItems) {

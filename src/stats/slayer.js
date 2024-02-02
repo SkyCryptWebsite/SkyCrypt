@@ -80,7 +80,7 @@ export function getSlayer(userProfile) {
 
     output.slayers[slayerName].kills.total ??= Object.values(output.slayers[slayerName].kills).reduce(
       (a, b) => a + b,
-      0
+      0,
     );
 
     Object.assign(output.slayers[slayerName], constants.SLAYER_INFO[slayerName]);

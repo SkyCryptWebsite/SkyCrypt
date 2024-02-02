@@ -15,7 +15,7 @@ function hasAccessory(accessories, accessory, options = { ignoreRarity: false })
 
   if (options.ignoreRarity === false) {
     return accessories.some(
-      (a) => a.id === id && constants.RARITIES.indexOf(a.rarity) >= constants.RARITIES.indexOf(accessory.rarity)
+      (a) => a.id === id && constants.RARITIES.indexOf(a.rarity) >= constants.RARITIES.indexOf(accessory.rarity),
     );
   } else {
     return accessories.some((a) => a.id === id);
@@ -115,8 +115,8 @@ export async function getMissingAccessories(calculated, items, packs) {
         helper.addToItemLore(
           item,
           `§7Price: §6${Math.round(price).toLocaleString()} Coins §7(§6${helper.formatNumber(
-            Math.floor(price / helper.getMagicalPower(item.rarity, item.id))
-          )} §7per MP)`
+            Math.floor(price / helper.getMagicalPower(item.rarity, item.id)),
+          )} §7per MP)`,
         );
       }
 

@@ -27,8 +27,8 @@ router.use(async (req, res, next) => {
           collections[a].tier,
           collections[a].amount,
           collections[a].totalAmount,
-        ])
-      )
+        ]),
+      ),
     );
   } catch (e) {
     next(e);

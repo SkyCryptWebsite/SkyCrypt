@@ -8,6 +8,7 @@ export class GuildButton extends LitElement {
 
   public guild: Guild | null = null;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private tooltip: any = null;
 
   firstUpdated() {

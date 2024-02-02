@@ -32,7 +32,7 @@ export function getFileHashes() {
     const fileNames = await readdirPromise(path.join(__dirname, "../public/resources", directory));
 
     const filePromises = fileNames.map((filename) =>
-      getFileHash(path.join(__dirname, "../public/resources", directory, filename))
+      getFileHash(path.join(__dirname, "../public/resources", directory, filename)),
     );
 
     const fileHashes = await Promise.all(filePromises);
