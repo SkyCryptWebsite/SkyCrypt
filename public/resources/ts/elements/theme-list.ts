@@ -67,7 +67,7 @@ export class ThemeList extends LitElement {
   }
 
   // disable shadow root
-  protected createRenderRoot(): Element | ShadowRoot {
+  protected createRenderRoot(): HTMLElement | ShadowRoot {
     return this;
   }
 }

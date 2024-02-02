@@ -5,13 +5,13 @@ import { getCookie, setCookie, eraseCookie } from "../common-defer";
 
 @customElement("pack-list")
 export class PackList extends LitElement {
-  @property()
+  @property({type: Array})
   public availablePacks: string[] = extra.packs.map((pack) => pack.id);
 
-  @property()
+  @property({type: Array})
   public selectedPacks: string[] = this.getCookiePackIds();
 
-  @property()
+  @property( {type: Boolean})
   public needsReload = false;
 
   select(packId: string): void {
@@ -74,7 +74,7 @@ export class PackList extends LitElement {
   }
 
   // disable shadow root
-  protected createRenderRoot(): Element | ShadowRoot {
+  protected createRenderRoot(): HTMLElement | ShadowRoot {
     return this;
   }
 }
