@@ -43,7 +43,7 @@ export class InventoryView extends LitElement {
           html`<div class="view-backpack" @click="${() => showBackpack(backpack)}">
             <span>View Backpack</span>
             <small>(Right click backpack to immediately open)</small>
-          </div>`
+          </div>`,
         );
       }
     } else if (this.inventoryType === "hotm") {
@@ -61,7 +61,7 @@ export class InventoryView extends LitElement {
 
       if (isSlotItem(item)) {
         itemTemplateResults.push(
-          html`<rich-item tabindex="0" class="inventory-slot rich-item" data-item-id="${item.itemId}"></rich-item>`
+          html`<rich-item tabindex="0" class="inventory-slot rich-item" data-item-id="${item.itemId}"></rich-item>`,
         );
       } else {
         itemTemplateResults.push(html`<div class="inventory-slot"></div>`);
@@ -72,7 +72,7 @@ export class InventoryView extends LitElement {
   }
 
   // disable shadow root
-  protected createRenderRoot(): Element | ShadowRoot {
+  protected createRenderRoot(): HTMLElement | ShadowRoot {
     return this;
   }
 }

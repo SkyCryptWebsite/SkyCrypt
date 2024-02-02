@@ -18,7 +18,7 @@ function getTierCompletions(floors = {}) {
 
         return [key, value.stats.tier_completions ?? 0];
       })
-      .filter(([, value]) => value > 0)
+      .filter(([, value]) => value > 0),
   );
 }
 

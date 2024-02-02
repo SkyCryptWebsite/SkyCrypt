@@ -62,7 +62,9 @@ main.grid {
 
       &:-webkit-autofill,
       &:-webkit-autofill:focus {
-        transition: background-color 600000s 0s, color 600000s 0s;
+        transition:
+          background-color 600000s 0s,
+          color 600000s 0s;
       }
 
       &::-webkit-search-cancel-button {
@@ -90,7 +92,9 @@ main.grid {
       font-weight: 700;
       font-size: 16px;
       transform: scale(1);
-      transition: transform 0.15s ease-in-out, background-color 0.15s;
+      transition:
+        transform 0.15s ease-in-out,
+        background-color 0.15s;
       will-change: transform;
 
       &:hover,

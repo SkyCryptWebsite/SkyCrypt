@@ -248,7 +248,7 @@ export function getMisc(profile, userProfile, hypixelProfile) {
     misc.pet_milestones = {
       sea_creatures_killed: getPetMilestone(
         "sea_creatures_killed",
-        userProfile.player_stats.pets.milestone.sea_creatures_killed
+        userProfile.player_stats.pets.milestone.sea_creatures_killed,
       ),
       ores_mined: getPetMilestone("ores_mined", userProfile.player_stats.pets.milestone.ores_mined),
     };

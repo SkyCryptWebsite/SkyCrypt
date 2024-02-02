@@ -80,7 +80,7 @@ export class InventoryView extends LitElement {
   }
 
   // disable shadow root
-  createRenderRoot(): Element | ShadowRoot {
+  createRenderRoot(): HTMLElement | ShadowRoot {
     return this;
   }
 }

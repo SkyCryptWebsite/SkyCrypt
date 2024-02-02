@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
+import os from "os";
 import {
   getClusterId,
   getFolderPath,
@@ -131,8 +132,8 @@ export async function init() {
         {
           base_path: "/" + path.relative(path.resolve(FOLDER_PATH, "..", "public"), pack.base_path ?? pack.basePath),
         },
-        pack.config
-      )
+        pack.config,
+      ),
     );
   });
 
@@ -278,7 +279,7 @@ async function loadResourcePacks() {
                   .resize(NORMALIZED_SIZE, leatherMetadata.height * (NORMALIZED_SIZE / leatherMetadata.width), {
                     kernel: sharp.kernel.nearest,
                   })
-                  .toBuffer()
+                  .toBuffer(),
               );
             }
           }
@@ -291,7 +292,7 @@ async function loadResourcePacks() {
         Object.keys(properties).filter((a) => a.includes("texture.leather_") && a.includes("_overlay")).length == 1
       ) {
         const leatherProperties = Object.keys(properties).find(
-          (a) => a.includes("texture.leather_") && a.includes("_overlay")
+          (a) => a.includes("texture.leather_") && a.includes("_overlay"),
         );
 
         textureFile = path.resolve(path.dirname(file), properties[leatherProperties]);
@@ -319,7 +320,7 @@ async function loadResourcePacks() {
             .resize(NORMALIZED_SIZE, textureMetadata.height * (NORMALIZED_SIZE / textureMetadata.width), {
               kernel: sharp.kernel.nearest,
             })
-            .toBuffer()
+            .toBuffer(),
         );
       }
 
@@ -557,14 +558,14 @@ const timeoutId = setTimeout(async () => {
   for (const [key, value] of textureMap) {
     textureMap.set(
       key,
-      value.sort((a, b) => b.weight - a.weight)
+      value.sort((a, b) => b.weight - a.weight),
     );
   }
 
   for (const [key, value] of textureIdDamageMap) {
     textureIdDamageMap.set(
       key,
-      value.sort((a, b) => b.weight - a.weight)
+      value.sort((a, b) => b.weight - a.weight),
     );
   }
 
@@ -652,7 +653,7 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
         if (matches == texture.match.length) {
           outputTexture = Object.assign(
             { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
-            texture
+            texture,
           );
         }
       }
@@ -713,7 +714,7 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
         if (matches == texture.match.length) {
           outputTexture = Object.assign(
             { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
-            texture
+            texture,
           );
         }
       }
@@ -726,7 +727,13 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
     return null;
   }
 
-  outputTexture.path = path.posix.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path);
+  if (os.platform() === "win32") {
+    outputTexture.path = path
+      .relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path)
+      .replace(/\\/g, "/");
+  } else {
+    outputTexture.path = path.posix.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path);
+  }
   debugStats.time_spent_ms = Date.now() - timeStarted;
   outputTexture.debug = debugStats;
 

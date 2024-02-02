@@ -15,7 +15,7 @@ async function processMuseumItems(items, museumData, customTextures, packs, opti
 
     if (donatedTime) {
       encodedData.map((i) =>
-        helper.addToItemLore(i, ["", `§7Donated: §c<local-time timestamp="${donatedTime}"></local-time>`])
+        helper.addToItemLore(i, ["", `§7Donated: §c<local-time timestamp="${donatedTime}"></local-time>`]),
       );
     }
 
