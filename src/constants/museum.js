@@ -178,6 +178,7 @@ export const MUSEUM = {
     "LAPIS_ARMOR",
     "MINER_OUTFIT",
     "GOLEM_ARMOR",
+    "FISHERMAN",
     "TANK_MINER",
     "ROTTEN",
     "HARDENED_DIAMOND",
@@ -588,6 +589,7 @@ export const MUSEUM = {
     RABBIT: "RABBIT_HELMET",
     SEYMOUR: "VELVET_TOP_HAT",
     LOTUS: "LOTUS_NECKLACE",
+    FISHERMAN: "PRISMARINE_NECKLACE",
   },
   inventory: [
     {
