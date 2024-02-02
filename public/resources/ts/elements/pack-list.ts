@@ -5,13 +5,13 @@ import { getCookie, setCookie, eraseCookie } from "../common-defer";
 
 @customElement("pack-list")
 export class PackList extends LitElement {
-  @property({type: Array})
+  @property({ type: Array })
   public availablePacks: string[] = extra.packs.map((pack) => pack.id);
 
-  @property({type: Array})
+  @property({ type: Array })
   public selectedPacks: string[] = this.getCookiePackIds();
 
-  @property( {type: Boolean})
+  @property({ type: Boolean })
   public needsReload = false;
 
   select(packId: string): void {
