@@ -263,7 +263,7 @@ function getDescription() {
     if (classes !== undefined) {
       const classesLine = [];
       for (const [dclass, data] of Object.entries(classes)) {
-        output += `${skillEmojis[dclass]} ${data.experience?.level ?? 0} `;
+        output += `${skillEmojis[dclass]} ${data.level?.level ?? 0} `;
       }
     }
 
