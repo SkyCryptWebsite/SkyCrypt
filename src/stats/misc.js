@@ -131,56 +131,49 @@ export function getMisc(profile, userProfile, hypixelProfile) {
   if ("races" in userProfile.player_stats) {
     misc.races = {};
     const races = userProfile.player_stats.races;
-    for (const key in userProfile.objectives) {
-      if (key.startsWith("complete_the_") === false) {
-        continue;
-      }
 
-      const raceTimeID = `${key.replace("complete_the_", "").split("_").slice(0, -1).join("_")}_best_time`;
-      const customRaceID = constants.CUSTOM_RACE_IDS[raceTimeID];
-      const tier = parseInt(key.split("_").at(-1));
+    for (let [id, data] of Object.entries(races)) {
+      if (typeof data === "number") {
+        misc.races.other ??= {
+          name: "Other",
+          races: {},
+        };
 
-      const raceTime = races[raceTimeID] ?? races[customRaceID];
-      let actualRaceId = (customRaceID ?? raceTimeID).split("_").slice(0, 2).join("_");
-      if (raceTime) {
-        misc.races.other ??= { name: "Other", races: {} };
-        misc.races.other.races[actualRaceId] = {
-          name: constants.RACE_NAMES[actualRaceId],
-          time: moment.duration(raceTime, "milliseconds").format("m:ss.SSS"),
-          tier: tier,
+        const raceId = id.replace("_best_time", "");
+        const raceName = constants.RACE_NAMES[raceId] ?? helper.titleCase(raceId.replace("_", " "));
+        misc.races.other.races[raceId] = {
+          name: raceName,
+          time: moment.duration(data, "milliseconds").format("m:ss.SSS"),
         };
       } else {
-        // Thank you Hypxiel
-        actualRaceId = actualRaceId.replace("_race", "");
-        const categoryRaceID = raceTimeID.replace(`${actualRaceId}_`, "").replace("_best_time", "");
-
-        misc.races[actualRaceId] ??= {
-          name: constants.RACE_NAMES[actualRaceId],
-          races: {
-            no_return: {},
-            with_return: {},
-          },
-        };
-
-        const raceId = raceTimeID.replace("_race", "");
-        if (categoryRaceID.endsWith("no_return_race")) {
-          const subcategoryRaceId = categoryRaceID.replace("_no_return_race", "");
-          const raceName = helper.titleCase(subcategoryRaceId.replace("_", " "));
-
-          misc.races[actualRaceId].races.with_return[subcategoryRaceId] = {
+        for ([id, data] of Object.entries(data)) {
+          const shortId = id.split("_").slice(0, 2).join("_");
+          const raceId = id.replace(`${shortId}_`, "").replace("_best_time", "");
+          const raceName = constants.RACE_NAMES[shortId] ?? helper.titleCase(shortId.replace("_", " "));
+          misc.races[shortId] ??= {
             name: raceName,
-            time: moment.duration(races.dungeon_hub[raceId], "milliseconds").format("m:ss.SSS"),
-            tier: tier,
+            races: {
+              with_return: {},
+              no_return: {},
+            },
           };
-        } else {
-          const subcategoryRaceId = categoryRaceID.replace("_with_return_race", "");
-          const raceName = helper.titleCase(subcategoryRaceId.replace("_", " "));
 
-          misc.races[actualRaceId].races.no_return[subcategoryRaceId] = {
-            name: raceName,
-            time: moment.duration(races.dungeon_hub[raceId], "milliseconds").format("m:ss.SSS"),
-            tier: tier,
-          };
+          const isReturn = id.endsWith("_with_return_best_time");
+          if (isReturn) {
+            const testId = raceId.replace("_with_return", "");
+
+            misc.races[shortId].races.with_return[testId] = {
+              name: helper.titleCase(testId.replace("_", " ")),
+              time: moment.duration(data, "milliseconds").format("m:ss.SSS"),
+            };
+          } else {
+            const testId = raceId.replace("_no_return", "");
+
+            misc.races[shortId].races.no_return[testId] = {
+              name: helper.titleCase(testId.replace("_", " ")),
+              time: moment.duration(data, "milliseconds").format("m:ss.SSS"),
+            };
+          }
         }
       }
     }

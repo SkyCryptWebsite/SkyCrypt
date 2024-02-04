@@ -25,9 +25,11 @@ const raceOrder = ["crystal_core", "giant_mushroom", "precursor_ruins", "other"]
                   <span class="stat-value"><%= race.time %></span>
                 </div>
         
+                <!-- 
                 <div>
                   <span class="stat-value"><%= helper.renderRaceTier(race.tier) %></span>
                 </div>
+                -->
               </div>
             <% } else { %>
               <div class="narrow-info-section-header"><%= helper.titleCase(subcategory.replace("_", " ")) %>:</div>
@@ -37,10 +39,12 @@ const raceOrder = ["crystal_core", "giant_mushroom", "precursor_ruins", "other"]
                     <span class="stat-name"><%= subcategoryRace.name %>: </span>
                     <span class="stat-value"><%= subcategoryRace.time %></span>
                   </div>
-          
+
+                  <!-- 
                   <div>
                     <span class="stat-value"><%= helper.renderRaceTier(subcategoryRace.tier) %></span>
                   </div>
+                  -->
                 </div>
               <% } %>
             <% } %>
