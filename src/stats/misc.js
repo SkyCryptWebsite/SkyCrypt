@@ -128,29 +128,35 @@ export function getMisc(profile, userProfile, hypixelProfile) {
   }
 
   const misc = {};
+
   if ("races" in userProfile.player_stats) {
     misc.races = {};
     const races = userProfile.player_stats.races;
 
+    const formatTime = (data) => moment.duration(data, "milliseconds").format("m:ss.SSS");
+    const getRaceName = (id) => constants.RACE_NAMES[id] ?? helper.titleCase(id.replace("_", " "));
+
     for (let [id, data] of Object.entries(races)) {
       if (typeof data === "number") {
-        misc.races.other ??= {
+        misc.races.other = misc.races.other || {
           name: "Other",
           races: {},
         };
 
         const raceId = id.replace("_best_time", "");
-        const raceName = constants.RACE_NAMES[raceId] ?? helper.titleCase(raceId.replace("_", " "));
+        const raceName = getRaceName(raceId);
+
         misc.races.other.races[raceId] = {
           name: raceName,
-          time: moment.duration(data, "milliseconds").format("m:ss.SSS"),
+          time: formatTime(data),
         };
       } else {
         for ([id, data] of Object.entries(data)) {
           const shortId = id.split("_").slice(0, 2).join("_");
           const raceId = id.replace(`${shortId}_`, "").replace("_best_time", "");
-          const raceName = constants.RACE_NAMES[shortId] ?? helper.titleCase(shortId.replace("_", " "));
-          misc.races[shortId] ??= {
+          const raceName = getRaceName(shortId);
+
+          misc.races[shortId] = misc.races[shortId] || {
             name: raceName,
             races: {
               with_return: {},
@@ -159,21 +165,12 @@ export function getMisc(profile, userProfile, hypixelProfile) {
           };
 
           const isReturn = id.endsWith("_with_return_best_time");
-          if (isReturn) {
-            const testId = raceId.replace("_with_return", "");
+          const dungeonRaceId = raceId.replace(isReturn ? "_with_return" : "_no_return", "");
 
-            misc.races[shortId].races.with_return[testId] = {
-              name: helper.titleCase(testId.replace("_", " ")),
-              time: moment.duration(data, "milliseconds").format("m:ss.SSS"),
-            };
-          } else {
-            const testId = raceId.replace("_no_return", "");
-
-            misc.races[shortId].races.no_return[testId] = {
-              name: helper.titleCase(testId.replace("_", " ")),
-              time: moment.duration(data, "milliseconds").format("m:ss.SSS"),
-            };
-          }
+          misc.races[shortId].races[isReturn ? "with_return" : "no_return"][dungeonRaceId] = {
+            name: getRaceName(dungeonRaceId),
+            time: formatTime(data),
+          };
         }
       }
     }
