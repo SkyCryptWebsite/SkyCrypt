@@ -5,6 +5,7 @@ import * as stats from "../stats.js";
 import * as lib from "../lib.js";
 import { db } from "../mongo.js";
 import _ from "lodash";
+import { SkyCryptError } from "../constants/error.js";
 
 function getMax(calculated, value, path) {
   const currentValue = value ?? 0;
@@ -329,6 +330,10 @@ export async function updateLeaderboardData(
 
     console.log(`${options.debugId}: updateLeaderboardData returned. (${Date.now() - timeStarted}ms)`);
   } catch (e) {
+    if (e instanceof SkyCryptError === false) {
+      return;
+    }
+
     const req = { params: { player: uuid } };
 
     helper.sendWebhookMessage(e, req, "updateLeaderboardData");
