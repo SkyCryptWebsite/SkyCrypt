@@ -1,0 +1,7 @@
+{
+	"parent": "item/hplus_handheld_abiphone",
+	"textures": {
+		"0": "./abingophone",
+		"1": "./abingophone_back"
+	}
+}
