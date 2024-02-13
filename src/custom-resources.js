@@ -524,6 +524,7 @@ export function getCompletePacks() {
 
 const textureMap = new Map();
 const allTextures = new Map();
+const allHeadTextures = new Map();
 const textureIdDamageMap = new Map();
 const allTexturesIdDamage = new Map();
 const timeoutId = setTimeout(async () => {
@@ -551,6 +552,11 @@ const timeoutId = setTimeout(async () => {
         textureIdDamageMap.set(key, [...data, texture]);
 
         allTexturesIdDamage.set(`${itemId}:${damage}`, true);
+      } else if (itemId !== undefined && itemId === 397) {
+        const key = `${pack.config.id}:${itemId}:${damage}`;
+        const data = allHeadTextures.get(key) ?? [];
+
+        allHeadTextures.set(key, [...data, texture]);
       }
     }
   }
@@ -720,6 +726,65 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
       }
 
       debugStats.processed_packs++;
+    }
+
+    const cachedHeadTexture = allHeadTextures.get(`${pack.config.id}:${item.id}:${item.Damage ?? 0}`);
+    if (cachedHeadTexture && cachedTexture === undefined && cachedtextureIdDamageMap === undefined) {
+      for (const texture of cachedHeadTexture) {
+        if (
+          texture.weight < outputTexture.weight ||
+          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
+        ) {
+          continue;
+        }
+
+        if (!ignore_id && texture.id != item.id) {
+          continue;
+        }
+
+        if (!ignore_id && "damage" in texture && texture.damage != item.Damage) {
+          continue;
+        }
+
+        if (!ignore_id && texture.match === undefined && !("skyblock_id" in texture)) {
+          continue;
+        }
+
+        let matches = 0;
+
+        let matchValues = [];
+        for (const match of texture.match) {
+          let { value, regex } = match;
+
+          if (value.endsWith(".*")) {
+            value = value.slice(0, -2);
+          }
+
+          if (hasPath(item, "tag", ...value.split(".")) == false) {
+            continue;
+          }
+
+          matchValues = getPath(item, "tag", ...value.split("."));
+          matchValues = Array.isArray(matchValues) ? matchValues : [matchValues];
+
+          const slash = regex.lastIndexOf("/");
+          regex = new RegExp(regex.slice(1, slash), regex.slice(slash + 1));
+
+          if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
+            matches++;
+          }
+        }
+
+        debugStats.found_matches += matches;
+        debugStats.processed_textures++;
+
+        if (matches == texture.match.length) {
+          outputTexture = Object.assign(
+            { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
+            texture,
+          );
+        }
+      }
     }
   }
 
