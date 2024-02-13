@@ -205,8 +205,8 @@ export async function getItems(
           itemLore.push(
             "",
             `§7Item Value: §6${Math.round(totalNetworth).toLocaleString()} Coins §7(§6${helper.formatNumber(
-              totalNetworth
-            )}§7)`
+              totalNetworth,
+            )}§7)`,
           );
         }
       } catch (error) {
