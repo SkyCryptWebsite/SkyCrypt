@@ -351,6 +351,9 @@ async function loadResourcePacks() {
         }
 
         let regex = properties[property];
+        if (regex.includes("\\u00A7")) {
+          regex = regex.toString().replace(/\\u00A7[0-9a-fk-or]/g, "");
+        }
 
         if (regex.startsWith("ipattern:")) {
           regex = mm.makeRe(regex.substring(9), { nocase: true });
