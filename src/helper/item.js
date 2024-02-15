@@ -74,6 +74,10 @@ export async function getItemData(query = {}) {
     item.texture_path = `/head/${dbItem.texture}`;
   }
 
+  if ("glowing" in dbItem) {
+    item.glowing = dbItem.glowing;
+  }
+
   if (dbItem.item_id >= 298 && dbItem.item_id <= 301) {
     const type = ["helmet", "chestplate", "leggings", "boots"][dbItem.item_id - 298];
 
