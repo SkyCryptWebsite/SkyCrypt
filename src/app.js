@@ -277,12 +277,12 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
     const paramBingo =
       profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : null;
-    console.log(req.cookies);
     const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, req.cookies.pack, {
       cacheOnly,
       debugId,
       updateLeaderboards: true,
       updateGuild: true,
+      customTextures: true,
     });
 
     if (isFoolsDay) {

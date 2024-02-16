@@ -64,6 +64,7 @@ export async function getStats(
     debugId: `${helper.getClusterId()}/unknown@getStats`,
     updateLeaderboards: false,
     updateGuild: false,
+    customTextures: false,
   },
 ) {
   const output = {};
@@ -162,12 +163,10 @@ export async function getStats(
   const profileMembers = profile.members;
   const uuid = profile.uuid;
 
-  // console.log(packs, "pack");
-
   const functions = {
     items: {
       fn: stats.getItems,
-      args: { userProfile, bingoProfile, packs, cacheOnly: options.cacheOnly },
+      args: { userProfile, bingoProfile, customTextures: options.customTextures, packs, options },
       promise: true,
     },
     fairy_souls: { fn: stats.getFairySouls, args: { userProfile, profile } },

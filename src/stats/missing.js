@@ -86,7 +86,7 @@ function getMissing(accessories) {
 }
 
 export async function getMissingAccessories(calculated, packs) {
-  const accessoryIds = calculated.items.accessories?.accessory_ids;
+  const accessoryIds = calculated.items?.accessories?.accessory_ids;
   if (!accessoryIds || accessoryIds?.length === 0) {
     return;
   }

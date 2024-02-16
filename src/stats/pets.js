@@ -431,7 +431,7 @@ export async function getPets(userProfile, calculated, profile) {
   const pets = userProfile.pets_data?.pets ?? [];
 
   // Adds pets from inventories
-  if (calculated.items.pets !== undefined) {
+  if (calculated.items?.pets !== undefined) {
     pets.push(...calculated.items.pets);
   }
 

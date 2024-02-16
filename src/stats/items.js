@@ -208,11 +208,9 @@ export async function getItems(
 
     console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
     return output;
-  } catch (error) {
-    console.error(error);
-
-    const username = profile.player_id;
-    helper.sendWebhookMessage(error, { username });
+  } catch (e) {
+    console.log(e);
+    helper.sendWebhookMessage(e, { username: profile.player_id });
 
     return {
       armor: {
