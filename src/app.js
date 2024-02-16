@@ -42,7 +42,6 @@ import * as itemRoute from "./routes/item.js";
 import * as headRoute from "./routes/head.js";
 import * as leatherRoute from "./routes/leather.js";
 import * as potionRoute from "./routes/potion.js";
-import * as stats from "./stats.js";
 import { SkyCryptError } from "./constants/error.js";
 
 const folderPath = helper.getFolderPath();
