@@ -315,7 +315,9 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
           console.debug(`${debugId}: an error has occurred.`);
           console.error(err);
 
-          await helper.sendWebhookMessage(err, req);
+          const username = req.params.player;
+          const profile = req.params.profile;
+          await helper.sendWebhookMessage(err, { username, profile });
 
           const favorites = parseFavorites(req.cookies.favorite);
           res.render(
@@ -347,9 +349,10 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     );
   } catch (e) {
     if (e instanceof SkyCryptError === false) {
-      if (e.message !== "socket hang up") {
-        helper.sendWebhookMessage(e, req);
-      }
+      const username = req.params.player;
+      const profile = req.params.profile;
+
+      helper.sendWebhookMessage(e, { username, profile });
     }
 
     const favorites = parseFavorites(req.cookies.favorite);

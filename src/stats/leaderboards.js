@@ -334,8 +334,6 @@ export async function updateLeaderboardData(
       return;
     }
 
-    const req = { params: { player: uuid } };
-
-    helper.sendWebhookMessage(e, req, "updateLeaderboardData");
+    helper.sendWebhookMessage(e, { username: uuid });
   }
 }

@@ -227,7 +227,10 @@ export async function getStats(
   output.errors = errors;
   if (Object.keys(errors).length > 0) {
     for (const error in errors) {
-      helper.sendWebhookMessage(errors[error], { params: { player: profile.uuid, profile: profile.profile_id } });
+      const username = profile.uuid;
+      const profileId = profile.profile_id;
+
+      helper.sendWebhookMessage(errors[error], { username, profile: profileId });
     }
   }
 

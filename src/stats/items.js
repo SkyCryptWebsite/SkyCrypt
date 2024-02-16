@@ -13,8 +13,6 @@ export async function getItems(
   try {
     const output = {};
 
-    throw new Error("This function is not implemented yet.");
-
     console.debug(`${options.debugId}: getItems called.`);
     const timeStarted = Date.now();
 
@@ -208,12 +206,13 @@ export async function getItems(
 
     output.allItems = allItems;
 
-    console.log(Object.keys(output));
-
     console.debug(`${options.debugId}: getItems returned. (${Date.now() - timeStarted}ms)`);
     return output;
   } catch (error) {
     console.error(error);
+
+    const username = profile.player_id;
+    helper.sendWebhookMessage(error, { username });
 
     return {
       armor: {
@@ -241,9 +240,15 @@ export async function getItems(
         accessories: [],
       },
       weapons: [],
-      farming_tools: [],
-      mining_tools: [],
-      fishing_tools: [],
+      farming_tools: {
+        tools: [],
+      },
+      mining_tools: {
+        tools: [],
+      },
+      fishing_tools: {
+        tools: [],
+      },
       pets: [],
       disabled: {},
       allItems: [],
