@@ -18,50 +18,24 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
     const userProfile = profile.members[uuid];
 
-    const items = await getItems(userProfile, false, undefined, req.options);
+    const items = await getItems(userProfile, null, false, undefined, req.options);
 
     const output = [];
+    for (const weapon of items.weapons.weapons) {
+      const weaponEnchantments = weapon.tag.ExtraAttributes.enchantments;
+      let enchantmentsOutput;
+      if (weaponEnchantments) {
+        enchantmentsOutput = Object.entries(weapon.tag.ExtraAttributes.enchantments)
+          .map(([key, value]) => `${key}=${value}`)
+          .join(",");
+      }
 
-    for (const weapon of items.weapons) {
-      const enchantments = weapon.tag.ExtraAttributes.enchantments;
-      let enchantmentsOutput = enchantments;
-
-      const stats = weapon.stats;
-      let statsOutput = weapon.stats;
-
-      const extra = weapon.extra;
-      let extraOutput = weapon.extra;
-
-      if (weapon.tag?.ExtraAttributes) {
-        if (enchantments !== undefined) {
-          enchantmentsOutput = [];
-
-          for (const enchantment in enchantments) {
-            enchantmentsOutput.push(enchantment + "=" + enchantments[enchantment]);
-          }
-
-          enchantmentsOutput = enchantmentsOutput.join(",");
-        }
-
-        if (stats !== undefined) {
-          statsOutput = [];
-
-          for (const stat in stats) {
-            statsOutput.push(stat + "=" + stats[stat]);
-          }
-
-          statsOutput = statsOutput.join(",");
-        }
-
-        if (extra !== undefined) {
-          extraOutput = [];
-
-          for (const value in extra) {
-            extraOutput.push(value + "=" + extra[value]);
-          }
-
-          extraOutput = extraOutput.join(",");
-        }
+      const weaponExtra = weapon.extra;
+      let extraOutput;
+      if (weaponExtra) {
+        extraOutput = Object.entries(weaponExtra)
+          .map(([key, value]) => `${key}=${JSON.stringify(value)}`)
+          .join(",");
       }
 
       output.push({
@@ -69,8 +43,8 @@ router.use(async (req, res, next) => {
         name: weapon.display_name,
         rarity: weapon.rarity,
         enchantments: enchantmentsOutput,
-        stats: statsOutput,
         extra: extraOutput,
+        recombobulated: weapon.recombobulated,
       });
     }
 
