@@ -56,7 +56,7 @@ router.get("/:player", async (req, res, next) => {
     for (const singleProfile of allProfiles) {
       const userProfile = singleProfile.members[profile.uuid];
 
-      const items = await getItems(userProfile, false, "", req.options);
+      const items = await getItems(userProfile, null, false, undefined, req.options);
       const accessories = items.accessories;
 
       output.profiles[singleProfile.profile_id] = {

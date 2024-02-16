@@ -4,7 +4,7 @@ import express from "express";
 
 import { tableify } from "../api.js";
 import { db } from "../../mongo.js";
-import { getItems, getPets } from "../../stats.js";
+import { getPets } from "../../stats.js";
 
 const router = express.Router();
 

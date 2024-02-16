@@ -18,7 +18,7 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
     const userProfile = profile.members[uuid];
 
-    const items = await getItems(userProfile, false, undefined, req.options);
+    const items = await getItems(userProfile, null, false, undefined, req.options);
 
     const allItems = items.allItems
       .concat(
