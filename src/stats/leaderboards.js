@@ -61,8 +61,7 @@ export async function updateLeaderboardData(
       }
 
       const paramBingo = profile.game_mode === "bingo" ? await lib.getBingoProfile(db, uuid, options) : null;
-      const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, [], options);
-      const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, [], options);
+      const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, [], options);
 
       if (calculated.skills?.skills !== undefined) {
         for (const skill in calculated.skills.skills) {

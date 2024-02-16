@@ -277,11 +277,8 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
     const paramBingo =
       profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : null;
-    const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, req.cookies.pack, {
-      cacheOnly,
-      debugId,
-    });
-    const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, req.cookies.pack, {
+    console.log(req.cookies);
+    const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, req.cookies.pack, {
       cacheOnly,
       debugId,
       updateLeaderboards: true,
@@ -300,7 +297,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       "stats",
       {
         req,
-        items,
+        items: calculated.items,
         calculated,
         _,
         constants,
