@@ -1,7 +1,6 @@
 import { redisClient } from "../redis.js";
 import * as helper from "../helper.js";
 import * as constants from "../constants.js";
-import * as stats from "../stats.js";
 import * as lib from "../lib.js";
 import { db } from "../mongo.js";
 import _ from "lodash";
