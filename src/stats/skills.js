@@ -8,11 +8,14 @@ async function getLevels(userProfile, profileMembers, hypixelProfile, levelCaps)
     const SKILL = userProfile.player_data.experience;
 
     const socialExperience = Object.keys(profileMembers).reduce((a, b) => {
-      return a + profileMembers[b].player_data?.experience?.SKILL_SOCIAL || 0;
+      return a + (profileMembers[b].player_data?.experience?.SKILL_SOCIAL ?? 0);
     }, 0);
 
     Object.assign(skillLevels, {
-      taming: getLevelByXp(SKILL.SKILL_TAMING, { skill: "taming" }),
+      taming: getLevelByXp(SKILL.SKILL_TAMING, {
+        skill: "taming",
+        cap: Math.max(hypixelProfile.achievements.skyblock_domesticator, 50),
+      }),
       farming: getLevelByXp(SKILL.SKILL_FARMING, { skill: "farming", cap: levelCaps.farming }),
       mining: getLevelByXp(SKILL.SKILL_MINING, { skill: "mining" }),
       combat: getLevelByXp(SKILL.SKILL_COMBAT, { skill: "combat" }),

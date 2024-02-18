@@ -279,10 +279,11 @@ export async function processItems(base64, source, customTextures = false, packs
       item.texture_path = constants.ANIMATED_ITEMS[item.extra.skin].texture;
     }
 
-    if (item.tag?.ExtraAttributes?.skin == undefined && customTextures) {
+    if (customTextures) {
       const customTexture = getTexture(item, {
         ignore_id: false,
         pack_ids: packs,
+        hotm: source === "storage_icons",
       });
 
       if (customTexture) {

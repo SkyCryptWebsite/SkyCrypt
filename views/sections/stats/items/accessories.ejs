@@ -153,7 +153,7 @@ function itemIcon(item, classes) { %>
       <% const inactiveAccessories = items.accessories.accessories.filter(a => a.isInactive === true); %>
       <% if (inactiveAccessories.length > 0) { %>
         <div class="accessory-list">
-          <p class="stat-sub-header">Inactive Accessories</p>
+          <p class="stat-sub-header">Inactive Accessories<span data-tippy-content='These accessories are inactive and do not count towards your stats.'></span></p>
           <% for (const item of inactiveAccessories) { %>
             <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
               <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
