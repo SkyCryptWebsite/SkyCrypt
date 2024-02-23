@@ -1,4 +1,0 @@
-Art and Pack Compilation by the Reborn Team
-Vanilla derivived from 1.14 Default Backport by Qwuiblington
-Other contributors are listed on our website: furfsky.net
-Models are made using Blockbench
