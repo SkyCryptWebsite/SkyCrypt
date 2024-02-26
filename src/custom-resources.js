@@ -9,6 +9,7 @@ import {
   hasPath,
   getPath,
   getId,
+  getTextureValue,
 } from "./helper.js";
 import mm from "micromatch";
 import util from "util";
@@ -351,6 +352,9 @@ async function loadResourcePacks() {
         }
 
         let regex = properties[property];
+        if (regex.includes("\\u00A7")) {
+          regex = regex.toString().replace(/\\u00A7[0-9a-fk-or]/g, "");
+        }
 
         if (regex.startsWith("ipattern:")) {
           regex = mm.makeRe(regex.substring(9), { nocase: true });
@@ -522,10 +526,15 @@ export function getCompletePacks() {
   return resourcePacks;
 }
 
-const textureMap = new Map();
-const allTextures = new Map();
-const textureIdDamageMap = new Map();
-const allTexturesIdDamage = new Map();
+const skyblockIDTextureMap = new Map();
+const textureValueTextureMap = new Map();
+const itemIdTextureMap = new Map();
+const headTextureMap = new Map();
+
+const skyblockIDListMap = new Map();
+const textureValueListMap = new Map();
+const itemIdListMap = new Map();
+
 const timeoutId = setTimeout(async () => {
   if (!resourcesReady) {
     await readyPromise;
@@ -535,35 +544,67 @@ const timeoutId = setTimeout(async () => {
     for (const texture of pack.textures) {
       if (texture.skyblock_id !== undefined) {
         const key = `${pack.config.id}:${texture.skyblock_id}`;
-        const data = textureMap.get(key) ?? [];
+        const data = skyblockIDTextureMap.get(key) ?? [];
 
-        textureMap.set(key, [...data, texture]);
-        allTextures.set(texture.skyblock_id, true);
-        continue;
+        skyblockIDListMap.set(`${texture.skyblock_id}`, true);
+        skyblockIDTextureMap.set(key, [...data, texture]);
+      }
+
+      const textureMatch = texture.match.filter((a) => a.value === "SkullOwner.Properties.textures.0.Value");
+      if (textureMatch.length > 0) {
+        const string = textureMatch[0].regex
+          .replace(/^\/\^|\\=\\\$\/$/g, "")
+          .replace(/\\\\/g, "\\")
+          .replace("$/", "");
+
+        const key = `${pack.config.id}:${string}`;
+        const data = textureValueTextureMap.get(key) ?? [];
+
+        textureValueListMap.set(`${string}`, true);
+        textureValueTextureMap.set(key, [...data, texture]);
       }
 
       const itemId = texture.id;
       const damage = texture.damage ?? 0;
       if (itemId !== undefined && itemId !== 397) {
         const key = `${pack.config.id}:${itemId}:${damage}`;
-        const data = textureIdDamageMap.get(key) ?? [];
+        const data = itemIdTextureMap.get(key) ?? [];
 
-        textureIdDamageMap.set(key, [...data, texture]);
+        itemIdListMap.set(`${itemId}:${damage}`, true);
+        itemIdTextureMap.set(key, [...data, texture]);
+      } else if (itemId !== undefined && itemId === 397) {
+        const key = `${pack.config.id}:${itemId}:${damage}`;
+        const data = headTextureMap.get(key) ?? [];
 
-        allTexturesIdDamage.set(`${itemId}:${damage}`, true);
+        itemIdListMap.set(`${itemId}:${damage}`, true);
+        headTextureMap.set(key, [...data, texture]);
       }
     }
   }
 
-  for (const [key, value] of textureMap) {
-    textureMap.set(
+  for (const [key, value] of skyblockIDTextureMap) {
+    skyblockIDTextureMap.set(
       key,
       value.sort((a, b) => b.weight - a.weight),
     );
   }
 
-  for (const [key, value] of textureIdDamageMap) {
-    textureIdDamageMap.set(
+  for (const [key, value] of textureValueTextureMap) {
+    textureValueTextureMap.set(
+      key,
+      value.sort((a, b) => b.weight - a.weight),
+    );
+  }
+
+  for (const [key, value] of itemIdTextureMap) {
+    itemIdTextureMap.set(
+      key,
+      value.sort((a, b) => b.weight - a.weight),
+    );
+  }
+
+  for (const [key, value] of headTextureMap) {
+    headTextureMap.set(
       key,
       value.sort((a, b) => b.weight - a.weight),
     );
@@ -571,6 +612,58 @@ const timeoutId = setTimeout(async () => {
 
   clearTimeout(timeoutId);
 }, 100);
+
+function processTextures(outputTexture, textures, pack, item) {
+  for (const texture of textures) {
+    if (
+      texture.weight < outputTexture.weight ||
+      (texture.weight === outputTexture.weight && texture.file < outputTexture.file)
+    ) {
+      break;
+    }
+
+    let matches = 0;
+
+    for (const match of texture.match) {
+      let { value, regex } = match;
+
+      if (value.endsWith(".*")) {
+        value = value.slice(0, -2);
+      }
+
+      const valueSplit = value.split(".");
+      if (!hasPath(item, "tag", ...valueSplit)) {
+        break;
+      }
+
+      let matchValues = getPath(item, "tag", ...valueSplit);
+      matchValues = Array.isArray(matchValues) ? matchValues : [matchValues];
+
+      const slash = regex.lastIndexOf("/");
+      regex = new RegExp(regex.slice(1, slash), regex.slice(slash + 1));
+
+      let matchFound = false;
+      for (let i = 0; i < matchValues.length; i++) {
+        if (regex.test(matchValues[i].toString().replace(removeFormatting, ""))) {
+          matchFound = true;
+          break;
+        }
+      }
+
+      if (!matchFound) {
+        break;
+      }
+
+      matches++;
+    }
+
+    if (matches === texture.match.length) {
+      outputTexture = { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config }, ...texture };
+    }
+  }
+
+  return outputTexture;
+}
 
 /**
  * Processes all textures that could potentially be connected to an item, then throws the one with biggest priority
@@ -582,21 +675,21 @@ const timeoutId = setTimeout(async () => {
  * @returns {object} Item's texture
  */
 export function getTexture(item, { ignore_id = false, pack_ids = [], debug = false, hotm = false } = {}) {
-  if (
-    ((allTextures.has(getId(item)) === false && allTexturesIdDamage.has(`${item.id}:${item.Damage ?? 0}`) === false) ||
-      getId(item) === "") &&
-    hotm === false
-  ) {
+  const ifExists =
+    skyblockIDListMap.has(getId(item)) === true ||
+    textureValueListMap.has(getTextureValue(item)) === true ||
+    itemIdListMap.has(`${item.id}:${item.Damage ?? 0}`) === true;
+
+  if (ifExists === false && hotm === false) {
     return null;
   }
 
-  const timeStarted = Date.now();
-
-  const debugStats = {
-    processed_packs: 0,
-    processed_textures: 0,
-    found_matches: 0,
-  };
+  // const timeStarted = Date.now();
+  // const debugStats = {
+  //   processed_packs: 0,
+  //   processed_textures: 0,
+  //   found_matches: 0,
+  // };
 
   let outputTexture = { weight: -9999 };
 
@@ -613,113 +706,24 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
   }
 
   for (const pack of tempPacks) {
-    const cachedTexture = textureMap.get(`${pack.config.id}:${getId(item)}`);
-    if (cachedTexture) {
-      for (const texture of cachedTexture) {
-        if (
-          texture.weight < outputTexture.weight ||
-          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
-        ) {
-          continue;
-        }
-
-        let matches = 0;
-        let matchValues = [];
-        for (const match of texture.match) {
-          let { value, regex } = match;
-
-          if (value.endsWith(".*")) {
-            value = value.slice(0, -2);
-          }
-
-          if (hasPath(item, "tag", ...value.split(".")) == false) {
-            continue;
-          }
-
-          matchValues = getPath(item, "tag", ...value.split("."));
-          matchValues = Array.isArray(matchValues) ? matchValues : [matchValues];
-
-          const slash = regex.lastIndexOf("/");
-          regex = new RegExp(regex.slice(1, slash), regex.slice(slash + 1));
-
-          if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
-            matches++;
-          }
-        }
-
-        debugStats.found_matches += matches;
-        debugStats.processed_textures++;
-
-        if (matches == texture.match.length) {
-          outputTexture = Object.assign(
-            { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
-            texture,
-          );
-        }
-      }
-
-      debugStats.found_matches++;
+    const cachedItemIdTexture = skyblockIDTextureMap.get(`${pack.config.id}:${getId(item)}`);
+    if (cachedItemIdTexture) {
+      outputTexture = processTextures(outputTexture, cachedItemIdTexture, pack, item);
     }
 
-    const cachedtextureIdDamageMap = textureIdDamageMap.get(`${pack.config.id}:${item.id}:${item.Damage ?? 0}`);
-    if (cachedtextureIdDamageMap && cachedTexture === undefined) {
-      for (const texture of cachedtextureIdDamageMap) {
-        if (
-          texture.weight < outputTexture.weight ||
-          (texture.weight == outputTexture.weight && texture.file < outputTexture.file)
-        ) {
-          continue;
-        }
+    const cachedTextureValueTexture = textureValueTextureMap.get(`${pack.config.id}:${getTextureValue(item)}`);
+    if (cachedTextureValueTexture) {
+      outputTexture = processTextures(outputTexture, cachedTextureValueTexture, pack, item);
+    }
 
-        if (!ignore_id && texture.id != item.id) {
-          continue;
-        }
+    const cachedHeadTexture = headTextureMap.get(`${pack.config.id}:${item.id}:${item.Damage ?? 0}`);
+    if (cachedHeadTexture) {
+      outputTexture = processTextures(outputTexture, cachedHeadTexture, pack, item);
+    }
 
-        if (!ignore_id && "damage" in texture && texture.damage != item.Damage) {
-          continue;
-        }
-
-        if (!ignore_id && texture.match === undefined && !("skyblock_id" in texture)) {
-          continue;
-        }
-
-        let matches = 0;
-
-        let matchValues = [];
-        for (const match of texture.match) {
-          let { value, regex } = match;
-
-          if (value.endsWith(".*")) {
-            value = value.slice(0, -2);
-          }
-
-          if (hasPath(item, "tag", ...value.split(".")) == false) {
-            continue;
-          }
-
-          matchValues = getPath(item, "tag", ...value.split("."));
-          matchValues = Array.isArray(matchValues) ? matchValues : [matchValues];
-
-          const slash = regex.lastIndexOf("/");
-          regex = new RegExp(regex.slice(1, slash), regex.slice(slash + 1));
-
-          if (matchValues.some((matchValue) => regex.test(matchValue.toString().replace(removeFormatting, "")))) {
-            matches++;
-          }
-        }
-
-        debugStats.found_matches += matches;
-        debugStats.processed_textures++;
-
-        if (matches == texture.match.length) {
-          outputTexture = Object.assign(
-            { pack: { base_path: pack.base_path ?? pack.basePath, config: pack.config } },
-            texture,
-          );
-        }
-      }
-
-      debugStats.processed_packs++;
+    const cachedItemIdTextureMap = itemIdTextureMap.get(`${pack.config.id}:${item.id}:${item.Damage ?? 0}`);
+    if (cachedItemIdTextureMap) {
+      outputTexture = processTextures(outputTexture, cachedItemIdTextureMap, pack, item);
     }
   }
 
@@ -734,8 +738,9 @@ export function getTexture(item, { ignore_id = false, pack_ids = [], debug = fal
   } else {
     outputTexture.path = path.posix.relative(path.resolve(FOLDER_PATH, "..", "public"), outputTexture.path);
   }
-  debugStats.time_spent_ms = Date.now() - timeStarted;
-  outputTexture.debug = debugStats;
+
+  // debugStats.time_spent_ms = Date.now() - timeStarted;
+  // outputTexture.debug = debugStats;
 
   return outputTexture;
 }

@@ -1,8 +1,0 @@
-{
-  "parent": "builtin/generated",
-  "display": {
-    "gui": {
-      "scale": [1.11, 1.11, 1.11]
-    }
-  }
-}

@@ -1,4 +1,3 @@
-import * as constants from "../constants.js";
 import { db } from "../mongo.js";
 import axios from "axios";
 
@@ -17,11 +16,10 @@ async function updateCollections() {
         name: collection.name,
         items: await Promise.all(
           Object.keys(collection.items).map(async (id) => {
-            const itemData = constants.ITEMS.get(id);
             return {
               id,
               name: collection.items[id].name,
-              texture: itemData.texture !== undefined ? `/head/${itemData.texture}` : `/item/${id}`,
+              texture: `/item/${id}`,
               maxTier: collection.items[id].maxTiers,
               tiers: collection.items[id].tiers,
             };
