@@ -191,7 +191,7 @@ export async function getItems(
       if (helper.getId(item) == "TRICK_OR_TREAT_BAG") {
         item.containsItems = candy_bag;
       }
-      
+
       const itemLore = item.tag?.display?.Lore ?? [];
       if (item.containsItems && item.containsItems.length > 0) {
         try {
