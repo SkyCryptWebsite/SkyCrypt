@@ -1,6 +1,0 @@
-{
-	"parent": "item/skyblock/pet",
-	"textures": {
-		"0": "./pastel_ender_dragon"
-	}
-}
