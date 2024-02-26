@@ -26,6 +26,7 @@ router.get("/:player/:profile", async (req, res, next) => {
       output[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
+        selected: singleProfile.selected,
         data: data.slayer,
       };
     }
@@ -47,6 +48,7 @@ router.get("/:player", async (req, res, next) => {
       output[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
+        selected: singleProfile.selected,
         data: data.slayer,
       };
     }
