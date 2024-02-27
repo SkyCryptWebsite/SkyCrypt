@@ -75,11 +75,6 @@ export const SLAYER_COST = {
   5: 100000,
 };
 
-export const MOB_MOUNTS = {
-  sea_emperor: ["guardian_emperor", "skeleton_emperor"],
-  monster_of_the_deep: ["zombie_deep", "chicken_deep"],
-};
-
 export const MOB_NAMES = {
   pond_squid: "Squid",
   unburried_zombie: "Crypt Ghoul",
@@ -100,54 +95,13 @@ export const MOB_NAMES = {
   pig_rider: "Taurus",
 };
 
-export const RACE_OBJECTIVE_TO_STAT_NAME = {
-  complete_the_end_race: "end_race_best_time",
-  complete_the_woods_race: "foraging_race_best_time",
-  complete_the_chicken_race: "chicken_race_best_time_2",
-  complete_the_giant_mushroom_anything_with_return_race: "dungeon_hub_giant_mushroom_anything_with_return_best_time",
-  complete_the_giant_mushroom_no_pearls_with_return_race: "dungeon_hub_giant_mushroom_no_pearls_with_return_best_time",
-  complete_the_giant_mushroom_no_abilities_with_return_race:
-    "dungeon_hub_giant_mushroom_no_abilities_with_return_best_time",
-  complete_the_giant_mushroom_nothing_with_return_race: "dungeon_hub_giant_mushroom_nothing_with_return_best_time",
-  complete_the_precursor_ruins_anything_with_return_race: "dungeon_hub_precursor_ruins_anything_with_return_best_time",
-  complete_the_precursor_ruins_no_pearls_with_return_race:
-    "dungeon_hub_precursor_ruins_no_pearls_with_return_best_time",
-  complete_the_precursor_ruins_no_abilities_with_return_race:
-    "dungeon_hub_precursor_ruins_no_abilities_with_return_best_time",
-  complete_the_precursor_ruins_nothing_with_return_race: "dungeon_hub_precursor_ruins_nothing_with_return_best_time",
-  complete_the_crystal_core_anything_with_return_race: "dungeon_hub_crystal_core_anything_with_return_best_time",
-  complete_the_crystal_core_no_pearls_with_return_race: "dungeon_hub_crystal_core_no_pearls_with_return_best_time",
-  complete_the_crystal_core_no_abilities_with_return_race:
-    "dungeon_hub_crystal_core_no_abilities_with_return_best_time",
-  complete_the_crystal_core_nothing_with_return_race: "dungeon_hub_crystal_core_nothing_with_return_best_time",
-  complete_the_giant_mushroom_anything_no_return_race: "dungeon_hub_giant_mushroom_anything_no_return_best_time",
-  complete_the_giant_mushroom_no_pearls_no_return_race: "dungeon_hub_giant_mushroom_no_pearls_no_return_best_time",
-  complete_the_giant_mushroom_no_abilities_no_return_race:
-    "dungeon_hub_giant_mushroom_no_abilities_no_return_best_time",
-  complete_the_giant_mushroom_nothing_no_return_race: "dungeon_hub_giant_mushroom_nothing_no_return_best_time",
-  complete_the_precursor_ruins_anything_no_return_race: "dungeon_hub_precursor_ruins_anything_no_return_best_time",
-  complete_the_precursor_ruins_no_pearls_no_return_race: "dungeon_hub_precursor_ruins_no_pearls_no_return_best_time",
-  complete_the_precursor_ruins_no_abilities_no_return_race:
-    "dungeon_hub_precursor_ruins_no_abilities_no_return_best_time",
-  complete_the_precursor_ruins_nothing_no_return_race: "dungeon_hub_precursor_ruins_nothing_no_return_best_time",
-  complete_the_crystal_core_anything_no_return_race: "dungeon_hub_crystal_core_anything_no_return_best_time",
-  complete_the_crystal_core_no_pearls_no_return_race: "dungeon_hub_crystal_core_no_pearls_no_return_best_time",
-  complete_the_crystal_core_no_abilities_no_return_race: "dungeon_hub_crystal_core_no_abilities_no_return_best_time",
-  complete_the_crystal_core_nothing_no_return_race: "dungeon_hub_crystal_core_nothing_no_return_best_time",
-};
-
-export const CUSTOM_RACE_IDS = {
-  woods_race_best_time: "foraging_race_best_time",
-  chicken_race_best_time: "chicken_race_best_time_2",
-};
-
 export const RACE_NAMES = {
   crystal_core: "Crystal Core",
   giant_mushroom: "Giant Mushroom",
   precursor_ruins: "Precursor Ruins",
   foraging_race: "Foraging",
   end_race: "End",
-  chicken_race: "Chicken",
+  chicken_race_2: "Chicken",
   rift_race: "Rift",
 };
 
@@ -347,14 +301,6 @@ export const EXPERIMENTS = {
 };
 
 export const MAX_FAVORITES = 10;
-
-export const INCREASE_MOST_STATS_EXCLUDE = [
-  "mining_speed",
-  "mining_fortune",
-  "farming_fortune",
-  "foraging_fortune",
-  "pristine",
-];
 
 export const FAIRY_SOULS = {
   max: {
