@@ -49,7 +49,7 @@ export function getPlayerStats() {
 
   // Bestiary
   if (calculated.bestiary?.milestone !== undefined) {
-    stats.strength.bestiary = calculated.bestiary.milestone * 2;
+    stats.health.bestiary = Math.floor(calculated.bestiary.milestone / 10);
   }
 
   // Unique Pets
