@@ -629,6 +629,38 @@ export const ESSENCE_SHOP = {
       maxLevel: 5,
     },
   },
+  gold: {
+    heart_of_gold: {
+      name: "Heart of Gold",
+      description: "Increases Healer class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    treasures_of_the_earth: {
+      name: "Treasure of the Earth",
+      description: "Increases your chances of spawning a Worm or Scatha when mining Hard Stone by 2-10%.",
+      maxLevel: 5,
+    },
+    dwarven_training: {
+      name: "Dwarven Training",
+      description: "Increases your Mining Wisdom by 3-10 while on Mining Islands.",
+      maxLevel: 3,
+    },
+    unbreaking: {
+      name: "Unbreaking",
+      description: "Increases your Vitality by 2-10.",
+      maxLevel: 5,
+    },
+    eager_miner: {
+      name: "Eager Miner",
+      description: "Increases your Mining Speed by 10-100 while on Mining Islands.",
+      maxLevel: 10,
+    },
+    midas_lure: {
+      name: "Midas Lure",
+      description: "Increases your chances of fishing up a Golden Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+  },
 };
 
 export const BANK_COOLDOWN = {
