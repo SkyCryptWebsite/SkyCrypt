@@ -661,6 +661,38 @@ export const ESSENCE_SHOP = {
       maxLevel: 10,
     },
   },
+  diamond: {
+    radiant_fisher: {
+      name: "Radiant Fisher",
+      description: "Increases your chances of fishing up a Diamond Trophy Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+    diamond_in_the_rough: {
+      name: "Diamond in the Rough",
+      description: "Increases Tank class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    rhinestone_infusion: {
+      name: "Rhinestone Infusion",
+      description: "Adds 1 Breaking Power to all Diamond Pickaxes.",
+      maxLevel: 1,
+    },
+    under_pressure: {
+      name: "Under Pressure",
+      description: "Increase your Strength by 5-25 while on Mining Islands.",
+      maxLevel: 5,
+    },
+    high_roller: {
+      name: "High Roller",
+      description: "Gain 1 extra random drop when obtaining a Crystal Nucleus Bundle.",
+      maxLevel: 1,
+    },
+    return_to_sender: {
+      name: "Return to Sender",
+      description: "Increases the chances of a Diamond Goblin spawning by 10-100%.",
+      maxLevel: 10,
+    },
+  },
 };
 
 export const BANK_COOLDOWN = {
