@@ -43,8 +43,7 @@ export function getPlayerStats() {
   // Skyblock Level
   if (calculated.skyblock_level.level && calculated.skyblock_level.level > 0) {
     stats.health.skyblock_level = calculated.skyblock_level.level * 5;
-    stats.strength.skyblock_level =
-      Math.floor(calculated.skyblock_level.level / 5);
+    stats.strength.skyblock_level = Math.floor(calculated.skyblock_level.level / 5);
   }
 
   // Bestiary
@@ -124,9 +123,10 @@ export function getPlayerStats() {
     stats.intelligence.harp += HARP_QUEST[harpID];
   }
 
+  console.log(calculated.perks);
   // Essence Shop
   for (const perk in calculated.perks ?? {}) {
-    if (perk in FORBIDDEN_STATS === false && perk !== "unbreaking")  {
+    if (perk in FORBIDDEN_STATS === false && perk !== "unbreaking") {
       continue;
     }
 
@@ -141,7 +141,7 @@ export function getPlayerStats() {
     }
 
     stats[name].essence_shop ??= 0;
-    stats[name].essence_shop += calculated.perks[perk] * (FORBIDDEN_STATS as any)[perk];
+    stats[name].essence_shop += calculated.perks[perk] * FORBIDDEN_STATS[perk as keyof typeof FORBIDDEN_STATS];
   }
 
   // Active equipment stats
@@ -330,4 +330,3 @@ function getBonusStat(level: number, key: BonusType, max: number) {
 
   return bonus;
 }
- 
