@@ -123,7 +123,6 @@ export function getPlayerStats() {
     stats.intelligence.harp += HARP_QUEST[harpID];
   }
 
-  console.log(calculated.perks);
   // Essence Shop
   for (const perk in calculated.perks ?? {}) {
     if (perk in FORBIDDEN_STATS === false && perk !== "unbreaking") {
