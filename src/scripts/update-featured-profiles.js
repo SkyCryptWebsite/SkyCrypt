@@ -43,7 +43,7 @@ const FEATURED_PROFILES = [
     // DuckySoLucky
     uuid: "dec987bbfa734d63bb9d566139232f81",
     type: "CONTRIBUTOR",
-    message: "Best Ratter EU",
+    message: "i use arch btw",
   },
   {
     // LeaPhant
