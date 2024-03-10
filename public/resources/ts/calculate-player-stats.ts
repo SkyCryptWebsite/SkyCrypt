@@ -133,6 +133,7 @@ export function getPlayerStats() {
     if (perk === "unbreaking") {
       stats.vitality.essence_shop ??= 0;
       stats.vitality.essence_shop += calculated.perks[perk] * 2;
+      continue;
     }
 
     const name = perk.split("_")[1];
