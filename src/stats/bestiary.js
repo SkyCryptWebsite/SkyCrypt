@@ -33,44 +33,31 @@ export function getBestiary(userProfile) {
   }
 
   const output = {};
-  let tiersUnlocked = 0,
-    totalTiers = 0;
   for (const [category, data] of Object.entries(constants.BESTIARY)) {
-    const { name, texture, mobs } = data;
     output[category] = {
-      name,
-      texture,
+      name: data.name,
+      texture: data.texture,
+      mobs: formatBestiaryMobs(userProfile, data.mobs),
     };
 
-    if (category === "fishing") {
-      for (const [key, value] of Object.entries(data)) {
-        output[category][key] = {
-          name: value.name,
-          texture: value.texture,
-        };
-
-        output[category][key].mobs = formatBestiaryMobs(userProfile, value.mobs);
-
-        tiersUnlocked += output[category][key].mobs.reduce((acc, cur) => acc + cur.tier, 0);
-        totalTiers += output[category][key].mobs.reduce((acc, cur) => acc + cur.maxTier, 0);
-        output[category][key].mobsUnlocked = output[category][key].mobs.length;
-        output[category][key].mobsMaxed = output[category][key].mobs.filter((mob) => mob.tier === mob.maxTier).length;
-      }
-    } else {
-      output[category].mobs = formatBestiaryMobs(userProfile, mobs);
-      output[category].mobsUnlocked = output[category].mobs.length;
-      output[category].mobsMaxed = output[category].mobs.filter((mob) => mob.tier === mob.maxTier).length;
-
-      tiersUnlocked += output[category].mobs.reduce((acc, cur) => acc + cur.tier, 0);
-      totalTiers += output[category].mobs.reduce((acc, cur) => acc + cur.maxTier, 0);
-    }
+    output[category].mobsUnlocked = output[category].mobs.length;
+    output[category].mobsMaxed = output[category].mobs.filter((mob) => mob.tier === mob.maxTier).length;
   }
+
+  const mobs = Object.values(output).flatMap((category) => Object.values(category.mobs));
+
+  const maxMilestone = mobs.map((mob) => mob.maxTier).reduce((acc, cur) => acc + cur, 0);
+  const milestone = mobs.map((mob) => mob.tier).reduce((acc, cur) => acc + cur, 0);
+  const familiesMaxed = mobs.filter((mob) => mob.tier === mob.maxTier).length;
+  const familiesUnlocked = mobs.filter((mob) => mob.kills > 0).length;
+  const totalFamilies = mobs.length;
 
   return {
     categories: output,
-    tiersUnlocked,
-    totalTiers,
-    milestone: tiersUnlocked / 10,
-    maxMilestone: totalTiers / 10,
+    milestone,
+    maxMilestone,
+    familiesUnlocked,
+    totalFamilies,
+    familiesMaxed,
   };
 }

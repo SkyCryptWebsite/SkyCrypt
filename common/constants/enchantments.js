@@ -69,6 +69,8 @@ export const MAX_ENCHANTS = new Set([
   "Punch II",
   "Quantum V",
   "Rainbow I",
+  "Rainbow II",
+  "Rainbow III",
   "Reflection V",
   "Rejuvenate V",
   "Replenish I",

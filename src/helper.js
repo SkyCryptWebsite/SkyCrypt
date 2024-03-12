@@ -132,6 +132,10 @@ export function getId(item) {
   return item?.tag?.ExtraAttributes?.id ?? "";
 }
 
+export function getTextureValue(item) {
+  return item?.tag?.SkullOwner?.Properties?.textures?.at(0)?.Value ?? "";
+}
+
 export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   let user = null;
 
