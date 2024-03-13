@@ -1,0 +1,7 @@
+{
+	"parent": "item/hplus_personal_deletor",
+	"textures": {
+		"side": "./personal_deletor_6000",
+		"water": "blocks/lava_still"
+	}
+}
