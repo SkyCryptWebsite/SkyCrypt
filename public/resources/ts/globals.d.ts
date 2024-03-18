@@ -425,6 +425,8 @@ declare const calculated: SkyCryptPlayer & {
     talked: boolean;
     total_badges: { gold: number; silver: number; bronze: number };
     unique_golds: number;
+    unique_platinums: number;
+    unique_diamonds: number;
   };
   first_joined: SkyCryptRelativeTime;
   fishing: {

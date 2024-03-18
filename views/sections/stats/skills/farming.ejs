@@ -75,6 +75,18 @@ function itemIcon(item, classes) { %>
       <span class="stat-name <%= max %>">Unique Golds: </span>
       <span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span>
       <br>
+
+      <!-- Unique Platinum Medals-->
+      <% max = farming.unique_platinums == 10 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Unique Platinum: </span>
+      <span class="stat-value <%= max %>"><%= farming.unique_platinums.toLocaleString() %></span>
+      <br>
+
+      <!-- Unique Diamond Medals-->
+      <% max = farming.unique_diamonds == 10 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Unique Diamonds: </span>
+      <span class="stat-value <%= max %>"><%= farming.unique_diamonds.toLocaleString() %></span>
+      <br>
     <% } %>
   </p>
 
