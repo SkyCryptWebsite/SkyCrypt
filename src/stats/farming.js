@@ -32,7 +32,7 @@ export function getFarming(userProfile) {
     };
 
     // Your amount of unique golds
-    farming.unique_golds = userProfile.jacobs_contest.unique_golds2?.length || 0;
+    farming.unique_golds = userProfile.jacobs_contest.unique_brackets.gold?.length || 0;
 
     // Things about individual crops
     farming.crops = {};
