@@ -414,7 +414,7 @@ declare const calculated: SkyCryptPlayer & {
         icon: "81_0";
         name: "Cactus";
         personal_best: number;
-        unique_gold: boolean;
+        highest_tier: string;
       };
     };
     current_badges: { diamond: number; platinum: number; gold: number; silver: number; bronze: number };

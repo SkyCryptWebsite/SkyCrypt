@@ -50,7 +50,7 @@ export function getFarming(userProfile) {
 
       Object.assign(farming.crops[crop], {
         attended: false,
-        unique_gold: userProfile.jacobs_contest.unique_golds2?.includes(crop) || false,
+        highest_tier: "none",
         contests: 0,
         personal_best: 0,
         badges: {
@@ -127,6 +127,14 @@ export function getFarming(userProfile) {
 
       contests.attended_contests++;
       contests.all_contests.push(contest);
+    }
+
+    for (const crop in farming.crops) {
+      for (const badge of Object.keys(farming.crops[crop].badges)) {
+        if (farming.crops[crop].badges[badge] < 1) continue;
+        farming.crops[crop].highest_tier = badge;
+        break;
+      }
     }
 
     farming.contests = contests;

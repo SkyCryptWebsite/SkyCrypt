@@ -168,7 +168,7 @@ function itemIcon(item, classes) { %>
             </div>
 
             <div class="chip-text">
-              <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>">
+              <div class="collection-name <%= ["diamond", "platinum", "gold"].includes(crop.highest_tier) ? 'max-stat' : '' %>">
                 <span class="stat-name"><%= crop.name %></span>
               </div>
 
