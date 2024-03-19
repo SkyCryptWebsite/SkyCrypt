@@ -409,7 +409,7 @@ declare const calculated: SkyCryptPlayer & {
     crops: {
       [key: string]: {
         attended: boolean;
-        badges: { gold: number; silver: number; bronze: number };
+        badges: { diamond: number; platinum: number; gold: number; silver: number; bronze: number };
         contests: number;
         icon: "81_0";
         name: "Cactus";
@@ -417,7 +417,7 @@ declare const calculated: SkyCryptPlayer & {
         unique_gold: boolean;
       };
     };
-    current_badges: { gold: number; silver: number; bronze: number };
+    current_badges: { diamond: number; platinum: number; gold: number; silver: number; bronze: number };
     perks: {
       double_drops: number;
       farming_level_cap: number;

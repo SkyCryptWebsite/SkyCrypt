@@ -1,6 +1,6 @@
 <% 
 
-const badgeOrder = ["gold", "silver", "bronze"];
+const badgeOrder = ["diamond", "platinum", "gold", "silver", "bronze"];
 
 function itemIcon(item, classes) { %>
   <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
@@ -94,14 +94,18 @@ function itemIcon(item, classes) { %>
   <% if (farming.talked && farming.contests.attended_contests > 0) {%>
     <p class="stat-raw-values">
       <% for (const badge of badgeOrder) { %>
+        <% if(["gold", "silver", "bronze"].includes(badge)) { %>
         <span data-tippy-content='
           <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Medals</span><br>
           <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Medals</span>
           '>
+          <% } %>
 
           <span class="stat-name"><%= badge %> medals: </span>
           <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span>
+          <% if(["gold", "silver", "bronze"].includes(badge)) { %>
         </span>
+        <% } %>
         <br>
       <% } %>
     </p>

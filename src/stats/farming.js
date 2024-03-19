@@ -23,6 +23,8 @@ export function getFarming(userProfile) {
       bronze: 0,
       silver: 0,
       gold: 0,
+      platinum: 0,
+      diamond: 0,
     };
 
     // Your current perks
@@ -52,6 +54,8 @@ export function getFarming(userProfile) {
         contests: 0,
         personal_best: 0,
         badges: {
+          diamond: 0,
+          platinum: 0,
           gold: 0,
           silver: 0,
           bronze: 0,
@@ -98,19 +102,17 @@ export function getFarming(userProfile) {
         const participants = data.claimed_participants;
 
         // Use the claimed medal if it exists and is valid
-        // This accounts for the farming mayor increased brackets perk
-        // Note: The medal brackets are the percentage + 1 extra person
-        if (
-          contest.claimed_medal === "bronze" ||
-          contest.claimed_medal === "silver" ||
-          contest.claimed_medal === "gold"
-        ) {
+        if (contest.claimed_medal) {
           contest.medal = contest.claimed_medal;
-        } else if (placing.position <= participants * 0.05 + 1) {
+        } else if (placing.position <= Math.floor(participants * 0.02)) {
+          contest.medal = "diamond";
+        } else if (placing.position <= Math.floor(participants * 0.05)) {
+          contest.medal = "platinum";
+        } else if (placing.position <= Math.floor(participants * 0.1)) {
           contest.medal = "gold";
-        } else if (placing.position <= participants * 0.25 + 1) {
+        } else if (placing.position <= Math.floor(participants * 0.3)) {
           contest.medal = "silver";
-        } else if (placing.position <= participants * 0.6 + 1) {
+        } else if (placing.position <= Math.floor(participants * 0.6)) {
           contest.medal = "bronze";
         }
 
