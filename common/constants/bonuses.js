@@ -49,6 +49,7 @@ export const STATS_BONUS = {
     3: { health: 3 },
     5: { health: 4 },
     7: { health: 5 },
+    8: { health: 5, health_regen: 50 },
     9: { health: 6 },
   },
   slayer_spider: {
@@ -70,11 +71,11 @@ export const STATS_BONUS = {
   },
   slayer_enderman: {
     1: { health: 1 },
-    2: { intelligence: 1 },
+    2: { intelligence: 2 },
     3: { health: 2 },
     4: { intelligence: 2 },
     5: { health: 3 },
-    6: { intelligence: 3 },
+    6: { intelligence: 5 },
     7: { health: 4 },
     8: { intelligence: 4 },
     9: { health: 5 },
