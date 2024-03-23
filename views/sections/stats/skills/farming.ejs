@@ -1,6 +1,6 @@
 <% 
 
-const badgeOrder = ["gold", "silver", "bronze"];
+const badgeOrder = ["diamond", "platinum", "gold", "silver", "bronze"];
 
 function itemIcon(item, classes) { %>
   <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
@@ -75,6 +75,18 @@ function itemIcon(item, classes) { %>
       <span class="stat-name <%= max %>">Unique Golds: </span>
       <span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span>
       <br>
+
+      <!-- Unique Platinum Medals-->
+      <% max = farming.unique_platinums == 10 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Unique Platinums: </span>
+      <span class="stat-value <%= max %>"><%= farming.unique_platinums.toLocaleString() %></span>
+      <br>
+
+      <!-- Unique Diamond Medals-->
+      <% max = farming.unique_diamonds == 10 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Unique Diamonds: </span>
+      <span class="stat-value <%= max %>"><%= farming.unique_diamonds.toLocaleString() %></span>
+      <br>
     <% } %>
   </p>
 
@@ -82,14 +94,18 @@ function itemIcon(item, classes) { %>
   <% if (farming.talked && farming.contests.attended_contests > 0) {%>
     <p class="stat-raw-values">
       <% for (const badge of badgeOrder) { %>
+        <% if(["gold", "silver", "bronze"].includes(badge)) { %>
         <span data-tippy-content='
           <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Medals</span><br>
           <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Medals</span>
           '>
+          <% } %>
 
           <span class="stat-name"><%= badge %> medals: </span>
           <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span>
+          <% if(["gold", "silver", "bronze"].includes(badge)) { %>
         </span>
+        <% } %>
         <br>
       <% } %>
     </p>
@@ -152,7 +168,7 @@ function itemIcon(item, classes) { %>
             </div>
 
             <div class="chip-text">
-              <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>">
+              <div class="collection-name <%= ["diamond", "platinum", "gold"].includes(crop.highest_tier) ? 'max-stat' : '' %>">
                 <span class="stat-name"><%= crop.name %></span>
               </div>
 
