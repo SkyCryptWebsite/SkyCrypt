@@ -20,3 +20,4 @@ export * from "./stats/rift.js";
 export * from "./stats/items.js";
 export * from "./stats/missing.js";
 export * from "./stats/leaderboards.js";
+export * from "./stats/networth.js";

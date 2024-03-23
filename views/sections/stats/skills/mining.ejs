@@ -211,9 +211,11 @@ function itemIcon(item, classes) { %>
       <span class="stat-value"><%= mining.core.selected_pickaxe_ability || 'None' %></span>
     </p>
 
-    <div id="inventory_container">
-      <inventory-view inventory-type="hotm"></inventory-view>
-    </div>
+    <% if (items.hotm.length > 0) { %>
+      <div id="inventory_container">
+        <inventory-view inventory-type="hotm"></inventory-view>
+      </div>
+    <% } %>
 
     <p class="stat-sub-header">Forge</p>
     <% if (mining.forge?.processes?.length > 0) {

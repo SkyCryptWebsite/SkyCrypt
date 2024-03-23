@@ -3,7 +3,6 @@ import * as lib from "../../lib.js";
 import express from "express";
 
 import { db } from "../../mongo.js";
-import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -22,8 +21,7 @@ router.get("/:player", async (req, res, next) => {
     for (const singleProfile of allProfiles) {
       const userProfile = singleProfile.members[profile.uuid];
 
-      const items = await getItems(userProfile, bingoProfile, false, "", req.options);
-      const data = await lib.getStats(db, singleProfile, bingoProfile, allProfiles, items, req.options);
+      const data = await lib.getStats(db, singleProfile, bingoProfile, allProfiles, [], req.options);
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
@@ -31,7 +29,6 @@ router.get("/:player", async (req, res, next) => {
         game_mode: singleProfile.game_mode,
         current: singleProfile.selected,
         raw: userProfile,
-        items,
         data,
       };
     }

@@ -85,8 +85,8 @@ function getMissing(accessories) {
   };
 }
 
-export async function getMissingAccessories(calculated, items, packs) {
-  const accessoryIds = items.accessories?.accessory_ids;
+export async function getMissingAccessories(calculated, packs) {
+  const accessoryIds = calculated.items?.accessories?.accessory_ids;
   if (!accessoryIds || accessoryIds?.length === 0) {
     return;
   }
@@ -140,7 +140,7 @@ export async function getMissingAccessories(calculated, items, packs) {
     });
   }
 
-  const accessories = items.accessories.accessories;
+  const accessories = calculated.items.accessories.accessories;
   const activeAccessories = accessories.filter((a) => a.isInactive === false);
 
   output.unique = accessories.filter((a) => a.isUnique === true).length;

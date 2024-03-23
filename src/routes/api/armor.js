@@ -18,35 +18,16 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
     const userProfile = profile.members[uuid];
 
-    const items = await getItems(userProfile, false, undefined, req.options);
+    const items = await getItems(userProfile, null, false, undefined, req.options);
 
     const output = [];
-
-    for (const armor of items.armor) {
-      const enchantments = armor.tag.ExtraAttributes.enchantments;
-      let enchantmentsOutput = enchantments;
-
-      const stats = armor.stats;
-      let statsOutput = stats;
-
-      if (enchantments !== undefined) {
-        enchantmentsOutput = [];
-
-        for (const enchantment in enchantments) {
-          enchantmentsOutput.push(enchantment + "=" + enchantments[enchantment]);
-        }
-
-        enchantmentsOutput = enchantmentsOutput.join(",");
-      }
-
-      if (stats !== undefined) {
-        statsOutput = [];
-
-        for (const stat in stats) {
-          statsOutput.push(stat + "=" + stats[stat]);
-        }
-
-        statsOutput = statsOutput.join(",");
+    for (const armor of items.armor?.armor ?? []) {
+      const armorEnchantments = armor.tag.ExtraAttributes.enchantments;
+      let enchantmentsOutput;
+      if (armorEnchantments) {
+        enchantmentsOutput = Object.entries(armor.tag.ExtraAttributes.enchantments)
+          .map(([key, value]) => `${key}=${value}`)
+          .join(",");
       }
 
       output.push({
@@ -54,7 +35,7 @@ router.use(async (req, res, next) => {
         name: armor.display_name,
         rarity: armor.rarity,
         enchantments: enchantmentsOutput,
-        stats: statsOutput,
+        recombobulated: armor.recombobulated,
       });
     }
 

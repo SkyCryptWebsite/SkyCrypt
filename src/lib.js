@@ -1,4 +1,3 @@
-import { getPreDecodedNetworth } from "skyhelper-networth";
 import sanitize from "mongo-sanitize";
 import retry from "async-retry";
 import axios from "axios";
@@ -58,13 +57,13 @@ export async function getStats(
   profile,
   bingoProfile,
   allProfiles,
-  items,
   packs,
   options = {
     cacheOnly: false,
     debugId: `${helper.getClusterId()}/unknown@getStats`,
     updateLeaderboards: false,
     updateGuild: false,
+    customTextures: false,
   },
 ) {
   const output = {};
@@ -160,40 +159,15 @@ export async function getStats(
 
   output.harp_quest = userProfile.quests?.harp_quest || {};
 
-  const specialMuseumItems = items.museumItems.specialItems
-    ? items.museumItems.specialItems.map((a) => a.data).flat()
-    : [];
-  const normalMuseumItems = items.museumItems.items
-    ? Object.values(items.museumItems.items)
-        .filter((a) => a && a.data !== undefined && a.borrowing === false)
-        .map((a) => a.data)
-        .flat()
-    : [];
-
-  const museumItems = [...normalMuseumItems, ...specialMuseumItems];
-
-  const networthItems = {
-    armor: items.armor?.armor ?? [],
-    equipment: items.equipment?.equipment ?? [],
-    wardrobe: items.wardrobe_inventory ?? [],
-    inventory: items.inventory ?? [],
-    enderchest: items.enderchest ?? [],
-    accessories: items.accessory_bag ?? [],
-    personal_vault: items.personal_vault ?? [],
-    storage: items.storage ? items.storage.concat(items.storage.map((item) => item.containsItems).flat()) : [],
-    fishing_bag: items.fishing_bag ?? [],
-    potion_bag: items.potion_bag ?? [],
-    candy_inventory: items.candy_bag ?? [],
-    museum: museumItems,
-  };
-
-  const bank = profile.banking?.balance ?? 0;
-  const networthOptions = { cache: true, onlyNetworth: true, v2Endpoint: true };
-
   const profileMembers = profile.members;
   const uuid = profile.uuid;
 
   const functions = {
+    items: {
+      fn: stats.getItems,
+      args: { userProfile, bingoProfile, customTextures: options.customTextures, packs, options },
+      promise: true,
+    },
     fairy_souls: { fn: stats.getFairySouls, args: { userProfile, profile } },
     skills: { fn: stats.getSkills, args: { userProfile, hypixelProfile, members: profileMembers } },
     slayer: { fn: stats.getSlayer, args: { userProfile } },
@@ -214,11 +188,11 @@ export async function getStats(
     user_data: { fn: stats.getUserData, args: { userProfile } },
     currencies: { fn: stats.getCurrenciesData, args: { userProfile, profile } },
     weight: { fn: stats.getWeight, args: { output }, promise: true },
-    accessories: { fn: stats.getMissingAccessories, args: { output, items, packs }, promise: true },
+    accessories: { fn: stats.getMissingAccessories, args: { output, packs }, promise: true, awaitPromises: true },
     temp_stats: { fn: stats.getTempStats, args: { userProfile } },
     rift: { fn: stats.getRift, args: { userProfile } },
-    networth: { fn: getPreDecodedNetworth, args: { userProfile, networthItems, bank, networthOptions }, promise: true },
-    pets: { fn: stats.getPets, args: { userProfile, output, items, profile }, promise: true, awaitPromises: true },
+    networth: { fn: stats.getNetworth, args: { userProfile, profile, output }, promise: true, awaitPromises: true },
+    pets: { fn: stats.getPets, args: { userProfile, output, profile }, promise: true, awaitPromises: true },
   };
 
   const { results, errors } = await executeFunctions(functions, [userProfile, hypixelProfile, profile.members]);
@@ -227,7 +201,11 @@ export async function getStats(
   output.errors = errors;
   if (Object.keys(errors).length > 0) {
     for (const error in errors) {
-      helper.sendWebhookMessage(errors[error], { params: { player: profile.uuid, profile: profile.profile_id } });
+      const username = profile.uuid;
+      const profileId = profile.profile_id;
+
+      helper.sendWebhookMessage(errors[error], { username, profile: profileId });
+      console.log(errors[error]);
     }
   }
 

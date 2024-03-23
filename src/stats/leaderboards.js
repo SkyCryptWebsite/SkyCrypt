@@ -1,7 +1,6 @@
 import { redisClient } from "../redis.js";
 import * as helper from "../helper.js";
 import * as constants from "../constants.js";
-import * as stats from "../stats.js";
 import * as lib from "../lib.js";
 import { db } from "../mongo.js";
 import _ from "lodash";
@@ -61,8 +60,7 @@ export async function updateLeaderboardData(
       }
 
       const paramBingo = profile.game_mode === "bingo" ? await lib.getBingoProfile(db, uuid, options) : null;
-      const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, [], options);
-      const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, [], options);
+      const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, [], options);
 
       if (calculated.skills?.skills !== undefined) {
         for (const skill in calculated.skills.skills) {
@@ -334,8 +332,6 @@ export async function updateLeaderboardData(
       return;
     }
 
-    const req = { params: { player: uuid } };
-
-    helper.sendWebhookMessage(e, req, "updateLeaderboardData");
+    helper.sendWebhookMessage(e, { username: uuid });
   }
 }
