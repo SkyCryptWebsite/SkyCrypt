@@ -43,13 +43,12 @@ export function getPlayerStats() {
   // Skyblock Level
   if (calculated.skyblock_level.level && calculated.skyblock_level.level > 0) {
     stats.health.skyblock_level = calculated.skyblock_level.level * 5;
-    stats.strength.skyblock_level =
-      Math.floor(calculated.skyblock_level.level / 5) + Math.floor(calculated.skyblock_level.level / 10) * 5;
+    stats.strength.skyblock_level = Math.floor(calculated.skyblock_level.level / 5);
   }
 
   // Bestiary
   if (calculated.bestiary?.milestone !== undefined) {
-    stats.strength.bestiary = calculated.bestiary.milestone * 2;
+    stats.health.bestiary = Math.floor(calculated.bestiary.milestone / 10);
   }
 
   // Unique Pets
@@ -126,7 +125,13 @@ export function getPlayerStats() {
 
   // Essence Shop
   for (const perk in calculated.perks ?? {}) {
-    if (perk in FORBIDDEN_STATS === false) {
+    if (perk in FORBIDDEN_STATS === false && perk !== "unbreaking") {
+      continue;
+    }
+
+    if (perk === "unbreaking") {
+      stats.vitality.essence_shop ??= 0;
+      stats.vitality.essence_shop += calculated.perks[perk] * 2;
       continue;
     }
 
@@ -136,7 +141,7 @@ export function getPlayerStats() {
     }
 
     stats[name].essence_shop ??= 0;
-    stats[name].essence_shop += calculated.perks[perk];
+    stats[name].essence_shop += calculated.perks[perk] * FORBIDDEN_STATS[perk as keyof typeof FORBIDDEN_STATS];
   }
 
   // Active equipment stats

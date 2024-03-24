@@ -75,11 +75,6 @@ export const SLAYER_COST = {
   5: 100000,
 };
 
-export const MOB_MOUNTS = {
-  sea_emperor: ["guardian_emperor", "skeleton_emperor"],
-  monster_of_the_deep: ["zombie_deep", "chicken_deep"],
-};
-
 export const MOB_NAMES = {
   pond_squid: "Squid",
   unburried_zombie: "Crypt Ghoul",
@@ -100,54 +95,13 @@ export const MOB_NAMES = {
   pig_rider: "Taurus",
 };
 
-export const RACE_OBJECTIVE_TO_STAT_NAME = {
-  complete_the_end_race: "end_race_best_time",
-  complete_the_woods_race: "foraging_race_best_time",
-  complete_the_chicken_race: "chicken_race_best_time_2",
-  complete_the_giant_mushroom_anything_with_return_race: "dungeon_hub_giant_mushroom_anything_with_return_best_time",
-  complete_the_giant_mushroom_no_pearls_with_return_race: "dungeon_hub_giant_mushroom_no_pearls_with_return_best_time",
-  complete_the_giant_mushroom_no_abilities_with_return_race:
-    "dungeon_hub_giant_mushroom_no_abilities_with_return_best_time",
-  complete_the_giant_mushroom_nothing_with_return_race: "dungeon_hub_giant_mushroom_nothing_with_return_best_time",
-  complete_the_precursor_ruins_anything_with_return_race: "dungeon_hub_precursor_ruins_anything_with_return_best_time",
-  complete_the_precursor_ruins_no_pearls_with_return_race:
-    "dungeon_hub_precursor_ruins_no_pearls_with_return_best_time",
-  complete_the_precursor_ruins_no_abilities_with_return_race:
-    "dungeon_hub_precursor_ruins_no_abilities_with_return_best_time",
-  complete_the_precursor_ruins_nothing_with_return_race: "dungeon_hub_precursor_ruins_nothing_with_return_best_time",
-  complete_the_crystal_core_anything_with_return_race: "dungeon_hub_crystal_core_anything_with_return_best_time",
-  complete_the_crystal_core_no_pearls_with_return_race: "dungeon_hub_crystal_core_no_pearls_with_return_best_time",
-  complete_the_crystal_core_no_abilities_with_return_race:
-    "dungeon_hub_crystal_core_no_abilities_with_return_best_time",
-  complete_the_crystal_core_nothing_with_return_race: "dungeon_hub_crystal_core_nothing_with_return_best_time",
-  complete_the_giant_mushroom_anything_no_return_race: "dungeon_hub_giant_mushroom_anything_no_return_best_time",
-  complete_the_giant_mushroom_no_pearls_no_return_race: "dungeon_hub_giant_mushroom_no_pearls_no_return_best_time",
-  complete_the_giant_mushroom_no_abilities_no_return_race:
-    "dungeon_hub_giant_mushroom_no_abilities_no_return_best_time",
-  complete_the_giant_mushroom_nothing_no_return_race: "dungeon_hub_giant_mushroom_nothing_no_return_best_time",
-  complete_the_precursor_ruins_anything_no_return_race: "dungeon_hub_precursor_ruins_anything_no_return_best_time",
-  complete_the_precursor_ruins_no_pearls_no_return_race: "dungeon_hub_precursor_ruins_no_pearls_no_return_best_time",
-  complete_the_precursor_ruins_no_abilities_no_return_race:
-    "dungeon_hub_precursor_ruins_no_abilities_no_return_best_time",
-  complete_the_precursor_ruins_nothing_no_return_race: "dungeon_hub_precursor_ruins_nothing_no_return_best_time",
-  complete_the_crystal_core_anything_no_return_race: "dungeon_hub_crystal_core_anything_no_return_best_time",
-  complete_the_crystal_core_no_pearls_no_return_race: "dungeon_hub_crystal_core_no_pearls_no_return_best_time",
-  complete_the_crystal_core_no_abilities_no_return_race: "dungeon_hub_crystal_core_no_abilities_no_return_best_time",
-  complete_the_crystal_core_nothing_no_return_race: "dungeon_hub_crystal_core_nothing_no_return_best_time",
-};
-
-export const CUSTOM_RACE_IDS = {
-  woods_race_best_time: "foraging_race_best_time",
-  chicken_race_best_time: "chicken_race_best_time_2",
-};
-
 export const RACE_NAMES = {
   crystal_core: "Crystal Core",
   giant_mushroom: "Giant Mushroom",
   precursor_ruins: "Precursor Ruins",
   foraging_race: "Foraging",
   end_race: "End",
-  chicken_race: "Chicken",
+  chicken_race_2: "Chicken",
   rift_race: "Rift",
 };
 
@@ -347,14 +301,6 @@ export const EXPERIMENTS = {
 };
 
 export const MAX_FAVORITES = 10;
-
-export const INCREASE_MOST_STATS_EXCLUDE = [
-  "mining_speed",
-  "mining_fortune",
-  "farming_fortune",
-  "foraging_fortune",
-  "pristine",
-];
 
 export const FAIRY_SOULS = {
   max: {
@@ -681,6 +627,70 @@ export const ESSENCE_SHOP = {
       name: "Wither Piper",
       description: "2-10% increased chance to find Vanquishers on the Crimson Isle.",
       maxLevel: 5,
+    },
+  },
+  gold: {
+    heart_of_gold: {
+      name: "Heart of Gold",
+      description: "Increases Healer class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    treasures_of_the_earth: {
+      name: "Treasure of the Earth",
+      description: "Increases your chances of spawning a Worm or Scatha when mining Hard Stone by 2-10%.",
+      maxLevel: 5,
+    },
+    dwarven_training: {
+      name: "Dwarven Training",
+      description: "Increases your Mining Wisdom by 3-10 while on Mining Islands.",
+      maxLevel: 3,
+    },
+    unbreaking: {
+      name: "Unbreaking",
+      description: "Increases your Vitality by 2-10.",
+      maxLevel: 5,
+    },
+    eager_miner: {
+      name: "Eager Miner",
+      description: "Increases your Mining Speed by 10-100 while on Mining Islands.",
+      maxLevel: 10,
+    },
+    midas_lure: {
+      name: "Midas Lure",
+      description: "Increases your chances of fishing up a Golden Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+  },
+  diamond: {
+    radiant_fisher: {
+      name: "Radiant Fisher",
+      description: "Increases your chances of fishing up a Diamond Trophy Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+    diamond_in_the_rough: {
+      name: "Diamond in the Rough",
+      description: "Increases Tank class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    rhinestone_infusion: {
+      name: "Rhinestone Infusion",
+      description: "Adds 1 Breaking Power to all Diamond Pickaxes.",
+      maxLevel: 1,
+    },
+    under_pressure: {
+      name: "Under Pressure",
+      description: "Increase your Strength by 5-25 while on Mining Islands.",
+      maxLevel: 5,
+    },
+    high_roller: {
+      name: "High Roller",
+      description: "Gain 1 extra random drop when obtaining a Crystal Nucleus Bundle.",
+      maxLevel: 1,
+    },
+    return_to_sender: {
+      name: "Return to Sender",
+      description: "Increases the chances of a Diamond Goblin spawning by 10-100%.",
+      maxLevel: 10,
     },
   },
 };

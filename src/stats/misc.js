@@ -128,58 +128,48 @@ export function getMisc(profile, userProfile, hypixelProfile) {
   }
 
   const misc = {};
+
   if ("races" in userProfile.player_stats) {
     misc.races = {};
     const races = userProfile.player_stats.races;
-    for (const key in userProfile.objectives) {
-      if (key.startsWith("complete_the_") === false) {
-        continue;
-      }
 
-      const raceTimeID = `${key.replace("complete_the_", "").split("_").slice(0, -1).join("_")}_best_time`;
-      const customRaceID = constants.CUSTOM_RACE_IDS[raceTimeID];
-      const tier = parseInt(key.split("_").at(-1));
+    const formatTime = (data) => moment.duration(data, "milliseconds").format("m:ss.SSS");
+    const getRaceName = (id) => constants.RACE_NAMES[id] ?? helper.titleCase(id.replace("_", " "));
 
-      const raceTime = races[raceTimeID] ?? races[customRaceID];
-      let actualRaceId = (customRaceID ?? raceTimeID).split("_").slice(0, 2).join("_");
-      if (raceTime) {
-        misc.races.other ??= { name: "Other", races: {} };
-        misc.races.other.races[actualRaceId] = {
-          name: constants.RACE_NAMES[actualRaceId],
-          time: moment.duration(raceTime, "milliseconds").format("m:ss.SSS"),
-          tier: tier,
+    for (let [id, data] of Object.entries(races)) {
+      if (typeof data === "number") {
+        misc.races.other = misc.races.other || {
+          name: "Other",
+          races: {},
+        };
+
+        const raceId = id.replace("_best_time", "");
+        const raceName = getRaceName(raceId);
+
+        misc.races.other.races[raceId] = {
+          name: raceName,
+          time: formatTime(data),
         };
       } else {
-        // Thank you Hypxiel
-        actualRaceId = actualRaceId.replace("_race", "");
-        const categoryRaceID = raceTimeID.replace(`${actualRaceId}_`, "").replace("_best_time", "");
+        for ([id, data] of Object.entries(data)) {
+          const shortId = id.split("_").slice(0, 2).join("_");
+          const raceId = id.replace(`${shortId}_`, "").replace("_best_time", "");
+          const raceName = getRaceName(shortId);
 
-        misc.races[actualRaceId] ??= {
-          name: constants.RACE_NAMES[actualRaceId],
-          races: {
-            no_return: {},
-            with_return: {},
-          },
-        };
-
-        const raceId = raceTimeID.replace("_race", "");
-        if (categoryRaceID.endsWith("no_return_race")) {
-          const subcategoryRaceId = categoryRaceID.replace("_no_return_race", "");
-          const raceName = helper.titleCase(subcategoryRaceId.replace("_", " "));
-
-          misc.races[actualRaceId].races.with_return[subcategoryRaceId] = {
+          misc.races[shortId] = misc.races[shortId] || {
             name: raceName,
-            time: moment.duration(races.dungeon_hub[raceId], "milliseconds").format("m:ss.SSS"),
-            tier: tier,
+            races: {
+              with_return: {},
+              no_return: {},
+            },
           };
-        } else {
-          const subcategoryRaceId = categoryRaceID.replace("_with_return_race", "");
-          const raceName = helper.titleCase(subcategoryRaceId.replace("_", " "));
 
-          misc.races[actualRaceId].races.no_return[subcategoryRaceId] = {
-            name: raceName,
-            time: moment.duration(races.dungeon_hub[raceId], "milliseconds").format("m:ss.SSS"),
-            tier: tier,
+          const isReturn = id.endsWith("_with_return_best_time");
+          const dungeonRaceId = raceId.replace(isReturn ? "_with_return" : "_no_return", "");
+
+          misc.races[shortId].races[isReturn ? "with_return" : "no_return"][dungeonRaceId] = {
+            name: getRaceName(dungeonRaceId),
+            time: formatTime(data),
           };
         }
       }
