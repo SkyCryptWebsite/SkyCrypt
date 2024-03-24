@@ -41,7 +41,7 @@
             
             <div class="chip-text">
               <% max = family.tier >= family.maxTier ? 'max-stat' : ''; %>
-              <div class="bestiary-name <%= max %>"><span class="stat-name"><%= helper.owoifyMessage(family.name= %> </span><span class="stat-value"><%= family.tier %></span></div>
+              <div class="bestiary-name <%= max %>"><span class="stat-name"><%= helper.owoifyMessage(family.name) %> </span><span class="stat-value"><%= family.tier %></span></div>
               <div class="bestiary-amount"><span class="stat-name">Kills: </span><span class="stat-value"><%= family.kills.toLocaleString() %></span></div>
             </div>
           </div>
