@@ -19,6 +19,7 @@ export * from "../common/helper.js";
 export * from "./helper/cache.js";
 export * from "./helper/item.js";
 export * from "./helper/metrics.js";
+export { owoifyMessage } from "./constants/owo/index.js";
 
 import {
   GUILD_XP,

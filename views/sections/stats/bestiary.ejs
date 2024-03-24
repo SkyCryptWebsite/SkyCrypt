@@ -14,7 +14,7 @@
           <% if (["name", "texture"].includes(key)) continue; %>
           <div class="category-header">
             <div class="floor-icon" style="background-image: url(<%= value.texture %>)"></div>
-            <span><%= value.name %></span>
+            <span class="category-name"><%= value.name %></span>
             <% if (value.mobsUnlocked === value.mobsMaxed) { %>
               <span class="category-header-maxed">max!</span>
             <% } else {%>
@@ -43,7 +43,7 @@
       <% } else { %>
         <div class="category-header">
           <div class="floor-icon" style="background-image: url(<%= data.texture %>)"></div>
-          <span><%= data.name %></span>
+          <span class="category-name"><%= data.name %></span>
           <% if (data.mobsUnlocked === data.mobsMaxed ) { %>
             <span class="category-header-maxed">max!</span>
           <% } else {%>

@@ -1,4 +1,5 @@
 import { MAX_ENCHANTS } from "./constants.js";
+import { owoifyMessage } from "../src/constants/owo/index.js";
 
 /**
  * @typedef {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"a"|"b"|"c"|"d"|"e"|"f"} ColorCode

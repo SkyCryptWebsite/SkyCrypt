@@ -1,6 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { owoifyMessage } from "../../../../src/constants/owo/index";
 
 import { formatNumber } from "../stats-defer";
 
@@ -58,7 +59,7 @@ export class SkillComponent extends LitElement {
         ${level.level == level.maxLevel ? html`<div class="piece-shine"></div>` : undefined}
       </div>
       <div class="skill-name">
-        ${skillName} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
+        ${owoifyMessage(skillName)} <span class="skill-level">${level.level >= 0 ? level.level : "?"}</span>
       </div>
       <div class="skill-bar" data-skill="${skillName}">
         <div class="skill-progress-bar" style="--progress: ${this.getProgress(level)}"></div>
