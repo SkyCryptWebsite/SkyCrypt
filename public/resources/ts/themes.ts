@@ -254,7 +254,7 @@ window.addEventListener(
   { capture: false, passive: true },
 );
 
-loadTheme(`/resources/themes/default.json?DuckySoLucky`);
+loadTheme(`/resources/themes/default.json?${Math.floor(Math.random() * Math.floor(1000000))}`);
 // Load the theme from localStorage if it exists
 {
   // TODO remove this once users are migrated to currentThemeUrl
