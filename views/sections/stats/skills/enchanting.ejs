@@ -4,7 +4,7 @@
     <div class="category-icon">
       <div class="item-icon icon-116_0"></div>
     </div>
-    <span>enchanting</span>
+    <span class="category-name">enchanting</span>
   </div>
 
   <% if (calculated.enchanting.unlocked === false) { %>
@@ -19,7 +19,7 @@
         const game_data = enchanting.experiments[game]; %>
         <div class="narrow-info-container">
           <div class="narrow-info-header">
-            <span><%= game_data.name %></span>
+            <span class="narrow-info-name"><%= game_data.name %></span>
           </div>
 
           <span>

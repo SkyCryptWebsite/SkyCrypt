@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import * as helper from "../../../../common/helper.js";
 import { STATS_DATA } from "../../../../common/constants.js";
+import { owoifyMessage } from "../../../../src/constants/owo/index.js";
 
 @customElement("bonus-stats")
 export class BonusStats extends LitElement {
@@ -14,7 +15,7 @@ export class BonusStats extends LitElement {
 
     return html`
       <p>
-        <span class="stat-name">Bonus: </span>
+        <span class="stat-name">Bonyus: </span>
         ${unsafeHTML(stats.join('<span class="bonus-divider" role="separator">//</span>'))}
       </p>
     `;
@@ -27,8 +28,8 @@ export class BonusStats extends LitElement {
       result.push(/* html */ `
         <span class="bonus-stat stat-name color-${stat.replaceAll("_", "-")}">
           ${helper.round(value, 1).toLocaleString()}${STATS_DATA[stat as StatName].suffix}
-          <abbr title="${STATS_DATA[stat as StatName].name}">
-            ${STATS_DATA[stat as StatName].nameTiny}
+          <abbr title="${owoifyMessage(STATS_DATA[stat as StatName].name)}">
+            ${owoifyMessage(STATS_DATA[stat as StatName].nameTiny)}
           </abbr>
         </span>
       `);

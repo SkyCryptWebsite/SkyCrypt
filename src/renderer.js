@@ -357,6 +357,15 @@ async function renderHead(textureId, scale) {
   );
   ctx.drawImage(hat_canvas, 0, 0);
 
+  /*
+  ctx.globalCompositeOperation = "source-atop";
+
+  ctx.fillStyle = "rgba(255, 105, 180, 0.5)"; 
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.globalCompositeOperation = "source-over";
+  */
+
   return canvas.toBuffer("image/png");
 }
 
