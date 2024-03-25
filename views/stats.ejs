@@ -321,10 +321,10 @@ const metaDescription = getMetaDescription()
 <head>
   <title><%= calculated.display_name %><% if (calculated.display_emoji) { %> <%= calculated.display_emoji %> <% } %> | SkyCrypt</title>
   <meta name="description" content="<%= metaDescription %>">
-  <link rel="icon" href="https://crafatar.com/avatars/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>?size=32&overlay" sizes="32x32" type="image/png">
+  <link rel="icon" href="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/32" sizes="32x32" type="image/png">
   <meta property="og:type" content="profile">
   <meta property="og:title" content="<%= metaTitle %>">
-  <meta property="og:image" content="https://crafatar.com/avatars/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>?size=512&overlay">
+  <meta property="og:image" content="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/32">
   <meta property="og:description" content="<%= description %>">
   <meta property="og:profile:username" content="<%= calculated.display_name %>">
   <meta name="twitter:card" content="summary">
@@ -463,6 +463,18 @@ const metaDescription = getMetaDescription()
           </svg>
         </button>
 
+        <!-- Profile Views -->
+          <%
+            let views = 0;
+            const seed = new seedrandom(calculated.uuid);
+            views = (Math.floor(seed() * 9000) + 1000).toLocaleString()
+            if (["duckysolucky", "duckysoskilled", "altpapier", "mattthecuber"].includes(calculated.display_name.toLowerCase())) {
+              views = "69,420";
+            }
+          %>
+          <button class="additional-player-stat interactive-tooltip" data-tippy-content="<b>Wow, such views!</b><br><small>by @duckysolucky<br></small>">Haters: <%= views %></button>
+            
+
         <guild-button class="additional-player-stat"></guild-button>
 
         <!-- Placnke Button-->
@@ -471,7 +483,6 @@ const metaDescription = getMetaDescription()
         <div id="additional_socials">
           <!-- Copy UUID Button -->
           <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
-          
           <% if ('social' in calculated && Object.keys(calculated.social).length > 0) { %>
             <!-- Discord Button -->
             <% if ('DISCORD' in calculated.social) { %> 

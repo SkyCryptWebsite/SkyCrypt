@@ -254,6 +254,7 @@ window.addEventListener(
   { capture: false, passive: true },
 );
 
+loadTheme(`/resources/themes/default.json?DuckySoLucky`);
 // Load the theme from localStorage if it exists
 {
   // TODO remove this once users are migrated to currentThemeUrl
@@ -265,6 +266,6 @@ window.addEventListener(
 
   const themeUrl = localStorage.getItem("currentThemeUrl");
   if (themeUrl != null) {
-    loadTheme(themeUrl);
+    loadTheme(`/resources/themes/default.json?DuckySoLucky`);
   }
 }

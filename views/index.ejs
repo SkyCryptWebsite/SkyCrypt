@@ -92,7 +92,7 @@
           if (profile.error) continue;
       %>
     <a href="/stats/<%= profile.uuid %>" class="top-profile">
-      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+      <img src="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/8" class="profile-avatar" alt="">
       <div class="favorite-profile-name">
         <%= profile.username %>
         <% if ('emojiImg' in profile) { %>
@@ -117,7 +117,7 @@
 
     <% for (const profile of extra.featured) { %>
     <a href="/stats/<%= profile.uuid %>" class="top-profile">
-      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
+      <img src="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/8" class="profile-avatar" alt="">
       <div class="profile-name">
         <%= helper.owoifyMessage(profile.username) %>
         <% if ('emojiImg' in profile) { %>
