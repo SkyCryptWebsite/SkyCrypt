@@ -75,7 +75,9 @@ export async function getSkills(userProfile, hypixelProfile, profileMembers) {
     farming: constants.DEFAULT_SKILL_CAPS.farming + (userProfile.jacobs_contest?.perks?.farming_level_cap ?? 0),
     carpentry: hypixelProfile.rankText
       ? constants.DEFAULT_SKILL_CAPS.runecrafting
-      : constants.NON_RUNECRAFTING_LEVEL_CAP,
+          : constants.NON_RUNECRAFTING_LEVEL_CAP,
+    taming: constants.MAXED_SKILL_CAPS.taming,
+    //taming: constants.DEFAULT_SKILL_CAPS.taming + (hypixelProfile.achievements.? ?? 0),
   };
 
   return await getLevels(userProfile, profileMembers, hypixelProfile, levelCaps);
