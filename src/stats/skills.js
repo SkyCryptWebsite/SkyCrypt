@@ -75,7 +75,7 @@ export async function getSkills(userProfile, hypixelProfile, profileMembers) {
     farming: constants.DEFAULT_SKILL_CAPS.farming + (userProfile.jacobs_contest?.perks?.farming_level_cap ?? 0),
     carpentry: hypixelProfile.rankText
       ? constants.DEFAULT_SKILL_CAPS.runecrafting
-          : constants.NON_RUNECRAFTING_LEVEL_CAP,
+      : constants.NON_RUNECRAFTING_LEVEL_CAP,
     taming: Math.max(hypixelProfile.achievements.skyblock_domesticator, 50),
   };
 
