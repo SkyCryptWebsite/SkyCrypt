@@ -76,8 +76,7 @@ export async function getSkills(userProfile, hypixelProfile, profileMembers) {
     carpentry: hypixelProfile.rankText
       ? constants.DEFAULT_SKILL_CAPS.runecrafting
           : constants.NON_RUNECRAFTING_LEVEL_CAP,
-    taming: constants.MAXED_SKILL_CAPS.taming,
-    //taming: constants.DEFAULT_SKILL_CAPS.taming + (hypixelProfile.achievements.? ?? 0),
+    taming: Math.max(hypixelProfile.achievements.skyblock_domesticator, 50),
   };
 
   return await getLevels(userProfile, profileMembers, hypixelProfile, levelCaps);
