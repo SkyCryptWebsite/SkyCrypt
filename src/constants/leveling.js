@@ -97,6 +97,7 @@ export const DEFAULT_SKILL_CAPS = {
 
 export const MAXED_SKILL_CAPS = {
   farming: 60,
+  taming: 60,
 };
 
 export const MAXED_SKILL_XP = {
