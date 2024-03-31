@@ -46,7 +46,7 @@ function itemIcon(item, classes) { %>
     <div class="category-icon">
       <div class="item-icon icon-274_0"></div>
     </div>
-    <span>mining</span>
+    <span class="category-name">mining</span>
   </div>
 
   <% const mining = calculated.mining; %>
@@ -211,9 +211,11 @@ function itemIcon(item, classes) { %>
       <span class="stat-value"><%= mining.core.selected_pickaxe_ability || 'None' %></span>
     </p>
 
-    <div id="inventory_container">
-      <inventory-view inventory-type="hotm"></inventory-view>
-    </div>
+    <% if (items.hotm.length > 0) { %>
+      <div id="inventory_container">
+        <inventory-view inventory-type="hotm"></inventory-view>
+      </div>
+    <% } %>
 
     <p class="stat-sub-header">Forge</p>
     <% if (mining.forge?.processes?.length > 0) {

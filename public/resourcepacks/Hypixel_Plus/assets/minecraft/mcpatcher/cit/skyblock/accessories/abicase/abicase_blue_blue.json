@@ -1,6 +1,7 @@
 {
-	"parent": "item/handheld_generated",
+	"parent": "item/hplus_handheld_abicase",
 	"textures": {
-		"layer0": "./abicase_blue_blue"
+		"0": "./abicase_blue_blue_front",
+		"1": "./abicase_blue_blue_back"
 	}
 }

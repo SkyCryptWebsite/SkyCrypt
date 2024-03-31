@@ -42,8 +42,8 @@ import * as itemRoute from "./routes/item.js";
 import * as headRoute from "./routes/head.js";
 import * as leatherRoute from "./routes/leather.js";
 import * as potionRoute from "./routes/potion.js";
-import * as stats from "./stats.js";
 import { SkyCryptError } from "./constants/error.js";
+import seedrandom from "seedrandom";
 
 const folderPath = helper.getFolderPath();
 
@@ -277,15 +277,12 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
     const paramBingo =
       profile.game_mode === "bingo" ? await lib.getBingoProfile(db, paramPlayer, { cacheOnly, debugId }) : null;
-    const items = await stats.getItems(profile.members[profile.uuid], paramBingo, true, req.cookies.pack, {
-      cacheOnly,
-      debugId,
-    });
-    const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, items, req.cookies.pack, {
+    const calculated = await lib.getStats(db, profile, paramBingo, allProfiles, req.cookies.pack, {
       cacheOnly,
       debugId,
       updateLeaderboards: true,
       updateGuild: true,
+      customTextures: true,
     });
 
     if (isFoolsDay) {
@@ -300,7 +297,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
       "stats",
       {
         req,
-        items,
+        items: calculated.items,
         calculated,
         _,
         constants,
@@ -308,6 +305,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         extra: await getExtra("stats", undefined, cacheOnly),
         fileHashes,
         fileNameMap,
+        seedrandom,
         page: "stats",
       },
       async (err, html) => {
@@ -315,7 +313,9 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
           console.debug(`${debugId}: an error has occurred.`);
           console.error(err);
 
-          await helper.sendWebhookMessage(err, req);
+          const username = req.params.player;
+          const profile = req.params.profile;
+          await helper.sendWebhookMessage(err, { username, profile });
 
           const favorites = parseFavorites(req.cookies.favorite);
           res.render(
@@ -347,9 +347,10 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
     );
   } catch (e) {
     if (e instanceof SkyCryptError === false) {
-      if (e.message !== "socket hang up") {
-        helper.sendWebhookMessage(e, req);
-      }
+      const username = req.params.player;
+      const profile = req.params.profile;
+
+      helper.sendWebhookMessage(e, { username, profile });
     }
 
     const favorites = parseFavorites(req.cookies.favorite);

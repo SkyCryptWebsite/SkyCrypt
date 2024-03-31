@@ -629,6 +629,70 @@ export const ESSENCE_SHOP = {
       maxLevel: 5,
     },
   },
+  gold: {
+    heart_of_gold: {
+      name: "Heart of Gold",
+      description: "Increases Healer class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    treasures_of_the_earth: {
+      name: "Treasure of the Earth",
+      description: "Increases your chances of spawning a Worm or Scatha when mining Hard Stone by 2-10%.",
+      maxLevel: 5,
+    },
+    dwarven_training: {
+      name: "Dwarven Training",
+      description: "Increases your Mining Wisdom by 3-10 while on Mining Islands.",
+      maxLevel: 3,
+    },
+    unbreaking: {
+      name: "Unbreaking",
+      description: "Increases your Vitality by 2-10.",
+      maxLevel: 5,
+    },
+    eager_miner: {
+      name: "Eager Miner",
+      description: "Increases your Mining Speed by 10-100 while on Mining Islands.",
+      maxLevel: 10,
+    },
+    midas_lure: {
+      name: "Midas Lure",
+      description: "Increases your chances of fishing up a Golden Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+  },
+  diamond: {
+    radiant_fisher: {
+      name: "Radiant Fisher",
+      description: "Increases your chances of fishing up a Diamond Trophy Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+    diamond_in_the_rough: {
+      name: "Diamond in the Rough",
+      description: "Increases Tank class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    rhinestone_infusion: {
+      name: "Rhinestone Infusion",
+      description: "Adds 1 Breaking Power to all Diamond Pickaxes.",
+      maxLevel: 1,
+    },
+    under_pressure: {
+      name: "Under Pressure",
+      description: "Increase your Strength by 5-25 while on Mining Islands.",
+      maxLevel: 5,
+    },
+    high_roller: {
+      name: "High Roller",
+      description: "Gain 1 extra random drop when obtaining a Crystal Nucleus Bundle.",
+      maxLevel: 1,
+    },
+    return_to_sender: {
+      name: "Return to Sender",
+      description: "Increases the chances of a Diamond Goblin spawning by 10-100%.",
+      maxLevel: 10,
+    },
+  },
 };
 
 export const BANK_COOLDOWN = {

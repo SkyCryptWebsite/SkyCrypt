@@ -424,15 +424,15 @@ function getPetScore(pets) {
   };
 }
 
-export async function getPets(userProfile, calculated, items, profile) {
+export async function getPets(userProfile, calculated, profile) {
   const output = {};
 
   // Get pets from profile
   const pets = userProfile.pets_data?.pets ?? [];
 
   // Adds pets from inventories
-  if (items.pets !== undefined) {
-    pets.push(...items.pets);
+  if (calculated.items?.pets !== undefined) {
+    pets.push(...calculated.items.pets);
   }
 
   // Add Montezume pet from the Rift

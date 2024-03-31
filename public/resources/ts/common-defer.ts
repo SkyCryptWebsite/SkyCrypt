@@ -105,6 +105,7 @@ export function eraseCookie(name: string) {
   document.cookie = name + "=; SameSite=Lax; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
+import("./elements/pack-list");
 const expanders = document.querySelectorAll(".expander");
 for (const expander of expanders) {
   expander.addEventListener("click", () => {

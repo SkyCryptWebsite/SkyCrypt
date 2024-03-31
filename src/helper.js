@@ -19,6 +19,7 @@ export * from "../common/helper.js";
 export * from "./helper/cache.js";
 export * from "./helper/item.js";
 export * from "./helper/metrics.js";
+export { owoifyMessage } from "./constants/owo/index.js";
 
 import {
   GUILD_XP,
@@ -1118,23 +1119,19 @@ export async function applyResourcePack(item, packs) {
   return item;
 }
 
-export async function sendWebhookMessage(e, req) {
-  const webhookUrl = credentials.discord_webhook;
-  if (webhookUrl !== undefined && req.params !== undefined) {
-    let description = "";
-    const playerUsername = req.params.player;
-    if (playerUsername) {
-      description += `Username: \`${playerUsername}\`\n`;
+export async function sendWebhookMessage(e, { username, profile }) {
+  try {
+    const webhookUrl = credentials.discord_webhook;
+    if (webhookUrl === undefined || username === undefined) {
+      return;
     }
 
-    description += `Options: \`${JSON.stringify(req.params)}\`\n`;
-
-    const paramProfile = req.params.profile;
-    if (paramProfile) {
-      description += `Profile: \`${paramProfile}\`\n`;
+    let description = `Username: \`${username}\`\n`;
+    if (profile) {
+      description += `Profile: \`${profile}\`\n`;
     }
 
-    description += `Link: https://sky.shiiyu.moe/stats/${playerUsername}${paramProfile ? `/${paramProfile}` : ""}\n`;
+    description += `Link: https://sky.shiiyu.moe/stats/${username}${profile ? `/${profile}` : ""}\n`;
     description += `\`\`\`${e.stack}\`\`\``;
 
     const embed = {
@@ -1144,8 +1141,8 @@ export async function sendWebhookMessage(e, req) {
       fields: [],
     };
 
-    await axios.post(webhookUrl, { embeds: [embed] }).catch((error) => {
-      console.log(error);
-    });
+    await axios.post(webhookUrl, { embeds: [embed] });
+  } catch (e) {
+    console.error(e);
   }
 }

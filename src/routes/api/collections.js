@@ -18,18 +18,19 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
 
     const collections = await stats.getCollections(uuid, profile, req.options.cacheOnly);
+    const collectionData = Object.values(collections)
+      .filter((a) => a.collections !== undefined)
+      .map((a) => a.collections)
+      .flat();
 
-    res.send(
-      tableify(
-        Object.keys(collections).map((a) => [
-          a,
-          collections[a].name,
-          collections[a].tier,
-          collections[a].amount,
-          collections[a].totalAmount,
-        ]),
-      ),
-    );
+    const output = collectionData.map((a) => ({
+      name: a.name,
+      tier: a.tier,
+      amount: a.amount,
+      totalAmount: a.totalAmount,
+    }));
+
+    res.send(tableify(output));
   } catch (e) {
     next(e);
   }

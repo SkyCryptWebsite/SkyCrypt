@@ -23,6 +23,7 @@ router.get("/:player/:profile", async (req, res, next) => {
     res.json({
       profile_id: profile.profile_id,
       cute_name: profile.cute_name,
+      selected: profile.selected,
       purse: profile.members[profile.uuid]?.currencies?.coin_purse ?? 0,
       bank: profile.banking?.balance ?? 0,
     });
@@ -40,6 +41,7 @@ router.get("/:player", async (req, res, next) => {
       output.profiles[profile.profile_id] = {
         profile_id: profile.profile_id,
         cute_name: profile.cute_name,
+        selected: profile.selected,
         purse: profile.members[profile.uuid]?.currencies?.coin_purse ?? 0,
         bank: profile.banking?.balance ?? 0,
       };
