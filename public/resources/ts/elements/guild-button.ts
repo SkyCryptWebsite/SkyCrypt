@@ -1,6 +1,7 @@
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
 import tippy from "tippy.js";
+import { owoifyMessage } from "../../../../src/constants/owo/index";
 
 @customElement("guild-button")
 export class GuildButton extends LitElement {
@@ -33,18 +34,18 @@ export class GuildButton extends LitElement {
         return;
       }
 
-      this.message = `Guild: ${guild.name}`;
+      this.message = `Guild: ${owoifyMessage(guild.name)}`;
 
       let tooltipContent = "";
       if (guild.player.rank !== undefined) {
-        tooltipContent += `<span class='stat-name'>Rank: </span><span class='stat-value'>${guild.player.rank}</span><br><br>`;
+        tooltipContent += `<span class='stat-name'>Rank: </span><span class='stat-value'>${owoifyMessage(guild.player.rank)}</span><br><br>`;
       }
 
       if (guild.guildMaster.username !== undefined && guild.guildMaster.uuid !== undefined) {
-        tooltipContent += `<span class='stat-name'>Guild Master: </span><a href='/stats/${guild.guildMaster.uuid}' class='no-underline stat-value'>${guild.guildMaster.username}</a><br>`;
+        tooltipContent += `<span class='stat-name'>Guild Master: </span><a href='/stats/${guild.guildMaster.uuid}' class='no-underline stat-value'>${owoifyMessage(guild.guildMaster.username)}</a><br>`;
       }
 
-      tooltipContent += `<span class='stat-name'>Tag: </span><span class='stat-value'>${guild.tag}</span><br>`;
+      tooltipContent += `<span class='stat-name'>Tag: </span><span class='stat-value'>${owoifyMessage(guild.tag)}</span><br>`;
 
       tooltipContent += `<span class='stat-name'>Members: </span><span class='stat-value'>${guild.members}</span><br>`;
 

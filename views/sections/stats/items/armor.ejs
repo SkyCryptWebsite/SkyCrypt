@@ -38,9 +38,9 @@
       </div>
     <% } %>
 
-    <p class="stat-sub-header">Equipment</p>
+    <p class="stat-sub-header category-name">Eqwuipmwnt</p>
     <% if (Object.keys(items.equipment.equipment).length == 0) { %>
-      <div class="no-access"><%= calculated.display_name %> doesn't have any equipment equipped.</div>
+      <div class="no-access"><%= calculated.display_name %> doesn't hawe any equipment equipped.</div>
     <% } else { %>
       <div class="pieces">
         <% for (const item of items.equipment.equipment.slice().reverse()) { %>
