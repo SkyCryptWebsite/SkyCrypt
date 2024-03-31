@@ -34,13 +34,13 @@ export function getFarming(userProfile) {
     };
 
     // Your amount of unique golds
-    farming.unique_golds = userProfile.jacobs_contest.unique_brackets.gold?.length || 0;
+    farming.unique_golds = userProfile.jacobs_contest?.unique_brackets?.gold?.length || 0;
 
     // unique platinums
-    farming.unique_platinums = userProfile.jacobs_contest.unique_brackets.platinum?.length || 0;
+    farming.unique_platinums = userProfile.jacobs_contest?.unique_brackets?.platinum?.length || 0;
 
     // unique diamonds
-    farming.unique_diamonds = userProfile.jacobs_contest.unique_brackets.diamond?.length || 0;
+    farming.unique_diamonds = userProfile.jacobs_contest?.unique_brackets?.diamond?.length || 0;
 
     // Things about individual crops
     farming.crops = {};
