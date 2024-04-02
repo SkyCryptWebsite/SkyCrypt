@@ -20,9 +20,9 @@
   <%- include('../includes/header') %>
   <main class="grid">
     <form class="lookup-player">
-      <p>Shawo SkyBwock stwats fow</p>
-      <input name="ign" <% if (player) { %> value="<%= player %>" <% }%> type="search" enterkeyhint="go" placeholder="Entew usewname" aria-label="username" autofocus required>
-      <button type="submit" class="big-green-button">Shawo mwe</button>
+      <p>Show SkyBlock stats for</p>
+      <input name="ign" <% if (player) { %> value="<%= player %>" <% }%> type="search" enterkeyhint="go" placeholder="Enter username" aria-label="username" autofocus required>
+      <button type="submit" class="big-green-button">Show me</button>
       <%# <p>or take me to a <a href="/random/stats">random profile</a>.</p> %>
     </form>
     <% if (extra.cacheOnly) { %>
@@ -92,7 +92,7 @@
           if (profile.error) continue;
       %>
     <a href="/stats/<%= profile.uuid %>" class="top-profile">
-      <img src="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/8" class="profile-avatar" alt="">
+      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
       <div class="favorite-profile-name">
         <%= profile.username %>
         <% if ('emojiImg' in profile) { %>
@@ -102,7 +102,7 @@
         <% } %>
       </div>
       <svg class="profile-rank" viewBox="0 0 24 24">
-        <title>Fwavowited pwofile</title>
+        <title>Favorited profile</title>
         <%# mdi-star %>
         <path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
       </svg>
@@ -117,18 +117,18 @@
 
     <% for (const profile of extra.featured) { %>
     <a href="/stats/<%= profile.uuid %>" class="top-profile">
-      <img src="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/8" class="profile-avatar" alt="">
+      <img src="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : profile.uuid %>?size=8&overlay" class="profile-avatar" alt="">
       <div class="profile-name">
-        <%= helper.owoifyMessage(profile.username) %>
+        <%= profile.username %>
         <% if ('emojiImg' in profile) { %>
         <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
         <% }else if ('emoji' in profile) { %>
         <%- extra.twemoji.parse(profile.emoji) %>
         <% } %>
       </div>
-      <div class="profile-last-online"><%- helper.owoifyMessage(extra.twemoji.parse(profile.message)) %></div>
+      <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
       <svg class="profile-rank" viewBox="0 0 24 24">
-        <title><%= helper.owoifyMessage(developerRoles[profile.type]?.title || developerRoles.ERROR.title) %></title>
+        <title><%= developerRoles[profile.type]?.title || developerRoles.ERROR.title %></title>
         <path fill="currentColor" d="<%= developerRoles[profile.type]?.svgPath || developerRoles.ERROR.svgPath %>" />
       </svg>
     </a>
