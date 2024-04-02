@@ -1,20 +1,5 @@
 {
-  "name": "April Fools Theme",
-  "author": "DuckySoLucky",
-  "schema": 2,
-  "images": {
-    "bg": "/resources/img/themes/owo/bg2.webp"
-  },
-  "backgrounds": {
-    "skillbar": { "type": "stripes", "angle": "45deg", "colors": ["#fc46aa", "#F699CD"], "width": 10 },
-    "maxedbar": { "type": "stripes", "angle": "45deg", "colors": ["#fa86c4", "#F25278"], "width": 10 }
-  },
-  "colors": {
-    "logo": "#fc46aa",
-    "link": "#fc46aa",
-    "icon": "#fc46aa",
-    "hover": "#fc46aa",
-    "maxed": "#d95c8f",
-    "gold": "#e87da7"
-  }
+  "name": "Default Theme",
+  "author": "SkyCrypt Team",
+  "schema": 2
 }

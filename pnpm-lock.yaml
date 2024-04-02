@@ -101,9 +101,6 @@ dependencies:
   relaxed-json:
     specifier: ^1.0.3
     version: 1.0.3
-  seedrandom:
-    specifier: ^3.0.5
-    version: 3.0.5
   sharp:
     specifier: ^0.33.2
     version: 0.33.2
@@ -3859,10 +3856,6 @@ packages:
 
   /sax@1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
-    dev: false
-
-  /seedrandom@3.0.5:
-    resolution: {integrity: sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==}
     dev: false
 
   /semver@6.3.1:

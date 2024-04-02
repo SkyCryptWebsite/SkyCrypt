@@ -254,7 +254,6 @@ window.addEventListener(
   { capture: false, passive: true },
 );
 
-loadTheme(`/resources/themes/default.json?${Math.floor(Math.random() * Math.floor(1000000))}`);
 // Load the theme from localStorage if it exists
 {
   // TODO remove this once users are migrated to currentThemeUrl
@@ -266,6 +265,6 @@ loadTheme(`/resources/themes/default.json?${Math.floor(Math.random() * Math.floo
 
   const themeUrl = localStorage.getItem("currentThemeUrl");
   if (themeUrl != null) {
-    loadTheme(`/resources/themes/default.json?DuckySoLucky`);
+    loadTheme(themeUrl);
   }
 }

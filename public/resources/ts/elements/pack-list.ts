@@ -2,7 +2,6 @@ import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
 import { getCookie, setCookie, eraseCookie } from "../common-defer";
-import { owoifyMessage } from "../../../../src/constants/owo/index";
 
 @customElement("pack-list")
 export class PackList extends LitElement {
@@ -55,9 +54,9 @@ export class PackList extends LitElement {
           <label class="list-item ${pack.default ? "default-item" : undefined}" @change="${() => this.select(pack.id)}">
             <img class="icon pack-icon" src="${pack.base_path}/pack.png" alt="" loading="lazy" />
             <a class="name" href="${pack.url}" target="_blank" rel="noreferrer"
-              >${owoifyMessage(pack.name)} ${pack.version ? html`<small>${pack.version}</small>` : undefined}</a
+              >${pack.name} ${pack.version ? html`<small>${pack.version}</small>` : undefined}</a
             ><br />
-            <div class="author">by <span>${owoifyMessage(pack.author)}</span></div>
+            <div class="author">by <span>${pack.author}</span></div>
             <input
               type="checkbox"
               name="pack"

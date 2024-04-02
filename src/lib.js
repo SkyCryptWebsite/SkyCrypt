@@ -218,9 +218,6 @@ export async function getStats(
     });
   }
 
-  output.skin_data.skinurl =
-    "http://textures.minecraft.net/texture/bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c";
-
   return output;
 }
 

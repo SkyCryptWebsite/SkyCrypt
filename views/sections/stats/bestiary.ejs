@@ -22,14 +22,13 @@
     <% for (const [category, data] of Object.entries(calculated.bestiary.categories)) { %>
       <div class="category-header">
         <div class="floor-icon" style="background-image: url(<%= data.texture %>)"></div>
-        <span><%= helper.owoifyMessage(data.name) %></span>
+        <span><%= data.name %></span>
         <% if (data.mobsUnlocked === data.mobsMaxed ) { %>
           <span class="category-header-maxed">max!</span>
         <% } else {%>
           <span class="category-header-detail">(<%= data.mobsMaxed %> / <%= data.mobsUnlocked %> max)</span>
         <% } %>
       </div>
-
 
       <div class="bestiary">
         <% for (const family of data.mobs) { %>
@@ -41,7 +40,7 @@
             
             <div class="chip-text">
               <% max = family.tier >= family.maxTier ? 'max-stat' : ''; %>
-              <div class="bestiary-name <%= max %>"><span class="stat-name"><%= helper.owoifyMessage(family.name) %> </span><span class="stat-value"><%= family.tier %></span></div>
+              <div class="bestiary-name <%= max %>"><span class="stat-name"><%= family.name %> </span><span class="stat-value"><%= family.tier %></span></div>
               <div class="bestiary-amount"><span class="stat-name">Kills: </span><span class="stat-value"><%= family.kills.toLocaleString() %></span></div>
             </div>
           </div>
