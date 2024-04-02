@@ -43,7 +43,6 @@ import * as headRoute from "./routes/head.js";
 import * as leatherRoute from "./routes/leather.js";
 import * as potionRoute from "./routes/potion.js";
 import { SkyCryptError } from "./constants/error.js";
-import seedrandom from "seedrandom";
 
 const folderPath = helper.getFolderPath();
 
@@ -305,7 +304,6 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
         extra: await getExtra("stats", undefined, cacheOnly),
         fileHashes,
         fileNameMap,
-        seedrandom,
         page: "stats",
       },
       async (err, html) => {

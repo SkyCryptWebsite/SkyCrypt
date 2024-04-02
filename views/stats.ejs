@@ -122,14 +122,15 @@ function itemIcon(item, classes) { %>
 <% } 
 
 function jerriefy(rank) {
-    rank = rank.replace("VIP", "VwV");
-    rank = rank.replace("MVP", "MwP");
-    rank = rank.replace("HELPER", "HEWPER");
-    rank = rank.replace("MOD", "MOWD");
-    rank = rank.replace("PIG", "PWIG");
-    rank = rank.replace("ADMIN", "AWDMIN");
-    rank = rank.replace("YOUTUBE", "YOWUTUBE");
-  
+  if (extra.isFoolsDay) {
+    rank = rank.replace("VIP", "JER");
+    rank = rank.replace("MVP", "JRY");
+    rank = rank.replace("HELPER", "JERRY");
+    rank = rank.replace("MOD", "JERRY");
+    rank = rank.replace("PIG", "JERRY");
+    rank = rank.replace("ADMIN", "SR JERRY");
+    rank = rank.replace("YOUTUBE", "YERRY");
+  }
 
   return rank;
 }
@@ -321,10 +322,10 @@ const metaDescription = getMetaDescription()
 <head>
   <title><%= calculated.display_name %><% if (calculated.display_emoji) { %> <%= calculated.display_emoji %> <% } %> | SkyCrypt</title>
   <meta name="description" content="<%= metaDescription %>">
-  <link rel="icon" href="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/32" sizes="32x32" type="image/png">
+  <link rel="icon" href="https://crafatar.com/avatars/<%= extra.isFoolsDay ? 'bd482739767c45dca1f8c33c40530952' : calculated.uuid %>?size=32&overlay" sizes="32x32" type="image/png">
   <meta property="og:type" content="profile">
   <meta property="og:title" content="<%= metaTitle %>">
-  <meta property="og:image" content="https://mc-heads.net/avatar/<%= 'bda07b15f8d1c3a1cf5166d8bbe4aaf2a46a95d4ab5cb08bdc93a3837b2157c' %>/32">
+  <meta property="og:image" content="https://crafatar.com/avatars/<%= calculated.uuid %>?size=512&overlay">
   <meta property="og:description" content="<%= description %>">
   <meta property="og:profile:username" content="<%= calculated.display_name %>">
   <meta name="twitter:card" content="summary">
@@ -393,7 +394,7 @@ const metaDescription = getMetaDescription()
         <!-- Player Rank -->
         <%- jerriefy(calculated.rank_prefix) %>
         <!-- Player Username -->
-        <%= helper.owoifyMessage(calculated.display_name) %>
+        <%= calculated.display_name %>
         <!-- Custom Player Emoji -->
         <% if (calculated.display_emoji_img) { %>
           <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
@@ -407,7 +408,7 @@ const metaDescription = getMetaDescription()
           <li>
             <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
               <!-- Username -->
-              <span class="<%= member.removed === true ? "kicked" : "" %>"> <%= helper.owoifyMessage(member.display_name) %> </span>
+              <span class="<%= member.removed === true ? "kicked" : "" %>"> <%= member.display_name %> </span>
 
               <!-- Emoji -->
               <% if (member.emojiImg) { %>
@@ -423,7 +424,7 @@ const metaDescription = getMetaDescription()
       <span class="text-on"> on </span>
       <span tabindex="0" id="stats_for_profile">
         <!-- Profile Name -->
-        <%= helper.owoifyMessage(calculated.profile.cute_name) %>
+        <%= calculated.profile.cute_name %>
         <!-- Profile Emoji -->
         <% if (calculated.profile.game_mode == 'ironman') { %>
           <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
@@ -463,18 +464,6 @@ const metaDescription = getMetaDescription()
           </svg>
         </button>
 
-        <!-- Profile Views -->
-          <%
-            let views = 0;
-            const seed = new seedrandom(calculated.uuid);
-            views = (Math.floor(seed() * 9000) + 1000).toLocaleString()
-            if (["duckysolucky", "duckysoskilled", "altpapier", "mattthecuber"].includes(calculated.display_name.toLowerCase())) {
-              views = "69,420";
-            }
-          %>
-          <button class="additional-player-stat interactive-tooltip" data-tippy-content="<b>Wow, such views!</b><br><small>by @duckysolucky<br></small>">Haters: <%= views %></button>
-            
-
         <guild-button class="additional-player-stat"></guild-button>
 
         <!-- Placnke Button-->
@@ -483,6 +472,7 @@ const metaDescription = getMetaDescription()
         <div id="additional_socials">
           <!-- Copy UUID Button -->
           <button data-copy-text="<%= calculated.uuid %>" class="copy-text additional-player-stat">Copy UUID</button>
+          
           <% if ('social' in calculated && Object.keys(calculated.social).length > 0) { %>
             <!-- Discord Button -->
             <% if ('DISCORD' in calculated.social) { %> 

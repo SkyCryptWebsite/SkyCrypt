@@ -47,22 +47,22 @@
     <% if ('skills' in calculated && 'runecrafting' in calculated.skills.skills) { %>
       <div class="additional-stat">
         <span data-tippy-content="
-          <span class='stat-name'><%= helper.owoifyMessage("Total Skill XP:") %></span> </span>
+          <span class='stat-name'>Total Skill XP: </span>
           <span class='stat-value'><%= Math.round(calculated.skills.totalSkillXp).toLocaleString() %></span>
-          <div class='tippy-explanation'><%= helper.owoifyMessage("Total XP gained in all skills except Social and Runecrafting.") %></div>
+          <div class='tippy-explanation'>Total XP gained in all skills except Social and Runecrafting.</div>
 
-          <span class='stat-name'><%= helper.owoifyMessage("Average Level:") %> </span>
+          <span class='stat-name'>Average Level: </span>
           <span class='stat-value'><%= calculated.skills.averageSkillLevel.toFixed(2) %></span>
-          <div class='tippy-explanation'><%= helper.owoifyMessage("Average skill level over all skills except Social and Runecrafting") %> <% if ('runecrafting' in calculated.skills.skills) { %><%= helper.owoifyMessage(", includes progress to next level.")%> <% } %></div>
+          <div class='tippy-explanation'>Average skill level over all skills except Social and Runecrafting<% if ('runecrafting' in calculated.skills.skills) { %>, includes progress to next level. <% } %></div>
 
           <% if ('runecrafting' in calculated.skills.skills) { %>
-            <span class='stat-name'><%= helper.owoifyMessage("Average Level without progress:") %> </span>
+            <span class='stat-name'>Average Level without progress: </span>
             <span class='stat-value'><%= calculated.skills.averageSkillLevelWithoutProgress.toFixed(2) %></span>
 
-            <div class='tippy-explanation'><%= helper.owoifyMessage("Average skill level without including partial level progress.") %></div>
+            <div class='tippy-explanation'>Average skill level without including partial level progress.</div>
           <% } %>">
 
-          <span class="stat-name"><%= helper.owoifyMessage("Average Skill Level:") %> </span>
+          <span class="stat-name">Average Skill Level: </span>
           <span class="stat-value"><%= calculated.skills.averageSkillLevel.toFixed(2) %></span>
         </span>
       </div>
@@ -71,7 +71,7 @@
     <!-- Fairy Souls -->
     <% if (calculated.fairy_souls !== undefined) { %>
       <div class="additional-stat">
-        <span data-tippy-content="<%= calculated.fairy_souls.progress %>% <%= helper.owoifyMessage("of fairy souls found.") %>">
+        <span data-tippy-content="<%= calculated.fairy_souls.progress %>% of fairy souls found.">
           <span class="stat-name">Fairy Souls: </span>
           <span class="stat-value"><%= calculated.fairy_souls.collected %> / <%= calculated.fairy_souls.total %></span>
         </span>
@@ -82,16 +82,16 @@
     <% if (calculated.weight) {
       const weightSystems = [
         {
-          name: helper.owoifyMessage("Senither Weight"),
-          author: helper.owoifyMessage("Senither"),
+          name: "Senither Weight",
+          author: "Senither",
           skill: calculated.weight.senither.skill.total,
           slayer: calculated.weight.senither.slayer.total,
           dungeon: calculated.weight.senither.dungeon.total,
           total: calculated.weight.senither.overall,
         },
         {
-          name: helper.owoifyMessage("Lily Weight"),
-          author: helper.owoifyMessage("LappySheep"),
+          name: "Lily Weight",
+          author: "LappySheep",
           skill: calculated.weight.lily.skill.base + calculated.weight.lily.skill.overflow,
           slayer: calculated.weight.lily.slayer,
           dungeon: calculated.weight.lily.catacombs.experience +
@@ -114,21 +114,21 @@
         <div class="additional-stat">
           <span data-tippy-content="
             <span class='stat-name'><%= weight.name %></span><br>
-            <span class='stat-info'><%= helper.owoifyMessage("Weight calculations by") %> <%= weight.author %></span>
+            <span class='stat-info'>Weight calculations by <%= weight.author %></span>
             <br/><br/>
-            <span class='stat-name'><%= helper.owoifyMessage("Skill:") %> </span>
+            <span class='stat-name'>Skill: </span>
             <span class='stat-value'>
             <%= parseFloat(weight.skill.toFixed(2)).toLocaleString() %>
             </span><br/>
-            <span class='stat-name'><%= helper.owoifyMessage("Slayer:") %> </span>
+            <span class='stat-name'>Slayer: </span>
             <span class='stat-value'>
             <%= parseFloat(weight.slayer.toFixed(2)).toLocaleString() %>
             </span><br/>
-            <span class='stat-name'><%= helper.owoifyMessage("Dungeon:") %> </span>
+            <span class='stat-name'>Dungeon: </span>
             <span class='stat-value'>
             <%= parseFloat(weight.dungeon.toFixed(2)).toLocaleString() %>
             </span><br/><br/>
-            <span class='stat-name'><%= helper.owoifyMessage("Total:") %> </span>
+            <span class='stat-name'>Total: </span>
             <span class='stat-value'>
             <%= parseFloat(weight.total.toFixed(2)).toLocaleString() %>
             </span>
@@ -144,8 +144,8 @@
     <% if (calculated.networth.noInventory === false) { %>
       <div class="additional-stat">
         <span data-tippy-content="
-          <span class='stat-name'><%= helper.owoifyMessage('Networth') %></span><br>
-          <span class='stat-info'><%= helper.owoifyMessage("Networth calculations by SkyHelper") %></span>
+          <span class='stat-name'><%= 'Networth' %></span><br>
+          <span class='stat-info'>Networth calculations by SkyHelper</span>
           <br/><br/>
 
           <%
@@ -181,7 +181,7 @@
             }
 
             if (value > 0) { %>
-              <span class='stat-name'><%= helper.owoifyMessage(name) %>: </span>
+              <span class='stat-name'><%= name %>: </span>
               <span class='stat-value'><%= helper.formatNumber(value) %></span>
               <br/>
             <% } %>
@@ -189,16 +189,16 @@
           <br/>
 
           <!-- Unsoulbound Networth -->
-          <span class='stat-name'><%= helper.owoifyMessage("Unsoulbound Networth:") %> </span>
+          <span class='stat-name'>Unsoulbound Networth: </span>
           <span class='stat-value'><%= helper.formatNumber(calculated.networth.unsoulboundNetworth, true) %></span>
           <br/>
 
           <!-- Total Networth -->
-          <span class='stat-name'><%= helper.owoifyMessage("Total Networth:") %> </span>
+          <span class='stat-name'>Total Networth: </span>
           <span class='stat-value'><%= Math.floor(calculated.networth.networth).toLocaleString() %> (<%= helper.formatNumber(calculated.networth.networth, true) %>)</span>
           <br/>
         ">
-          <span class="stat-name"><%= helper.owoifyMessage("Networth:") %> </span>
+          <span class="stat-name">Networth: </span>
           <span class="stat-value"><%= helper.formatNumber(parseFloat(Math.round(calculated.networth.networth))) %></span>
         </span>
       </div>

@@ -2,7 +2,6 @@ import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import * as helper from "../../../../common/helper.js";
 import { STATS_DATA, HIDDEN_STATS } from "../../../../common/constants.js";
-import { owoifyMessage } from "../../../../src/constants/owo/index.js";
 
 @customElement("player-stat")
 export class PlayerStat extends LitElement {
@@ -38,7 +37,7 @@ export class PlayerStat extends LitElement {
       <div data-stat="${this.stat}" class="basic-stat stat-${this.stat.replaceAll("_", "-")}">
         <div data-tippy-content="${tooltip.join("")}">
           <span class="stat-icon">${icon}</span>
-          <span class="stat-name">${owoifyMessage(name)}</span>
+          <span class="stat-name">${name}</span>
           <span class="stat-value">${value.toLocaleString()}${suffix}</span>
         </div>
       </div>
