@@ -254,6 +254,13 @@ window.addEventListener(
   { capture: false, passive: true },
 );
 
+let themeUrl = localStorage.getItem("currentThemeUrl");
+
+// workaround for potential cached april fools theme
+if (themeUrl != null && themeUrl.includes("?") && themeUrl.includes("default")) {
+  localStorage.setItem("currentThemeUrl", `/resources/themes/default.json`);
+}
+
 // Load the theme from localStorage if it exists
 {
   // TODO remove this once users are migrated to currentThemeUrl
@@ -263,7 +270,7 @@ window.addEventListener(
     localStorage.removeItem("currentTheme");
   }
 
-  const themeUrl = localStorage.getItem("currentThemeUrl");
+  themeUrl = localStorage.getItem("currentThemeUrl");
   if (themeUrl != null) {
     loadTheme(themeUrl);
   }
