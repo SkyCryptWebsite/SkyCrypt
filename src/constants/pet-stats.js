@@ -1030,6 +1030,8 @@ class BlackCat extends Pet {
     return {
       speed: this.level * 0.25,
       intelligence: this.level * 1,
+      magic_find: this.level * 0.15,
+      pet_luck: this.level * 0.15,
     };
   }
 
