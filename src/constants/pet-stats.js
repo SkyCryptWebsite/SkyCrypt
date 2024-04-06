@@ -2752,7 +2752,7 @@ class BlueWhale extends Pet {
 class Ammonite extends Pet {
   get stats() {
     return {
-      sea_creature_chance: this.level * 0.05 + (this.profile?.mining?.core?.tier?.level || 0),
+      sea_creature_chance: this.level * (0.05 + 0.01 * (this.profile?.mining?.core?.level?.level || 0)),
     };
   }
 
