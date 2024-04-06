@@ -288,9 +288,11 @@ function getProfilePets(pets, calculated) {
       );
     }
 
-    pet.lore = "";
+    pet.tag ??= {};
+    pet.tag.display ??= {};
+    pet.tag.display.Lore ??= [];
     for (const line of lore) {
-      pet.lore += '<span class="lore-row wrap">' + helper.renderLore(line) + "</span>";
+      pet.tag.display.Lore.push(line);
     }
 
     pet.display_name = `${petName}${petSkin ? " ✦" : ""}`;

@@ -392,14 +392,14 @@ const metaDescription = getMetaDescription()
     <div id="player_profile"><span class="text-stats-for">Stats for</span>
       <span tabindex="0" id="stats_for_player">
         <!-- Player Rank -->
-        <%- jerriefy(calculated.rank_prefix) %>
+        <span class="player-rank-name"><%- jerriefy(calculated.rank_prefix) %></span>
         <!-- Player Username -->
-        <%= calculated.display_name %>
+        <span class="player-name"><%= calculated.display_name %></span>
         <!-- Custom Player Emoji -->
         <% if (calculated.display_emoji_img) { %>
           <img class="emoji" draggable="false" src="<%= calculated.display_emoji_img %>">
         <% } else if (calculated.display_emoji) { %>
-          <%- extra.twemoji.parse(calculated.display_emoji) %>
+          <%- calculated.display_emoji %>
         <% } %>
 
         <!-- Profile Members -->
@@ -408,13 +408,13 @@ const metaDescription = getMetaDescription()
           <li>
             <a class="goto" href="/stats/<%= member.uuid %>/<%= calculated.profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>">
               <!-- Username -->
-              <span class="<%= member.removed === true ? "kicked" : "" %>"> <%= member.display_name %> </span>
+              <span class="player-name <%= member.removed === true ? "kicked" : "" %>"> <%= member.display_name %> </span>
 
               <!-- Emoji -->
               <% if (member.emojiImg) { %>
                 <img class="emoji" draggable="false" src="<%= member.emojiImg %>">
               <% } else if (member.emoji) { %>
-                <%- extra.twemoji.parse(member.emoji) %>
+                <%- member.emoji %>
               <% } %>
             </a>
           </li>
@@ -424,14 +424,14 @@ const metaDescription = getMetaDescription()
       <span class="text-on"> on </span>
       <span tabindex="0" id="stats_for_profile">
         <!-- Profile Name -->
-        <%= calculated.profile.cute_name %>
+        <span class="profile-name"><%= calculated.profile.cute_name %></span>
         <!-- Profile Emoji -->
         <% if (calculated.profile.game_mode == 'ironman') { %>
           <img src="/resources/img/icons/ironman.png" class="emoji" alt="ironman">
         <% } else if (calculated.profile.game_mode == 'bingo') { %>
-          <%- extra.twemoji.parse("🎲") %>
+          <%- "🎲" %>
         <% } else if (calculated.profile.game_mode == 'island') { %>
-          <%- extra.twemoji.parse("🌴") %>
+          <%- "🌴" %>
         <% } %>
 
         <ul id="other_profiles">
@@ -439,14 +439,14 @@ const metaDescription = getMetaDescription()
             const _profile = calculated.profiles[profile_id]; %>
             <li>
               <a class="goto" href="/stats/<%= calculated.uuid %>/<%= _profile.profile_id %><%= Object.keys(req.query).length > 0 ? '?' + new URLSearchParams(req.query).toString() : '' %>"> 
-                <%= _profile.cute_name %>
+                <span class="profile-name"><%= _profile.cute_name %></span>
 
                 <% if (_profile.game_mode == 'ironman') { %>
                   <img src="/resources/img/icons/ironman.png" class="emoji">
                 <% } else if (_profile.game_mode == 'bingo') { %>
-                 <%- extra.twemoji.parse("🎲") %>
+                 <%- "🎲" %>
                 <% } else if (_profile.game_mode == 'island') { %>
-                  <%- extra.twemoji.parse("🌴") %>
+                  <%- "🌴" %>
                 <% } %>
               </a>
             </li>

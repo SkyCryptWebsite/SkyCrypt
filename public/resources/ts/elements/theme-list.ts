@@ -12,6 +12,7 @@ const themeURLs = [
   "draconic",
   "burning-cinnabar",
   "candycane",
+  "april-fools-2024",
 ].map((name) => `/resources/themes/${name}.json`);
 
 themeURLs.push(...JSON.parse(localStorage.getItem("customThemeUrls") ?? "[]"));
