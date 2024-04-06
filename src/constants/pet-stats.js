@@ -8,12 +8,13 @@ const EPIC = RARITIES.indexOf("epic");
 const LEGENDARY = RARITIES.indexOf("legendary");
 const MYTHIC = RARITIES.indexOf("mythic");
 
-function formatStat(stat) {
+function formatStat(stat, red = false) {
   const formattedStat = stat.toFixed(2).replace(/\.?0+$/, "");
+  const color = red ? "§c" : "§a";
   if (stat > 0) {
-    return `§a+${formattedStat}`;
+    return `${color}+${formattedStat}`;
   } else {
-    return `§a${formattedStat}`;
+    return `${color}${formattedStat}`;
   }
 }
 
@@ -66,13 +67,13 @@ class Pet {
           list.push(`§7Defense: ${formatStat(newStats[stat])}`);
           break;
         case "strength":
-          list.push(`§7Strength: ${formatStat(newStats[stat])}`);
+          list.push(`§7Strength: ${formatStat(newStats[stat], true)}`);
           break;
         case "crit_chance":
-          list.push(`§7Crit Chance: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Crit Chance: ${formatStat(newStats[stat], true)}%`);
           break;
         case "crit_damage":
-          list.push(`§7Crit Damage: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Crit Damage: ${formatStat(newStats[stat], true)}%`);
           break;
         case "intelligence":
           list.push(`§7Intelligence: ${formatStat(newStats[stat])}`);
@@ -81,10 +82,10 @@ class Pet {
           list.push(`§7Speed: ${formatStat(newStats[stat])}`);
           break;
         case "bonus_attack_speed":
-          list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat], true)}%`);
           break;
         case "sea_creature_chance":
-          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat], true)}%`);
           break;
         case "magic_find":
           list.push(`§7Magic Find: ${formatStat(newStats[stat])}`);
