@@ -2905,9 +2905,11 @@ class FlyingFish extends Pet {
 class Megalodon extends Pet {
   get stats() {
     return {
-      ferocity: this.level * 0.05,
       strength: this.level * 0.5,
       magic_find: this.level * 0.1,
+      ferocity: this.level * 0.05,
+      sea_creature_chance: this.level * 0.05,
+      fishing_speed: this.level * 0.3,
     };
   }
 
@@ -2920,11 +2922,11 @@ class Megalodon extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { epic: 0.25 });
+    const mult = getValue(this.rarity, { epic: 1 });
     return {
       name: "§6Blood Scent",
       desc: [
-        `§7Deal up to §c+${round(mult * this.level, 1)}% ${
+        `§7Deal up to §c+${round(50 + mult * this.level, 1)}% ${
           SYMBOLS.strength
         } Damage §7based on the enemy's missing health.`,
       ],
@@ -2932,21 +2934,18 @@ class Megalodon extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.2 });
     return {
       name: "§6Enhanced scales",
-      desc: [`§7Increases the stats of Shark Armor by §a${round(mult * this.level, 1)}%§7.`],
+      desc: [`§7Doubles the pet's base stats during the §bFishing Festival§7.`],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.5 });
+    const mult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Feeding frenzy",
       desc: [
-        `§7On kill gain §c${round(mult * this.level, 1)} ${SYMBOLS.strength} Damage §7and §f${
-          SYMBOLS.speed
-        } Speed §7for 5 seconds§7.`,
+        `§7Increases your chance to catch Sharks during the §bFishing Festival §7by §a${round(10 + this.level * mult, 1)}%§7.`,
       ],
     };
   }
