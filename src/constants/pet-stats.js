@@ -2417,8 +2417,6 @@ class Giraffe extends Pet {
     };
   }
 
-  //"§7§7Increases your melee damage by", "§7§c95.5% §7if you are more than 3 blocks", "§7away from the target.",
-
   get third() {
     const mult = getValue(this.rarity, { legendary: 0.5 });
     return {
