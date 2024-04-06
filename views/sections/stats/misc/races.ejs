@@ -9,13 +9,13 @@ const raceOrder = ["crystal_core", "giant_mushroom", "precursor_ruins", "other"]
     <div class="category-icon">
       <div class="item-icon icon-317_0"></div>
     </div>
-    <span>races</span>
+    <span class="category-name">races</span>
   </div>
 
   <div class="race-containers narrow-info-container-wrapper">
     <% for (const [category, data] of Object.entries(calculated.misc.races).sort((a, b) => raceOrder.indexOf(a[0]) - raceOrder.indexOf(b[0]))) { %>
       <div class="narrow-info-container">
-        <div class="narrow-info-header"><%= data.name %></div>
+        <div class="narrow-info-header category-name"><%= data.name %></div>
         <div class="narrow-info-content">
           <% for (const [subcategory, race] of Object.entries(data.races)) { %>
             <% if (race.name !== undefined) { %>
