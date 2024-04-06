@@ -29,7 +29,6 @@ import * as constants from "./constants.js";
 import * as custom_resources from "./custom-resources.js";
 import { SitemapStream, streamToPromise } from "sitemap";
 import { createGzip } from "zlib";
-import twemoji from "twemoji";
 import cookieParser from "cookie-parser";
 
 import * as apiRoute from "./routes/api.js";
@@ -218,8 +217,6 @@ async function getFavoritesFormUUIDs(uuids) {
 
 async function getExtra(page = null, favoriteUUIDs = [], cacheOnly) {
   const output = {};
-
-  output.twemoji = twemoji;
 
   output.packs = custom_resources.getPacks();
 

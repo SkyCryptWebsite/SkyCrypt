@@ -98,7 +98,7 @@
         <% if ('emojiImg' in profile) { %>
         <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
         <% }else if ('emoji' in profile) { %>
-        <%-" " + extra.twemoji.parse(profile.emoji) %>
+        <%-" " + profile.emoji %>
         <% } %>
       </div>
       <svg class="profile-rank" viewBox="0 0 24 24">
@@ -123,10 +123,10 @@
         <% if ('emojiImg' in profile) { %>
         <img class="emoji" draggable="false" src="<%= profile.emojiImg %>" alt="<%= profile.emojiImg.split('/').pop().split('.')[0] %>">
         <% }else if ('emoji' in profile) { %>
-        <%- extra.twemoji.parse(profile.emoji) %>
+        <%- profile.emoji %>
         <% } %>
       </div>
-      <div class="profile-last-online"><%- extra.twemoji.parse(profile.message) %></div>
+      <div class="profile-last-online"><%- profile.message %></div>
       <svg class="profile-rank" viewBox="0 0 24 24">
         <title><%= developerRoles[profile.type]?.title || developerRoles.ERROR.title %></title>
         <path fill="currentColor" d="<%= developerRoles[profile.type]?.svgPath || developerRoles.ERROR.svgPath %>" />

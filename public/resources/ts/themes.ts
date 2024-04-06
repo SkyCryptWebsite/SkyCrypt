@@ -196,7 +196,9 @@ function processTheme(theme: Theme): ProcessedTheme {
   return processedTheme;
 }
 
+const REFRESH_THEMES = ["/resources/themes/april-fools-2024.json"];
 export async function loadTheme(themeUrl: string): Promise<void> {
+  const oldThemeUrl = localStorage.getItem("currentThemeUrl") ?? "";
   const theme = await getTheme(themeUrl);
 
   const processedTheme = processTheme(theme);
@@ -209,6 +211,12 @@ export async function loadTheme(themeUrl: string): Promise<void> {
 
   localStorage.setItem("currentThemeUrl", themeUrl);
   localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
+
+  if (themeUrl !== oldThemeUrl) {
+    if (REFRESH_THEMES.includes(themeUrl) || REFRESH_THEMES.includes(oldThemeUrl)) {
+      location.reload();
+    }
+  }
 }
 
 window.addEventListener("storage", (event) => {

@@ -6,6 +6,7 @@ import { renderLore } from "../../../common/formatting.js";
 
 import { getPlayerStats } from "./calculate-player-stats";
 import { RARITY_COLORS } from "../../../common/constants.js";
+import { owoifyMessage } from "../../../src/constants/themes/april-fools-2024/index.js";
 
 import("./elements/inventory-view");
 import("./elements/guild-button");
@@ -242,6 +243,8 @@ function fillLore(element: HTMLElement) {
     return;
   }
 
+  const owofiyLore = localStorage.getItem("currentThemeUrl") === "/resources/themes/april-fools-2024.json";
+
   const itemNameString = ((item as Item).tag?.display?.Name ?? item.display_name ?? "???") as string;
   const colorCode = itemNameString.match(/^§([0-9a-fklmnor])/i);
   if (colorCode && colorCode[1]) {
@@ -259,6 +262,10 @@ function fillLore(element: HTMLElement) {
   if (element.hasAttribute("data-pet-index")) {
     itemNameContent.dataset.multicolor = "false";
     itemNameContent.innerHTML = `[Lvl ${(item as Pet).level.level}] ${item.display_name}`;
+  }
+
+  if (owofiyLore === true) {
+    itemNameContent.innerHTML = owoifyMessage(itemNameContent.innerHTML);
   }
 
   if (item.texture_path) {
@@ -280,9 +287,11 @@ function fillLore(element: HTMLElement) {
   if ("lore" in item) {
     itemLore.innerHTML = item.lore;
   } else if ("tag" in item && Array.isArray(item.tag.display?.Lore)) {
-    itemLore.innerHTML = item.tag.display.Lore.map(
-      (line: string) => '<span class="lore-row">' + renderLore(line) + "</span>",
-    ).join("");
+    itemLore.innerHTML = item.tag.display.Lore.map((line: string) => {
+      const newLine = owofiyLore ? owoifyMessage(line) : line;
+
+      return '<span class="lore-row">' + renderLore(newLine) + "</span>";
+    }).join("");
   } else {
     itemLore.innerHTML = "";
   }
@@ -919,5 +928,42 @@ export function formatNumber(number: number, floor: boolean, rounding = 10): str
     node.data = bonusStats;
 
     element.appendChild(node);
+  });
+}
+
+const currentTheme = localStorage.getItem("currentThemeUrl");
+if (currentTheme === "/resources/themes/april-fools-2024.json") {
+  document.querySelectorAll("*").forEach((element) => {
+    // return lore text color to default color (so it's not pink)
+    if (element.classList.contains("item-lore")) {
+      element.classList.add("nice-colors-light");
+      return;
+    }
+
+    element.classList.add("april-fools-2024");
+
+    const owoifyElements = [
+      "stat-name",
+      "stat-value",
+      "stat-sub-header",
+      "narrow-info-name",
+      "stat-header",
+      "inventory-tab-name",
+      "category-name",
+      "nav-item",
+      "text-stats-for",
+      "pet-name",
+      "pet-level",
+      "skill-name",
+      "kill-entity",
+      "tier-name",
+      "skill-name",
+      "rank-name",
+      "player-name",
+      "profile-name",
+    ];
+    if (owoifyElements.some((owoifyElement) => element.classList.contains(owoifyElement))) {
+      element.innerHTML = owoifyMessage(element.innerHTML);
+    }
   });
 }

@@ -177,7 +177,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   }
 
   if (cacheOnly === false && (user == undefined || +new Date() - user.date > 7200 * 1000)) {
-    const profileRequest = axios(`https://api.ashcon.app/mojang/v2/user/${uuid}`, { timeout: 5000 });
+    const profileRequest = axios(`https://mowojang.matdoes.dev/mojang/v2/user/${uuid}`, { timeout: 5000 });
 
     profileRequest
       .then(async (response) => {
