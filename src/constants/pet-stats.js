@@ -1777,10 +1777,9 @@ class Pigman extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.25 });
     return {
       name: "§6Giant Slayer",
-      desc: [`§7Deal §a${round(this.level * mult, 1)}% §7extra damage to monsters level 100 and up§7.`],
+      desc: [`§7Deal §c+50% §7damage to monsters Level 50+ and §c+75% §7damage to monsters Level 100+.`],
     };
   }
 }
