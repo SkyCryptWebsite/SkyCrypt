@@ -2356,26 +2356,27 @@ class Zombie extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.15, epic: 0.25 });
+    const base = getValue(this.rarity, { common: 5, uncommon: 10, epic: 15 });
+    const mult = getValue(this.rarity, { common: 0.1 });
     return {
-      name: "§6Chomp",
-      desc: [`§7Heal §c+${round(this.level * mult, 1)} ${SYMBOLS.health} §7per Zombie kill.`],
+      name: "§6Bite Shield",
+      desc: [`§7Reduce the damage taken from zombies by §a${round(base + this.level * mult, 1)}%§7.`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { rare: 0.2, epic: 0.25 });
+    const mult = getValue(this.rarity, { rare: 1.25 });
     return {
       name: "§6Rotten Blade",
-      desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to zombies.`],
+      desc: [`§7Deal §a${round(25 + this.level * mult, 1)}% §7more damage to zombies.`],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.2 });
+    const mult = getValue(this.rarity, { legendary: 0.25 });
     return {
       name: "§6Living Dead",
-      desc: [`§7Increases all stats on §7§2undead ${SYMBOLS.undead} §7armor by §a${round(this.level * mult, 1)}%§7.`],
+      desc: [`§7Increases all stats on §7§2Undead ${SYMBOLS.undead} §7armor by §a${round(this.level * mult, 1)}%§7.`],
     };
   }
 }
