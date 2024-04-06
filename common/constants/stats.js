@@ -245,15 +245,6 @@ export const STATS_DATA = {
     suffix: "",
     color: "a",
   },
-  undead: {
-    name: "Undead",
-    nameLore: "Undead",
-    nameShort: "Undead",
-    nameTiny: "U",
-    symbol: "༕",
-    suffix: "",
-    color: "2",
-  },
   alchemy_wisdom: {
     name: "Alchemy Wisdom",
     nameLore: "Alchemy Wisdom",
@@ -387,6 +378,8 @@ const symbols = {
   soulflow: "⸎",
   dungeon_upgrade: "⚚",
   dye: "✿",
+  undead: "༕",
+  arachnal: "Ж",
 };
 for (const stat in STATS_DATA) {
   symbols[stat] = STATS_DATA[stat].symbol;
