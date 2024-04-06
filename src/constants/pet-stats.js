@@ -128,6 +128,12 @@ class Pet {
         case "foraging_fortune":
           list.push(`§7Foraging Fortune: ${formatStat(newStats[stat])}`);
           break;
+        case "vitality":
+          list.push(`§7Vitality: ${formatStat(newStats[stat])}`);
+          break;
+        case "mending":
+          list.push(`§7Mending: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -1308,6 +1314,8 @@ class Ghoul extends Pet {
       health: this.level * 1,
       intelligence: this.level * 0.75,
       ferocity: this.level * 0.05,
+      vitality: this.level * 0.25,
+      mending: this.level * 0.25,
     };
   }
 
@@ -1323,31 +1331,31 @@ class Ghoul extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { epic: 0.25 });
+    const mult = getValue(this.rarity, { epic: 0.005 });
     return {
-      name: "§6Amplified Healing",
-      desc: [
-        `§7Grants §4${round(this.level * mult, 1)} ${
-          SYMBOLS.vitality
-        } Vitality§7, which increases your incoming healing.`,
-      ],
+      name: "§6Undead Slayer",
+      desc: [`§7Gain §b${round(1 + this.level * mult, 3)}x §7Combat XP against §aZombies.`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.5 });
+    const mult = getValue(this.rarity, { epic: 0.2 });
     return {
-      name: "§6Zombie Arm",
-      desc: [`§7Increase the health and range of the Zombie sword by §a${round(this.level * mult, 1)}%§7.`],
+      name: "§6Army of the Dead",
+      desc: [
+        `§7Increases the amount of souls you can store by §a2 §7and the chance of getting a mob's soul by §a${round(this.level * mult, 1)}%§7.`,
+      ],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 1 });
+    const costMult = getValue(this.rarity, { legendary: 0.3 });
+    const damageMult = getValue(this.rarity, { legendary: 0.2 });
+    const healthMult = getValue(this.rarity, { legendary: 1 });
     return {
       name: "§6Reaper Soul",
       desc: [
-        `§7Increases the health and lifespan of the Reaper Scythe zombies by §a${round(this.level * mult, 1)}%§7.`,
+        `§7Reduces the summoning cost of mobs by §a${round(this.level * costMult, 1)}% §7and increases their damage output by §a${round(this.level * damageMult, 1)}%§7. Increases the health of all summoned mobs by §a${round(this.level * healthMult, 1)}%§7.`,
       ],
     };
   }
