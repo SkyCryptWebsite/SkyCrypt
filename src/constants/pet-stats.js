@@ -965,7 +965,7 @@ class WitherSkeleton extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.25 });
+    const mult = getValue(this.rarity, { epic: 1.25 });
     return {
       name: "§6Wither Blood",
       desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to wither mobs.`],
