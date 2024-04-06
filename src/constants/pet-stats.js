@@ -103,7 +103,7 @@ class Pet {
           list.push(`§7Damage: ${formatStat(newStats[stat])}`);
           break;
         case "ferocity":
-          list.push(`§7Ferocity: ${formatStat(newStats[stat])}`);
+          list.push(`§7Ferocity: ${formatStat(newStats[stat], true)}`);
           break;
         case "mining_speed":
           list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
@@ -1935,9 +1935,9 @@ class Skeleton extends Pet {
 class Snowman extends Pet {
   get stats() {
     return {
-      damage: this.level * 0.25,
       strength: this.level * 0.25,
       crit_damage: this.level * 0.25,
+      damage: this.level * 0.25,
     };
   }
 
@@ -1952,15 +1952,18 @@ class Snowman extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { legendary: 0.04 });
+    const blockMult = getValue(this.rarity, { legendary: 0.08 });
+    const damageMult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Blizzard",
-      desc: [`§7Slow all enemies within §a${4 + round(this.level * mult, 1)} §7blocks.`],
+      desc: [
+        `§7Enemies within §a${8 + round(this.level * blockMult, 1)} §7blocks are slowed by §a25% §7and deal §a${round(this.level * damageMult, 1)}% §7less damage.`,
+      ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { legendary: 0.15 });
+    const mult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Frostbite",
       desc: [
@@ -1973,19 +1976,19 @@ class Snowman extends Pet {
   }
 
   get third() {
+    const mult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Snow Cannon",
       desc: [
-        `§7Your snowman fires a snowball dealing §a5x §7your §c${SYMBOLS.strength} Strength §7when a mob gets close to you (1s cooldown).`,
+        `§7Shoots a snowball towards an enemy when you attack dealing §a${round(this.level * mult)}% §7 of your last dealt melee damage, capped at §f200,000§7. §8(1s cooldown).`,
       ],
     };
   }
 
   get fourth() {
-    const mult = getValue(this.rarity, { mythic: 0.5 });
     return {
-      name: "§6Ouch",
-      desc: [`§7Your snowballs have §a${round(this.level * mult, 1)}% §7chance chance to dealing §cdouble §7damage!`],
+      name: "§6Ouch!",
+      desc: [`§7Your snowballs have §a50% §7chance chance of dealing §cdouble §7damage!`],
     };
   }
 }
