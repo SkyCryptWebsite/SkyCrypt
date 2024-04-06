@@ -1369,6 +1369,7 @@ class Golem extends Pet {
     return {
       health: this.level * 1.5,
       strength: this.level * 0.5,
+      swing_range: this.level * 0.01,
     };
   }
 
@@ -1384,15 +1385,17 @@ class Golem extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { epic: 0.3 });
     return {
       name: "§6Last Stand",
-      desc: [`§7While less than 25% HP, deal §a${round(this.level * mult, 1)}% §7more damage§7.`],
+      desc: [
+        "§7While at less than §a20% HP§7, reduce incoming damage by §a20%§7. Additionally, gain a temporary shield equal to §a40% §7of your maximum health and deal §a40% §7more damage§7.",
+        "§8(Lasts 12s, 60s cooldown)",
+      ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.2, legendary: 0.25 });
+    const mult = getValue(this.rarity, { epic: 0.25 });
     return {
       name: "§6Ricochet",
       desc: [
@@ -1402,15 +1405,9 @@ class Golem extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 3 });
     return {
       name: "§6Toss",
-      desc: [
-        `§7Every 5 hits, throw the enemy up into the air and deal §a${round(
-          200 + this.level * mult,
-          1,
-        )}% §7damage (10s cooldown)`,
-      ],
+      desc: [`§7Every 5 hits, throw the enemy up into the air and deal §a5x §7damage §8(5s cooldown)`],
     };
   }
 }
