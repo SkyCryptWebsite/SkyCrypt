@@ -360,6 +360,13 @@ export const STATS_DATA = {
     nameTiny: "BPC",
     symbol: "ൠ",
   },
+  swing_range: {
+    name: "Swing Range",
+    nameLore: "Swing Range",
+    nameShort: "Swing Range",
+    nameTiny: "SR",
+    symbol: "Ⓢ",
+  },
 };
 
 export const HIDDEN_STATS = [

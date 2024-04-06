@@ -134,6 +134,9 @@ class Pet {
         case "mending":
           list.push(`§7Mending: ${formatStat(newStats[stat])}`);
           break;
+        case "swing_range":
+          list.push(`§7Swing Range: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -2382,6 +2385,7 @@ class Giraffe extends Pet {
     return {
       health: this.level * 1,
       crit_chance: this.level * 0.05,
+      swing_range: this.level * 0.01,
     };
   }
 
@@ -2397,32 +2401,33 @@ class Giraffe extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.05, uncommon: 0.1, rare: 0.15, epic: 0.2, legendary: 0.25 });
+    const base = getValue(this.rarity, { common: 1, uncommon: 1.5, epic: 2 });
+    const mult = getValue(this.rarity, { common: 0.99, uncommon: 1.485, epic: 1.98 });
     return {
       name: "§6Good Heart",
-      desc: [`§7Regen §c${round(this.level * mult, 1)} ${SYMBOLS.health} §7per second§7.`],
+      desc: [`§7Grants §c+${round(base + this.level * mult, 1)} ${SYMBOLS.health_regen} Health Regen§7.`],
     };
   }
 
   get second() {
-    const multStrength = getValue(this.rarity, { rare: 0.4, epic: 0.5 });
-    const multCd = getValue(this.rarity, { rare: 0.1, epic: 0.25, legendary: 0.4 });
+    const mult = getValue(this.rarity, { rare: 0.0015 });
     return {
       name: "§6Higher Ground",
       desc: [
-        `§7Grants §c+${round(this.level * multStrength, 1)} ${SYMBOLS.strength} Strength §7and §9+${round(
-          this.level * multCd + 20,
-          1,
-        )} ${SYMBOLS.crit_damage} Crit Damage §7when mid air or jumping§7.`,
+        `§7Increases your §9${SYMBOLS.crit_damage} Crit Damage §7and §c${SYMBOLS.strength} Strength §7by §c${round(this.level * mult, 2)}% §7for every §e0.1 ${SYMBOLS.swing_range} Swing Range §7over §e3${SYMBOLS.swing_range} §7(up to §e6${SYMBOLS.swing_range}§7).`,
       ],
     };
   }
 
+  //"§7§7Increases your melee damage by", "§7§c95.5% §7if you are more than 3 blocks", "§7away from the target.",
+
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.25 });
+    const mult = getValue(this.rarity, { legendary: 0.5 });
     return {
       name: "§6Long Neck",
-      desc: [`§7See enemies from afar and gain §a${round(this.level * mult, 1)}% §7dodge chance§7.`],
+      desc: [
+        `§7Increases your melee damage by §c${50 + round(this.level * mult, 1)}% §7if you are more than 3 blocks away from the target.`,
+      ],
     };
   }
 }
