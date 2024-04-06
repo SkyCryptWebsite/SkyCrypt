@@ -1589,8 +1589,9 @@ class Horse extends Pet {
 class Hound extends Pet {
   get stats() {
     return {
+      speed: this.level * 0.1,
       strength: this.level * 0.4,
-      bonus_attack_speed: this.level * 0.15,
+      bonus_attack_speed: this.level * 0.25,
       ferocity: this.level * 0.05,
     };
   }
@@ -1610,12 +1611,12 @@ class Hound extends Pet {
     const mult = getValue(this.rarity, { epic: 0.05 });
     return {
       name: "§6Scavenger",
-      desc: [`§7Gain +§a${round(this.level * mult, 1)} §7coins per monster kill§7.`],
+      desc: [`§7Gain §a+${round(this.level * mult, 1)} §7coins per monster kill§7.`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { legendary: 0.1 });
+    const mult = getValue(this.rarity, { epic: 0.3 });
     return {
       name: "§6Finder",
       desc: [`§7Increases the chance for monsters to drop their armor by §a${round(this.level * mult, 1)}%§7.`],
@@ -1623,10 +1624,10 @@ class Hound extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.1 });
+    const mult = getValue(this.rarity, { epic: 0.005 });
     return {
       name: "§6Fury Claws",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}%	§e${SYMBOLS.bonus_attack_speed} Bonus Attack Speed§7.`],
+      desc: [`§7Gain §b${round(1 + this.level * mult, 3)}x §7Combat XP against §aWolves.`],
     };
   }
 }
