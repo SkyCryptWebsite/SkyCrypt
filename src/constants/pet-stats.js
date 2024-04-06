@@ -1902,10 +1902,10 @@ class Skeleton extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.1, uncommon: 0.15, epic: 0.2 });
+    const mult = getValue(this.rarity, { common: 0.15, uncommon: 0.2, rare: 0.25, epic: 0.5, legendary: 0.75 });
     return {
       name: "§6Bone Arrows",
-      desc: [`§7Increase arrow damage by §a${round(this.level * mult, 1)}% §7which is tripled while in dungeons§7.`],
+      desc: [`§7Increase arrow damage by §a${round(this.level * mult, 1)}% §7which is doubled while in dungeons§7.`],
     };
   }
 
