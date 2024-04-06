@@ -1996,7 +1996,7 @@ class Snowman extends Pet {
 class Spider extends Pet {
   get stats() {
     return {
-      strength: this.level * 0.1,
+      strength: this.level * 0.5,
       crit_chance: this.level * 0.1,
     };
   }
@@ -2016,18 +2016,17 @@ class Spider extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.05, uncommon: 0.075, epic: 0.1 });
+    const mult = getValue(this.rarity, { common: 0.02, uncommon: 0.04, rare: 0.06, epic: 0.08, legendary: 0.1 });
     return {
       name: "§6One With The Spider",
       desc: [
-        `§7Gain §a${round(this.level * mult, 1)} §c${SYMBOLS.strength} Strength §7for every nearby spider.`,
-        `§8Max 10 spiders`,
+        `§7Applies §c+${5 + round(this.level * mult, 1)} ${SYMBOLS.strength} Strength §7to all §4Arachnal ${SYMBOLS.arachnal} §7weapons, armor, and equipment you have equipped.`,
       ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { rare: 0.3, epic: 0.4 });
+    const mult = getValue(this.rarity, { epic: 0.4 });
     return {
       name: "§6Web-weaver",
       desc: [`§7Upon hitting a monster it becomes slowed by §a${round(this.level * mult, 1)}%§7.`],
