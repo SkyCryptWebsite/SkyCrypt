@@ -2197,8 +2197,9 @@ class Tiger extends Pet {
 class Turtle extends Pet {
   get stats() {
     return {
-      defense: this.level * 1,
-      health: this.level * 0.5,
+      health: 50 + this.level * 0.25,
+      defense: 100 + this.level * 0.5,
+      true_defense: this.level * 0.15,
     };
   }
 
@@ -2215,18 +2216,18 @@ class Turtle extends Pet {
     const mult = getValue(this.rarity, { epic: 0.27 });
     return {
       name: "§6Turtle Tactics",
-      desc: [`§7Gain §a+${round(3 + this.level * mult, 1)}% ${SYMBOLS.defense} Defense§7.`],
+      desc: [
+        `§7Gain §a+${round(3 + this.level * mult, 1)}% ${SYMBOLS.defense} Defense §7and an additional §a+10% §a${SYMBOLS.defense} Defense §7when standing still.`,
+      ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.15, legendary: 0.25 });
+    const mult = getValue(this.rarity, { epic: 0.015 });
     return {
       name: "§6Genius Amniote",
       desc: [
-        `§7Grants §a+${round(5 + this.level * mult, 1)} ${
-          SYMBOLS.defense
-        } Defense §7for every player around you, up to 4 nearby players.`,
+        `§7Grants §a+${round(1 + this.level * mult, 1)} ${SYMBOLS.defense}% Defense §7to 4 players within 50 blocks of you.`,
       ],
     };
   }
@@ -2239,10 +2240,13 @@ class Turtle extends Pet {
   }
 
   get fourth() {
-    const mult = getValue(this.rarity, { legendary: 0.25 });
+    const damageMult = getValue(this.rarity, { legendary: 0.25 });
+    const vitalityMult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Turtle Shell",
-      desc: [`§7When under §c33% §7maximum HP, you take §a${round(this.level * mult, 1)}% §7less damage.`],
+      desc: [
+        `§7When under §c40% §7maximum HP, you take §a${round(this.level * damageMult, 1)}% §7less damage. Gain §4+${round(10 + this.level * vitalityMult, 1)}♨ Vitality §7for 15 seconds after taking 10 hits.`,
+      ],
     };
   }
 }
