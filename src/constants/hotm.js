@@ -770,7 +770,7 @@ class PeakOfTheMountain extends Node {
     const baseTier = level > this.level ? level : 1;
 
     for (let tier = baseTier; tier <= level; tier++) {
-      for (const [reward, qty] of Object.entries(rewards.potm[tier])) {
+      for (const [reward, qty] of Object.entries(rewards.potm[tier] ?? {})) {
         const qtyColor = rewards.rewards[reward].qtyColor;
         const formatted = rewards.rewards[reward].formatted;
         output.push(`§8+ §${qtyColor}${qty} ${formatted}`);
