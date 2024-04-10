@@ -637,7 +637,8 @@ export function parseItemGems(gems, rarity) {
         gem_tier: value?.quality || value,
       });
     } else {
-      throw new Error(`Error! Unknown gemstone slot key: ${key}`);
+      console.log(key);
+      // throw new Error(`Error! Unknown gemstone slot key: ${key}`);
     }
   }
 
