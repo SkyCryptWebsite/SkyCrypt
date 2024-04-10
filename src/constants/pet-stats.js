@@ -41,7 +41,8 @@ function getValue(rarity, data) {
     case MYTHIC:
       return mythic;
     default:
-      throw new Error("Unknown rarity");
+      console.log(`Unknown rarity: ${rarity}`);
+    // throw new Error("Unknown rarity");
   }
 }
 
