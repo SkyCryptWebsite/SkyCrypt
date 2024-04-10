@@ -33,7 +33,7 @@ export function getHotmItems(userProfile, packs) {
   // Check for missing node classes
   for (const nodeId in nodes) {
     if (constants.HOTM.nodes[nodeId] == undefined) {
-      throw new Error(`Missing Heart of the Mountain node: ${nodeId}`);
+      // throw new Error(`Missing Heart of the Mountain node: ${nodeId}`);
     }
   }
 
