@@ -172,4 +172,88 @@ export const GEMSTONES = {
       },
     },
   },
+  AQUAMARINE: {
+    name: "Aquamarine",
+    color: "3",
+    stats: {
+      ROUGH: {
+        sea_creature_chance: [0.1, 0.1, 0.2, 0.2, 0.3, 0.4, null],
+      },
+      FLAWED: {
+        sea_creature_chance: [0.2, 0.2, 0.3, 0.4, 0.6, 0.8, null],
+      },
+      FINE: {
+        sea_creature_chance: [0.5, 0.6, 0.7, 0.8, 1, 1.2, null],
+      },
+      FLAWLESS: {
+        sea_creature_chance: [0.9, 1, 1.1, 1.2, 1.4, 1.6, null],
+      },
+      PERFECT: {
+        sea_creature_chance: [1.3, 1.4, 1.5, 1.6, 1.8, 2, null],
+      },
+    },
+  },
+  CITRINE: {
+    name: "Citrine",
+    color: "4",
+    stats: {
+      ROUGH: {
+        foraging_fortune: [0.5, 1, 1.5, 2, 2.5, 3, null],
+      },
+      FLAWED: {
+        foraging_fortune: [1, 1.5, 2, 2.5, 3, 4, null],
+      },
+      FINE: {
+        foraging_fortune: [1.5, 2, 3, 4, 5, 6, null],
+      },
+      FLAWLESS: {
+        foraging_fortune: [2, 3, 4, 5, 6, 8, null],
+      },
+      PERFECT: {
+        foraging_fortune: [3, 4, 5, 6, 8, 10, null],
+      },
+    },
+  },
+  ONYX: {
+    name: "Onyx",
+    color: "8",
+    stats: {
+      ROUGH: {
+        crit_damage: [1, 1, 2, 2, 3, 4, null],
+      },
+      FLAWED: {
+        crit_damage: [2, 2, 3, 3, 4, 6, null],
+      },
+      FINE: {
+        crit_damage: [3, 3, 4, 5, 6, 8, null],
+      },
+      FLAWLESS: {
+        crit_damage: [4, 5, 6, 7, 8, 10, null],
+      },
+      PERFECT: {
+        crit_damage: [5, 6, 7, 8, 10, 12, null],
+      },
+    },
+  },
+  PERIDOT: {
+    name: "Peridot",
+    color: "2",
+    stats: {
+      ROUGH: {
+        farming_fortune: [0.5, 1, 1.5, 2, 2.5, 3, null],
+      },
+      FLAWED: {
+        farming_fortune: [1, 1.5, 2, 2.5, 3, 4, null],
+      },
+      FINE: {
+        farming_fortune: [1.5, 2, 3, 4, 5, 6, null],
+      },
+      FLAWLESS: {
+        farming_fortune: [2, 3, 4, 5, 6, 8, null],
+      },
+      PERFECT: {
+        farming_fortune: [3, 4, 5, 6, 8, 10, null],
+      },
+    },
+  },
 };
