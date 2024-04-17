@@ -10,7 +10,7 @@ The SkyCrypt Project, which is based on [LeaPhant's skyblock-stats](https://gith
 
 **Website**: https://sky.shiiyu.moe
 
-[![CI](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/node.js.yml/badge.svg)](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/node.js.yml)
+[![CI/CD](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/SkyCryptWebsite/SkyCrypt/actions/workflows/ci-cd.yml)
 
 <h2 align="center">Screenshot</h1>
 
