@@ -3,7 +3,7 @@
   "author": "WarpWing",
   "schema": 2,
   "images": {
-    "bg": "https://cdn.discordapp.com/attachments/713278398830477353/744929704611676221/farming_2.png"
+    "bg": "https://blog.warpwing.cloud/_astro/demo-banner.BbPub-ks_1KHh80.webp"
   },
   "backgrounds": {
     "skillbar": { "type": "color", "color": "#00aabb" }
