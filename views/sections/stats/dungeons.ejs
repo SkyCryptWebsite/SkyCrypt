@@ -19,22 +19,20 @@ function formatDungeonStat(stat, type) {
   <a class="stat-anchor" id="Dungeons"></a>
   <h2 class="stat-header">Dungeons</h2>
   <div class="stat-content">
-    <% if (calculated.dungeons.catacombs.visited === false) { %>
+    <% if (!calculated.dungeons.catacombs?.visited) { %>
       <p class="stat-raw-values">
         <%= calculated.display_name %> hasn't entered a dungeon yet.
       </p>
     <% } else { %>
-      <% if (calculated.dungeons.catacombs.visited) { %>
-        <div class="skill-bars">
-          <skill-component skill="catacombs" type="dungeon" icon="<%= skillItems.catacombs %>"></skill-component>
+      <div class="skill-bars">
+        <skill-component skill="catacombs" type="dungeon" icon="<%= skillItems.catacombs %>"></skill-component>
 
-          <skill-component skill="healer" type="dungeon_class" icon="<%= skillItems.healer %>"></skill-component>
-          <skill-component skill="mage" type="dungeon_class" icon="<%= skillItems.mage %>"></skill-component>
-          <skill-component skill="berserk" type="dungeon_class" icon="<%= skillItems.berserk %>"></skill-component>
-          <skill-component skill="archer" type="dungeon_class" icon="<%= skillItems.archer %>"></skill-component>
-          <skill-component skill="tank" type="dungeon_class" icon="<%= skillItems.tank %>"></skill-component>
-        </div>
-      <% } %>
+        <skill-component skill="healer" type="dungeon_class" icon="<%= skillItems.healer %>"></skill-component>
+        <skill-component skill="mage" type="dungeon_class" icon="<%= skillItems.mage %>"></skill-component>
+        <skill-component skill="berserk" type="dungeon_class" icon="<%= skillItems.berserk %>"></skill-component>
+        <skill-component skill="archer" type="dungeon_class" icon="<%= skillItems.archer %>"></skill-component>
+        <skill-component skill="tank" type="dungeon_class" icon="<%= skillItems.tank %>"></skill-component>
+      </div>
 
       <p class="stat-raw-values" style="margin: 20px 0;">
         <!-- Selected Class-->
@@ -156,7 +154,7 @@ function formatDungeonStat(stat, type) {
       <% if (calculated.dungeons.master_catacombs !== undefined) { %>
         <p class="stat-sub-header">Master Catacombs</p>
 
-        <% if (calculated.dungeons.master_catacombs.visited === false) { %>
+        <% if (!calculated.dungeons.master_catacombs?.visited) { %>
           <p class="stat-raw-values"><%= calculated.display_name %> hasn't completed any Master Catacombs floor yet.</p>
         <% } else { %>
           <div class="floor-containers narrow-info-container-wrapper">
