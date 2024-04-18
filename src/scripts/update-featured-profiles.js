@@ -36,7 +36,7 @@ const FEATURED_PROFILES = [
   {
     // WarpWing
     uuid: "7d7b04b49c24433cacc60a3da66eba01",
-    type: "MAINTAINER",
+    type: "HOST",
     message: "Grandmaster of Unit Testing",
   },
   {
