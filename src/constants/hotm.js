@@ -1830,6 +1830,7 @@ class HotmReset extends HotmItem {
       `§8- §5${this.resources.token_of_the_mountain.toLocaleString()} Token of the Mountain`,
       `§8- §2${this.resources.mithril_powder.toLocaleString()} Mithril Powder`,
       `§8- §d${this.resources.gemstone_powder.toLocaleString()} Gemstone Powder`,
+      `§8- §b${this.resources.gemstone_powder.toLocaleString()} Glacite Powder`,
       "",
       "§7You will §akeep §7any Tiers and §cPeak of the Mountain §7that you have unlocked.",
     ];

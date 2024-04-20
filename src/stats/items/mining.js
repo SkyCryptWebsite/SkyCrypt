@@ -96,6 +96,7 @@ export function getHotmItems(userProfile, packs) {
         token_of_the_mountain: mcdata.tokens,
         mithril_powder: mcdata.powder.mithril,
         gemstone_powder: mcdata.powder.gemstone,
+        glacite_powder: mcdata.powder.glacite,
       },
       crystals: mcdata.crystal_nucleus.crystals,
       last_reset: mcdata.hotm_last_reset,
@@ -121,7 +122,6 @@ export function getHotmItems(userProfile, packs) {
   }
 
   // Processing textures
-  const timeNow = Date.now();
   output.forEach((item) => {
     const customTexture = getTexture(item, {
       ignore_id: false,
@@ -137,8 +137,6 @@ export function getHotmItems(userProfile, packs) {
         "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
     }
   });
-
-  console.log(`\x1b[44m[HOTM] Generated HotM items in ${Date.now() - timeNow}ms\x1b[0m`);
 
   return output;
 }
