@@ -1333,7 +1333,7 @@ class GiftsFromTheDeparted extends Node {
     this.max_level = 100;
     this.upgrade_type = "glacite_powder";
     this.requires = [];
-    this.positionType = "cross";
+    this.positionType = "top";
   }
 
   get upgradeCost() {
@@ -1375,7 +1375,7 @@ class HungryForMore extends Node {
     this.max_level = 50;
     this.upgrade_type = "glacite_powder";
     this.requires = [];
-    this.positionType = "cross";
+    this.positionType = "top";
   }
 
   get upgradeCost() {
@@ -1427,7 +1427,7 @@ class RagsOfRiches extends Node {
     this.max_level = 1;
     this.upgrade_type = "glacite_powder";
     this.requires = [];
-    this.positionType = "cross";
+    this.positionType = "top";
   }
 
   perk(level) {
