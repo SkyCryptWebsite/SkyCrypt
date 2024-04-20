@@ -18,17 +18,23 @@ const UPGRADE_TYPES = {
     name: "FREE",
     color: "a",
   },
+  glacite_powder: {
+    name: "Glacite Powder",
+    color: "b",
+  },
 };
 
 const rewards = {
   hotm: {
     1: {
       token_of_the_mountain: 1,
+      skyblock_experience: 35,
     },
     2: {
       token_of_the_mountain: 2,
       access_to_forge: 0,
       new_forgeable_items: 0,
+      skyblock_experience: 45,
     },
     3: {
       token_of_the_mountain: 2,
@@ -36,23 +42,43 @@ const rewards = {
       new_forgeable_items: 0,
       access_crystal_hollows: 0,
       emissary_braum_crystal_hollows: 0,
+      skyblock_experience: 60,
     },
     4: {
       token_of_the_mountain: 2,
       forge_slot: 1,
       new_forgeable_items: 0,
+      skyblock_experience: 75,
     },
     5: {
       token_of_the_mountain: 2,
       new_forgeable_items: 0,
+      skyblock_experience: 90,
     },
     6: {
       token_of_the_mountain: 2,
       new_forgeable_items: 0,
+      skyblock_experience: 100,
     },
     7: {
       token_of_the_mountain: 3,
       new_forgeable_items: 0,
+      skyblock_experience: 130,
+    },
+    8: {
+      token_of_the_mountain: 2,
+      new_forgeable_items: 0,
+      skyblock_experience: 180,
+    },
+    9: {
+      token_of_the_mountain: 2,
+      new_forgeable_items: 0,
+      skyblock_experience: 210,
+    },
+    10: {
+      token_of_the_mountain: 2,
+      new_forgeable_items: 0,
+      skyblock_experience: 240,
     },
   },
   potm: {
@@ -84,6 +110,18 @@ const rewards = {
     7: {
       token_of_the_mountain: 1,
       skyblock_experience: 125,
+    },
+    8: {
+      glacite_powder_when_mining_glacite: 3,
+      skyblock_experience: 150,
+    },
+    9: {
+      chance_for_glacite_mineshaft_to_spawn: "10%",
+      skyblock_experience: 175,
+    },
+    10: {
+      token_of_the_mountain: 2,
+      skyblock_experience: 200,
     },
   },
   rewards: {
@@ -120,16 +158,24 @@ const rewards = {
       qtyColor: "a",
     },
     mithril_powder_when_mining_mithril: {
-      formatted: "§2Mithril Powder §7when mining §fMithril",
+      formatted: "§2Base Mithril Powder §7when mining §fMithril",
       qtyColor: "2",
     },
     gemstone_powder_when_mining_gemstones: {
-      formatted: "§dGemstone Powder §7when mining §dGemstones",
+      formatted: "§dBase Gemstone Powder §7when mining §dGemstones",
       qtyColor: "d",
     },
     skyblock_experience: {
       formatted: "§bSkyblock XP",
       qtyColor: "b",
+    },
+    glacite_powder_when_mining_glacite: {
+      formatted: "§bBase Glacite Powder §7when mining §bGlacite",
+      qtyColor: "b",
+    },
+    chance_for_glacite_mineshaft_to_spawn: {
+      formatted: "§achance §bfor Glacite Mineshaft §7to spawn.",
+      qtyColor: "a",
     },
   },
 };
@@ -164,6 +210,23 @@ const nodeNames = {
   forge_time: "Quick Forge",
   pickaxe_toss: "Pickobulus",
   mining_speed: "Mining Speed",
+  gemstone_infusion: "Gemstone Infusion",
+  gifts_from_the_departed: "Gifts from the Departed",
+  frozen_solid: "Frozen Solid",
+  hungry_for_more: "Dead Man's Chest",
+  excavator: "Excavator",
+  rags_of_riches: "Rags of Riches",
+  hazardous_miner: "Hazardous Miner",
+  surveyor: "Surveyor",
+  subzero_mining: "SubZero Mining",
+  eager_adventurer: "Eager Adventurer",
+  keen_eye: "Keen Eye",
+  warm_hearted: "Warm Hearted",
+  dust_collector: "Dust Collector",
+  daily_grind: "Daily Grind",
+  strong_arm: "Strong Arm",
+  no_stone_unturned: "No Stone Unturned",
+  mineshaft_mayhem: "Mineshaft Mayhem",
 };
 
 /*
@@ -268,7 +331,7 @@ class HotM {
     };
   }
 
-  get position7x9() {
+  get position10x9() {
     return 9 * (HOTM.tiers - this.tier) + 1;
   }
 }
@@ -294,8 +357,8 @@ class Node {
     this.selectedPickaxeAbility = data.selectedPickaxeAbility;
   }
 
-  get position7x9() {
-    return this.position + 1 + (ceil(this.position / HOTM.tiers) - 1) * 2;
+  get position10x9() {
+    return this.position + 1;
   }
 
   get itemData() {
@@ -476,10 +539,11 @@ class MiningSpeed2 extends Node {
     super(data);
     this.id = "mining_speed_2";
     this.name = nodeNames[this.id];
-    this.position = 2;
+    this.position = 29;
     this.max_level = 50;
     this.upgrade_type = "gemstone_powder";
     this.requires = ["lonesome_miner"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -498,10 +562,11 @@ class PowderBuff extends Node {
     super(data);
     this.id = "powder_buff";
     this.name = nodeNames[this.id];
-    this.position = 4;
+    this.position = 31;
     this.max_level = 50;
     this.upgrade_type = "gemstone_powder";
     this.requires = ["mole"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -520,10 +585,11 @@ class MiningFortune2 extends Node {
     super(data);
     this.id = "mining_fortune_2";
     this.name = nodeNames[this.id];
-    this.position = 6;
+    this.position = 33;
     this.max_level = 50;
     this.upgrade_type = "gemstone_powder";
     this.requires = ["great_explorer"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -542,11 +608,12 @@ class VeinSeeker extends Node {
     super(data);
     this.id = "vein_seeker";
     this.name = nodeNames[this.id];
-    this.position = 8;
+    this.position = 37;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["lonesome_miner"];
     this.nodeType = "pickaxe_ability";
+    this.positionType = "right_ability";
   }
 
   get upgradeCost() {
@@ -574,10 +641,11 @@ class LonesomeMiner extends Node {
     super(data);
     this.id = "lonesome_miner";
     this.name = nodeNames[this.id];
-    this.position = 9;
+    this.position = 38;
     this.max_level = 45;
     this.upgrade_type = "gemstone_powder";
     this.requires = ["goblin_killer", "professional"];
+    this.positionType = "cross";
   }
 
   get upgradeCost() {
@@ -598,10 +666,11 @@ class Professional extends Node {
     super(data);
     this.id = "professional";
     this.name = nodeNames[this.id];
-    this.position = 10;
+    this.position = 39;
     this.max_level = 140;
     this.upgrade_type = "gemstone_powder";
     this.requires = ["mole", "lonesome_miner"];
+    this.positionType = "horizontal_line";
   }
 
   get upgradeCost() {
@@ -620,10 +689,11 @@ class Mole extends Node {
     super(data);
     this.id = "mole";
     this.name = nodeNames[this.id];
-    this.position = 11;
+    this.position = 40;
     this.max_level = 190;
     this.upgrade_type = "gemstone_powder";
     this.requires = ["efficient_miner", "professional", "fortunate"];
+    this.positionType = "cross";
   }
 
   get upgradeCost() {
@@ -651,10 +721,11 @@ class Fortunate extends Node {
     super(data);
     this.id = "fortunate";
     this.name = nodeNames[this.id];
-    this.position = 12;
+    this.position = 41;
     this.max_level = 20;
     this.upgrade_type = "mithril_powder";
     this.requires = ["mole", "great_explorer"];
+    this.positionType = "horizontal_line";
   }
 
   get upgradeCost() {
@@ -673,10 +744,11 @@ class GreatExplorer extends Node {
     super(data);
     this.id = "great_explorer";
     this.name = nodeNames[this.id];
-    this.position = 13;
+    this.position = 42;
     this.max_level = 20;
     this.upgrade_type = "gemstone_powder";
     this.requires = ["star_powder", "fortunate"];
+    this.positionType = "cross";
   }
 
   get upgradeCost() {
@@ -698,11 +770,12 @@ class ManiacMiner extends Node {
     super(data);
     this.id = "maniac_miner";
     this.name = nodeNames[this.id];
-    this.position = 14;
+    this.position = 43;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["great_explorer"];
     this.nodeType = "pickaxe_ability";
+    this.positionType = "left_ability";
   }
 
   get upgradeCost() {
@@ -730,10 +803,11 @@ class GoblinKiller extends Node {
     super(data);
     this.id = "goblin_killer";
     this.name = nodeNames[this.id];
-    this.position = 16;
+    this.position = 47;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["mining_madness", "lonesome_miner"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -752,11 +826,12 @@ class PeakOfTheMountain extends Node {
     super(data);
     this.id = "special_0";
     this.name = nodeNames[this.id];
-    this.position = 18;
-    this.max_level = 7;
+    this.position = 49;
+    this.max_level = 10;
     this.upgrade_type = data.level >= 5 ? "gemstone_powder" : "mithril_powder";
     this.requires = ["efficient_miner"];
     this.nodeType = "special";
+    this.positionType = "peak_of_the_mountain";
   }
 
   get upgradeCost() {
@@ -792,10 +867,11 @@ class StarPowder extends Node {
     super(data);
     this.id = "star_powder";
     this.name = nodeNames[this.id];
-    this.position = 20;
+    this.position = 51;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["front_loaded", "great_explorer"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -812,10 +888,11 @@ class SkyMall extends Node {
     super(data);
     this.id = "daily_effect";
     this.name = nodeNames[this.id];
-    this.position = 22;
+    this.position = 55;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["mining_madness"];
+    this.positionType = "left_perk";
   }
 
   get upgradeCost() {
@@ -842,10 +919,11 @@ class MiningMadness extends Node {
     super(data);
     this.id = "mining_madness";
     this.name = nodeNames[this.id];
-    this.position = 23;
+    this.position = 56;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["random_event", "mining_experience", "goblin_killer"];
+    this.positionType = "cross";
   }
 
   get upgradeCost() {
@@ -864,10 +942,11 @@ class SeasonedMineman extends Node {
     super(data);
     this.id = "mining_experience";
     this.name = nodeNames[this.id];
-    this.position = 24;
+    this.position = 57;
     this.max_level = 100;
     this.upgrade_type = "mithril_powder";
     this.requires = ["efficient_miner", "mining_madness"];
+    this.positionType = "horizontal_line";
   }
 
   get upgradeCost() {
@@ -886,10 +965,11 @@ class EfficientMiner extends Node {
     super(data);
     this.id = "efficient_miner";
     this.name = nodeNames[this.id];
-    this.position = 25;
+    this.position = 58;
     this.max_level = 100;
     this.upgrade_type = "mithril_powder";
     this.requires = ["daily_powder", "mining_experience", "experience_orbs"];
+    this.positionType = "cross";
   }
 
   get upgradeCost() {
@@ -909,10 +989,11 @@ class Orbiter extends Node {
     super(data);
     this.id = "experience_orbs";
     this.name = nodeNames[this.id];
-    this.position = 26;
+    this.position = 59;
     this.max_level = 80;
     this.upgrade_type = "mithril_powder";
     this.requires = ["efficient_miner", "front_loaded"];
+    this.positionType = "horizontal_line";
   }
 
   get upgradeCost() {
@@ -931,10 +1012,11 @@ class FrontLoaded extends Node {
     super(data);
     this.id = "front_loaded";
     this.name = nodeNames[this.id];
-    this.position = 27;
+    this.position = 60;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["fallen_star_bonus", "experience_orbs", "star_powder"];
+    this.positionType = "cross";
   }
 
   get upgradeCost() {
@@ -953,10 +1035,11 @@ class PrecisionMining extends Node {
     super(data);
     this.id = "precision_mining";
     this.name = nodeNames[this.id];
-    this.position = 28;
+    this.position = 61;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["front_loaded"];
+    this.positionType = "right_perk";
   }
 
   get upgradeCost() {
@@ -975,10 +1058,11 @@ class LuckOfTheCave extends Node {
     super(data);
     this.id = "random_event";
     this.name = nodeNames[this.id];
-    this.position = 30;
+    this.position = 65;
     this.max_level = 45;
     this.upgrade_type = "mithril_powder";
     this.requires = ["mining_speed_boost", "mining_madness"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -1004,10 +1088,11 @@ class DailyPowder extends Node {
     super(data);
     this.id = "daily_powder";
     this.name = nodeNames[this.id];
-    this.position = 32;
+    this.position = 67;
     this.max_level = 100;
     this.upgrade_type = "mithril_powder";
     this.requires = ["mining_fortune"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -1026,10 +1111,11 @@ class Crystallized extends Node {
     super(data);
     this.id = "fallen_star_bonus";
     this.name = nodeNames[this.id];
-    this.position = 34;
+    this.position = 69;
     this.max_level = 30;
     this.upgrade_type = "mithril_powder";
     this.requires = ["pickaxe_toss", "front_loaded"];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -1051,11 +1137,12 @@ class MiningSpeedBoost extends Node {
     super(data);
     this.id = "mining_speed_boost";
     this.name = nodeNames[this.id];
-    this.position = 37;
+    this.position = 74;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["titanium_insanium", "random_event"];
     this.nodeType = "pickaxe_ability";
+    this.positionType = "left_l";
   }
 
   get upgradeCost() {
@@ -1083,10 +1170,11 @@ class TitaniumInsanium extends Node {
     super(data);
     this.id = "titanium_insanium";
     this.name = nodeNames[this.id];
-    this.position = 38;
+    this.position = 75;
     this.max_level = 50;
     this.upgrade_type = "mithril_powder";
     this.requires = ["mining_fortune", "mining_speed_boost"];
+    this.positionType = "horizontal_line";
   }
 
   get upgradeCost() {
@@ -1105,10 +1193,11 @@ class MiningFortune extends Node {
     super(data);
     this.id = "mining_fortune";
     this.name = nodeNames[this.id];
-    this.position = 39;
+    this.position = 76;
     this.max_level = 50;
     this.upgrade_type = "mithril_powder";
     this.requires = ["mining_speed"];
+    this.positionType = "cross";
   }
 
   get upgradeCost() {
@@ -1127,10 +1216,11 @@ class QuickForge extends Node {
     super(data);
     this.id = "forge_time";
     this.name = nodeNames[this.id];
-    this.position = 40;
+    this.position = 77;
     this.max_level = 20;
     this.upgrade_type = "mithril_powder";
     this.requires = ["mining_fortune", "pickaxe_toss"];
+    this.positionType = "horizontal_line";
   }
 
   get upgradeCost() {
@@ -1152,11 +1242,12 @@ class Pickobulus extends Node {
     super(data);
     this.id = "pickaxe_toss";
     this.name = nodeNames[this.id];
-    this.position = 41;
+    this.position = 78;
     this.max_level = 1;
     this.upgrade_type = null;
     this.requires = ["forge_time", "fallen_star_bonus"];
     this.nodeType = "pickaxe_ability";
+    this.positionType = "right_l";
   }
 
   get upgradeCost() {
@@ -1183,10 +1274,11 @@ class MiningSpeed extends Node {
     super(data);
     this.id = "mining_speed";
     this.name = nodeNames[this.id];
-    this.position = 46;
+    this.position = 85;
     this.max_level = 50;
     this.upgrade_type = "mithril_powder";
     this.requires = [];
+    this.positionType = "vertical_line";
   }
 
   get upgradeCost() {
@@ -1197,6 +1289,392 @@ class MiningSpeed extends Node {
   perk(level) {
     const val = level * 20;
     return [`§7Grants §a+${val} §6${SYMBOLS.mining_speed} Mining Speed§7.`];
+  }
+}
+class GemstoneInfusion extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "gemstone_infusion";
+    this.name = nodeNames[this.id];
+    this.position = 1;
+    this.max_level = 1;
+    this.upgrade_type = null;
+    this.requires = ["gifts_from_the_departed"];
+    this.nodeType = "pickaxe_ability";
+    this.positionType = "right_ability";
+  }
+
+  get upgradeCost() {
+    return 0;
+  }
+
+  perk(level) {
+    const boost = [50, 50, 50][this.pickaxeAbilityLevel - 1];
+    const duration = [16, 16, 16][this.pickaxeAbilityLevel - 1];
+    const cooldown = [140, 140, 140][this.pickaxeAbilityLevel - 1];
+    return [
+      "§6Pickaxe Ability: Gemstone Infusion",
+      `§7Increases the effectivness of §6every Gemstone §7in your pick's Gemstone Slots by §a${boost}% §7for §a${duration}s.`,
+      `§8Cooldown: §a${cooldown}s`,
+      "",
+      "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
+      "",
+      "§8Upgrade your Pickaxe Abilities by unlocking §cPeak of the Mountain §8in this menu!",
+    ];
+  }
+}
+
+class GiftsFromTheDeparted extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "gifts_from_the_departed";
+    this.name = nodeNames[this.id];
+    this.position = 2;
+    this.max_level = 100;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "top";
+  }
+
+  get upgradeCost() {
+    const nextLevel = this.level + 1;
+
+    return nextLevel + 1;
+  }
+
+  perk(level) {
+    const val = level * 0.2;
+
+    return [`§7Gain a §a${val}% §7chance to get an extra item when looting a §bFrozen Corpse§7.`];
+  }
+}
+
+class FrozenSolid extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "frozen_solid";
+    this.name = nodeNames[this.id];
+    this.position = 3;
+    this.max_level = 1;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "horizontal_line";
+  }
+
+  perk() {
+    return [`§7Gain §a2x §bGlacite Powder §7from killing mobs in the §bGlacite Tunnels §7and §bGlacite Mineshafts§7.`];
+  }
+}
+
+class HungryForMore extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "hungry_for_more";
+    this.name = nodeNames[this.id];
+    this.position = 4;
+    this.max_level = 50;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "top";
+  }
+
+  get upgradeCost() {
+    const nextLevel = this.level + 1;
+
+    return nextLevel + 1;
+  }
+
+  perk(level) {
+    const val = level * 1;
+
+    return [
+      `§7Gain a §a${val}% §7chance to spawn §a1 §7additional §bFrozen Corpse §7when you enter a §bGlacite Mineshaft§7.`,
+    ];
+  }
+}
+
+class Excavator extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "excavator";
+    this.name = nodeNames[this.id];
+    this.position = 5;
+    this.max_level = 50;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "horizontal_line";
+  }
+
+  get upgradeCost() {
+    const nextLevel = this.level + 1;
+
+    return nextLevel + 1;
+  }
+
+  perk(level) {
+    const val = level * 0.5;
+
+    return [`§9Suspicious Scraps §7are §a${val}% §7more likely to contain a fossil.`];
+  }
+}
+
+class RagsOfRiches extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "rags_of_riches";
+    this.name = nodeNames[this.id];
+    this.position = 6;
+    this.max_level = 1;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "top";
+  }
+
+  perk(level) {
+    const val = level * 2;
+
+    return [`§7Grants §a+${val} §6${SYMBOLS.mining_fortune} Mining Fortune §7while mining inside a §bGlaite Mineshaft`];
+  }
+}
+
+class HazardousMiner extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "hazardous_miner";
+    this.name = nodeNames[this.id];
+    this.position = 7;
+    this.max_level = 1;
+    this.upgrade_type = null;
+    this.requires = [""];
+    this.nodeType = "pickaxe_ability";
+    this.positionType = "left_ability";
+  }
+
+  get upgradeCost() {
+    return 0;
+  }
+
+  perk() {
+    const boost = [40, 40, 40][this.pickaxeAbilityLevel - 1];
+    const duration = [16.5, 16.5, 16.5][this.pickaxeAbilityLevel - 1];
+    const radius = [20, 20, 20][this.pickaxeAbilityLevel - 1];
+    const cooldown = [140, 140, 140][this.pickaxeAbilityLevel - 1];
+    return [
+      "§6Pickaxe Ability: Hazardous Miner",
+      `§7Grants §a+${boost} §6${SYMBOLS.mining_speed} Mining Speed §7for §a${duration}s §7for each enemy within §a${radius} §7blocks`,
+      `§8Cooldown: §a${cooldown}s`,
+      "",
+      "§8Pickaxe Abilities apply to all of your pickaxes. You can select a Pickaxe Ability from your Heart of the Mountain.",
+      "",
+      "§8Upgrade your Pickaxe Abilities by unlocking §cPeak of the Mountain §8in this menu!",
+    ];
+  }
+}
+
+class Surveyor extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "surveyor";
+    this.name = nodeNames[this.id];
+    this.position = 11;
+    this.max_level = 20;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "vertical_line";
+  }
+
+  perk(level) {
+    const val = level * 0.75;
+
+    return [
+      `§7Increases your chance of finding a §bGlacite Mineshaft §7when mining in the §bGlacite Tunnels §7by §a+${val}%§7.`,
+    ];
+  }
+}
+
+class SubzeroMining extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "subzero_mining";
+    this.name = nodeNames[this.id];
+    this.position = 13;
+    this.max_level = 100;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "vertical_line";
+  }
+
+  perk(level) {
+    const val = level * 1;
+
+    return [`§7Grants §a+${val} §6${SYMBOLS.mining_fortune} Mining Fortune §7when mining §bGlacite§7.`];
+  }
+}
+
+class EagerAdventurer extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "eager_adventurer";
+    this.name = nodeNames[this.id];
+    this.position = 15;
+    this.max_level = 50;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "vertical_line";
+  }
+
+  perk(level) {
+    const val = level * 2;
+
+    return [`§7Grants §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7when inside the §bGlacite Mineshafts§7.`];
+  }
+}
+
+class KeenEye extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "keen_eye";
+    this.name = nodeNames[this.id];
+    this.position = 19;
+    this.max_level = 1;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "left_perk";
+  }
+
+  perk() {
+    return [
+      `§7Whenever you enter a §bGlacite Mineshaft §7one highlighted Hard Stone §7will contian §a+250 §bGlacite Powder§7.`,
+    ];
+  }
+}
+
+class WarmHearted extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "warm_hearted";
+    this.name = nodeNames[this.id];
+    this.position = 20;
+    this.max_level = 50;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "cross";
+  }
+
+  perk(level) {
+    const val = level * 0.2;
+
+    return [`§7Grants §a+${val} §b${SYMBOLS.cold_resistence} Cold Resistence§7.`];
+  }
+}
+
+class DustCollector extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "dust_collector";
+    this.name = nodeNames[this.id];
+    this.position = 21;
+    this.max_level = 20;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "horizontal_line";
+  }
+
+  perk(level) {
+    const val = level * 1;
+
+    return [`§7Receive §a${val}% §7more §fFossil Dust §7from all sources.`];
+  }
+}
+
+class DailyGrind extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "daily_grind";
+    this.name = nodeNames[this.id];
+    this.position = 22;
+    this.max_level = 100;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "cross";
+  }
+
+  perk() {
+    const val = 50;
+
+    return [
+      `§7Your first daily commission in each Mining Zone grants bonus powder: `,
+      ``,
+      `§2Dwarven Mines: §a+${val} §2Mithril Powder`,
+      `§5Crystal Hollows: §a+${val} §dGemstone Powder`,
+      `§bGlacite Tunnels: §a+${val} §bGlacite Powder`,
+    ];
+  }
+}
+
+class StrongArm extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "strong_arm";
+    this.name = nodeNames[this.id];
+    this.position = 23;
+    this.max_level = 100;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "horizontal_line";
+  }
+
+  perk(level) {
+    const val = level * 5;
+
+    return [`§7Gain §a+${val} §6${SYMBOLS.mining_speed} Mining Speed §7when mining Tungsten or Umber.`];
+  }
+}
+
+class NoStoneUnturned extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "no_stone_unturned";
+    this.name = nodeNames[this.id];
+    this.position = 24;
+    this.max_level = 50;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "cross";
+  }
+
+  perk(level) {
+    const val = level * 0.5;
+
+    return [
+      `§7Increases your chances of finding a §9Suspicious Scrap §7when mining in a §bGlacite Mineshaft by §a${val}%§7.`,
+    ];
+  }
+}
+
+class MineshaftMayhem extends Node {
+  constructor(data) {
+    super(data);
+    this.id = "mineshaft_mayhem";
+    this.name = nodeNames[this.id];
+    this.position = 25;
+    this.max_level = 1;
+    this.upgrade_type = "glacite_powder";
+    this.requires = [];
+    this.positionType = "right_perk";
+  }
+
+  perk() {
+    return [
+      `§7Every time your enter a §bGlacite Mineshaft§7, you receive a random buff.`,
+      ``,
+      `§7Possible Buffs`,
+      `§8 ■ §a+5% §7chance to find a §9Suspicious Scrap§7.`,
+      `§8 ■ §7Gain §a100 §6${SYMBOLS.mining_speed} Mining Speed§7.`,
+      `§8 ■ §7Gain §a200 §6${SYMBOLS.mining_fortune} Mining Fortune§7.`,
+      `§8 ■ §7Gain §a+10 §b${SYMBOLS.cold_resistence} Cold Resistence§7.`,
+      `§8 ■ §7Reduce Pickaxe Ability cooldown by §a25%§7.`,
+    ];
   }
 }
 
@@ -1211,7 +1689,7 @@ class MiningSpeed extends Node {
 */
 
 class HotmItem {
-  get position7x9() {
+  get position10x9() {
     return 9 * (HOTM.tiers - this.position) + 9;
   }
 }
@@ -1261,6 +1739,7 @@ class CrystalHollowsCrystals extends HotmItem {
       Damage: 3,
       glowing: false,
       texture_path: "/head/ef7835fc9e6daf632160e9b7ff378788a408064cc75ebf9f5158e615bdd59603",
+      skyblock_id: "hotm_crystal",
     };
     this.crystals = data.crystals;
   }
@@ -1281,6 +1760,11 @@ class CrystalHollowsCrystals extends HotmItem {
       "§dYour Other Crystals",
       `§8- §dJasper ${this.formatCrystal("jasper", this.crystals.jasper_crystal?.state)}`,
       `§8- §cRuby ${this.formatCrystal("ruby", this.crystals.ruby_crystal?.state)}`,
+      `§8- §fOpal ${this.formatCrystal("opal", this.crystals.opal_crystal?.state)}`,
+      `§8- §bAquamarine ${this.formatCrystal("aquamarine", this.crystals.aquamarine_crystal?.state)}`,
+      `§8- §2Peridot ${this.formatCrystal("peridot", this.crystals.peridot_crystal?.state)}`,
+      `§8- §4Citrine ${this.formatCrystal("citrine", this.crystals.citrine_crystal?.state)}`,
+      `§8- §0Onyx ${this.formatCrystal("onyx", this.crystals.onyx_crystal?.state)}`,
     ];
   }
 
@@ -1309,7 +1793,7 @@ class CrystalHollowsCrystals extends HotmItem {
     }
 
     // Jasper and Ruby do not have a PLACED state
-    if (["jasper", "ruby"].includes(crystal) && state === "FOUND") {
+    if (["jasper", "ruby", "opal", "aquamarine", "peridot", "citrine", "onyx"].includes(crystal) && state === "FOUND") {
       color = "a";
       symbol = "✔";
     }
@@ -1328,6 +1812,7 @@ class HotmReset extends HotmItem {
       Damage: 3,
       glowing: false,
       texture_path: "/head/6448e275313532f54c4ba21894809a23dce52af01ddd1e89fc7689481fab737e",
+      skyblock_id: "hotm_reset",
     };
     this.last_reset = data.last_reset;
     this.resources = {
@@ -1345,6 +1830,7 @@ class HotmReset extends HotmItem {
       `§8- §5${this.resources.token_of_the_mountain.toLocaleString()} Token of the Mountain`,
       `§8- §2${this.resources.mithril_powder.toLocaleString()} Mithril Powder`,
       `§8- §d${this.resources.gemstone_powder.toLocaleString()} Gemstone Powder`,
+      `§8- §b${this.resources.gemstone_powder.toLocaleString()} Glacite Powder`,
       "",
       "§7You will §akeep §7any Tiers and §cPeak of the Mountain §7that you have unlocked.",
     ];
@@ -1384,9 +1870,31 @@ class HotmReset extends HotmItem {
 */
 
 const nodeClasses = {
+  // HOTM 10
+  gemstone_infusion: GemstoneInfusion,
+  gifts_from_the_departed: GiftsFromTheDeparted,
+  frozen_solid: FrozenSolid,
+  hungry_for_more: HungryForMore,
+  excavator: Excavator,
+  rags_of_riches: RagsOfRiches,
+  hazardous_miner: HazardousMiner,
+  // HOTM 9
+  surveyor: Surveyor,
+  subzero_mining: SubzeroMining,
+  eager_adventurer: EagerAdventurer,
+  // HOTM 8
+  keen_eye: KeenEye,
+  warm_hearted: WarmHearted,
+  dust_collector: DustCollector,
+  daily_grind: DailyGrind,
+  strong_arm: StrongArm,
+  no_stone_unturned: NoStoneUnturned,
+  mineshaft_mayhem: MineshaftMayhem,
+  // HOTM 7
   mining_speed_2: MiningSpeed2,
   powder_buff: PowderBuff,
   mining_fortune_2: MiningFortune2,
+  // HOTM 6
   vein_seeker: VeinSeeker,
   lonesome_miner: LonesomeMiner,
   professional: Professional,
@@ -1394,9 +1902,11 @@ const nodeClasses = {
   fortunate: Fortunate,
   great_explorer: GreatExplorer,
   maniac_miner: ManiacMiner,
+  // HOTM 5
   goblin_killer: GoblinKiller,
   special_0: PeakOfTheMountain,
   star_powder: StarPowder,
+  // HOTM 4
   daily_effect: SkyMall,
   mining_madness: MiningMadness,
   mining_experience: SeasonedMineman,
@@ -1404,14 +1914,17 @@ const nodeClasses = {
   experience_orbs: Orbiter,
   front_loaded: FrontLoaded,
   precision_mining: PrecisionMining,
+  // HOTM 3
   random_event: LuckOfTheCave,
   daily_powder: DailyPowder,
   fallen_star_bonus: Crystallized,
+  // HOTM 2
   mining_speed_boost: MiningSpeedBoost,
   titanium_insanium: TitaniumInsanium,
   mining_fortune: MiningFortune,
   forge_time: QuickForge,
   pickaxe_toss: Pickobulus,
+  // HOTM 1
   mining_speed: MiningSpeed,
 };
 
@@ -1453,4 +1966,4 @@ export const PRECURSOR_PARTS = {
 
 export const COMMISSIONS_MILESTONE = 6;
 
-export const MAX_PEAK_OF_THE_MOUNTAIN_LEVEL = 7;
+export const MAX_PEAK_OF_THE_MOUNTAIN_LEVEL = 10;

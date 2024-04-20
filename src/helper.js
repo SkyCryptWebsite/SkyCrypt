@@ -664,6 +664,10 @@ export function generateGemLore(type, tier, rarity) {
   const lore = [];
   const stats = [];
 
+  if (!GEMSTONES[type.toUpperCase()]) {
+    return "§c§oMISSING GEMSTONE DATA§r";
+  }
+
   // Gem color
   const color = `§${GEMSTONES[type.toUpperCase()].color}`;
 
