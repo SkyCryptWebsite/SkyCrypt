@@ -268,7 +268,7 @@ app.all("/stats/:player/:profile?", async (req, res, next) => {
 
     const museum = await lib.getMuseum(db, profile, { cacheOnly, debugId });
     for (const member in museum) {
-      profile.members[member].museum = museum[member];
+      profile.members[member].museum = {};
     }
 
     const paramBingo =
