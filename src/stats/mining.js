@@ -33,6 +33,11 @@ export function getMiningCoreData(userProfile) {
       spent: data.powder_spent_gemstone || 0,
       available: data.powder_gemstone ?? 0,
     },
+    glacite: {
+      total: (data.powder_glacite ?? 0) + (data.powder_spent_glacite ?? 0),
+      spent: data.powder_spent_glacite ?? 0,
+      available: data.powder_glacite ?? 0,
+    },
   };
 
   const crystalsCompleted = data.crystals

@@ -205,6 +205,17 @@ function itemIcon(item, classes) { %>
         <%= mining.core.powder.gemstone.total.toLocaleString() %>
       </span>
       <br>
+      <!-- Glacite Powder -->
+      <% max = mining.core.powder.glacite.total >= constants.HOTM.powder_for_max_nodes.glacite_powder ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Glacite Powder:</span>
+      <span class="stat-value <%= max %>" data-tippy-content="
+        <span class='stat-name'>Total:</span> <span class='stat-value'><%= mining.core.powder.glacite.total.toLocaleString() %></span><br>
+        <span class='stat-name'>Spent:</span> <span class='stat-value'><%= mining.core.powder.glacite.spent.toLocaleString() %></span><br>
+        <span class='stat-name'>Available:</span> <span class='stat-value'><%= mining.core.powder.glacite.available.toLocaleString() %></span>
+      ">
+        <%= mining.core.powder.glacite.total.toLocaleString() %>
+      </span>
+      <br>
 
       <!-- Pickaxe Ability -->
       <span class="stat-name">Pickaxe Ability:</span>

@@ -47,7 +47,7 @@ export class InventoryView extends LitElement {
         );
       }
     } else if (this.inventoryType === "hotm") {
-      pagesize = 7 * 9;
+      pagesize = 10 * 9;
     } else if (this.inventoryType === "bingo_card") {
       pagesize = 6 * 9;
     } else if (this.inventoryType === "museum") {
