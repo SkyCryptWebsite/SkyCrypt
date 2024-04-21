@@ -124,6 +124,7 @@ export const AREA_NAMES = {
   garden: "The Garden",
   rift: "Rift",
   kuudra: "Kuudra's Hollow",
+  mineshaft: "Glacite Mineshaft",
 };
 
 export const COLOR_NAMES = {
