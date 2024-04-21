@@ -430,7 +430,7 @@ export async function getPets(userProfile, calculated, profile) {
   const output = {};
 
   // Get pets from profile
-  const pets = userProfile.pets_data?.pets ?? [];
+  const pets = _.clone(userProfile.pets_data?.pets ?? []);
 
   // Adds pets from inventories
   if (calculated.items?.pets !== undefined) {
