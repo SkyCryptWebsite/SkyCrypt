@@ -238,7 +238,7 @@ function itemIcon(item, classes) { %>
               <%= process.name %> - <%= process.timeFinished < Date.now() ? "ended" : `ending ${process.timeFinishedText}`%>
             </span>
           <% } else { %>
-            <span class="stat-value">Unknown item</span>
+            <span class="stat-value"><%= process.name %></span>
 
             <script>
               console.error( "Unknown forge item id: <%= process.id.split('UNKNOWN-')[1] %>" )

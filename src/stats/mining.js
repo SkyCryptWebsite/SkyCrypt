@@ -95,6 +95,8 @@ async function getForge(userProfile) {
         timeFinishedText: "",
       };
 
+      const dbObject = constants.ITEMS.get(item.id);
+
       if (item.id in constants.FORGE_TIMES) {
         let forgeTime = constants.FORGE_TIMES[item.id] * 60 * 1000;
         const quickForge = userProfile.mining_core?.nodes?.forge_time;
@@ -102,13 +104,13 @@ async function getForge(userProfile) {
           forgeTime *= constants.QUICK_FORGE_MULTIPLIER[quickForge];
         }
 
-        const dbObject = constants.ITEMS.get(item.id);
         forgeItem.name = item.id == "PET" ? "[Lvl 1] Ammonite" : dbObject ? dbObject.name : item.id;
 
         const timeFinished = item.startTime + forgeTime;
         forgeItem.timeFinished = timeFinished;
         forgeItem.timeFinishedText = moment(timeFinished).fromNow();
       } else {
+        forgeItem.name = dbObject?.name ?? helper.titleCase(item.id);
         forgeItem.id = `UNKNOWN-${item.id}`;
       }
 
