@@ -1,0 +1,7 @@
+{
+	"parent": "item/handheld_gauntlet",
+	"textures": {
+		"0": "./glowstone_gauntlet_hand",
+		"1": "./glowstone_gauntlet"
+	}
+}

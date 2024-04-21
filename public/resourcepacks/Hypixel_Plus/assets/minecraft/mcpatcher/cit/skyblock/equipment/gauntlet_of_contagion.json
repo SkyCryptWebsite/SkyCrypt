@@ -1,0 +1,7 @@
+{
+	"parent": "item/handheld_gauntlet",
+	"textures": {
+		"0": "./gauntlet_of_contagion_hand",
+		"1": "./gauntlet_of_contagion"
+	}
+}
