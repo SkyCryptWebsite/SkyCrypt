@@ -1,6 +1,0 @@
-{
-	"parent": "item/block",
-	"textures": {
-		"0": "./super_compactor_3000"
-	}
-}

@@ -1,7 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "./mixed_mite_gel",
-        "layer1": "./mixed_mite_gel2"
-    }
-}
