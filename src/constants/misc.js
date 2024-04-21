@@ -304,7 +304,7 @@ export const MAX_FAVORITES = 10;
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 242,
+    normal: 247,
     stranded: 4,
   },
 };
