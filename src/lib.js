@@ -175,7 +175,7 @@ export async function getStats(
     deaths: { fn: stats.getDeaths, args: { userProfile } },
     minions: { fn: stats.getMinions, args: { profile } },
     bestiary: { fn: stats.getBestiary, args: { userProfile } },
-    dungeons: { fn: stats.getDungeons, args: { userProfile, hypixelProfile } },
+    dungeons: { fn: stats.getDungeons, args: { userProfile } },
     fishing: { fn: stats.getFishing, args: { userProfile } },
     farming: { fn: stats.getFarming, args: { userProfile } },
     enchanting: { fn: stats.getEnchanting, args: { userProfile } },
