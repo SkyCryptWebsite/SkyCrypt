@@ -65,7 +65,7 @@ function getEssence(userProfile) {
   return output;
 }
 
-export async function getDungeons(userProfile, hypixelProfile) {
+export async function getDungeons(userProfile) {
   const dungeons = userProfile.dungeons;
   if (dungeons == null || Object.keys(dungeons).length === 0 || dungeons.dungeon_types == undefined) {
     return;
@@ -148,7 +148,7 @@ export async function getDungeons(userProfile, hypixelProfile) {
 
   output.classes.maxed = classValues.filter((a) => a.level.level >= 50).length === classLength;
 
-  output.secrets_found = hypixelProfile.achievements.skyblock_treasure_hunter || 0;
+  output.secrets_found = dungeons?.secrets ?? 0;
 
   // TODO: Fix this, constants are incorrect and hypixel has completely changed the system
   /*
