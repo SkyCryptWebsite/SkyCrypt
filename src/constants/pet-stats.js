@@ -3858,7 +3858,7 @@ class Ankylosaurus extends Pet {
 class Penguin extends Pet {
   get stats() {
     return {
-      sea_creature_chance: 0.3 * this.level,
+      sea_creature_chance: 0.1 * this.level,
     };
   }
 
