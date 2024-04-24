@@ -124,6 +124,7 @@ export const AREA_NAMES = {
   garden: "The Garden",
   rift: "Rift",
   kuudra: "Kuudra's Hollow",
+  mineshaft: "Glacite Mineshaft",
 };
 
 export const COLOR_NAMES = {
@@ -304,7 +305,7 @@ export const MAX_FAVORITES = 10;
 
 export const FAIRY_SOULS = {
   max: {
-    normal: 242,
+    normal: 247,
     stranded: 4,
   },
 };

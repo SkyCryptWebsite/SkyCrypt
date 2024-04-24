@@ -77,7 +77,7 @@ function getProfilePets(pets, calculated) {
   }
 
   // debug pets
-  // pets = helper.generateDebugPets("OWL");
+  // pets = helper.generateDebugPets("GLACITE_GOLEM");
 
   for (const pet of pets) {
     if ("tier" in pet === false) {
@@ -430,7 +430,7 @@ export async function getPets(userProfile, calculated, profile) {
   const output = {};
 
   // Get pets from profile
-  const pets = userProfile.pets_data?.pets ?? [];
+  const pets = _.clone(userProfile.pets_data?.pets ?? []);
 
   // Adds pets from inventories
   if (calculated.items?.pets !== undefined) {
