@@ -139,6 +139,9 @@ class Pet {
         case "swing_range":
           list.push(`§7Swing Range: ${formatStat(newStats[stat])}`);
           break;
+        case "cold_resistence":
+          list.push(`§7Cold Resistence: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -3676,6 +3679,367 @@ class RiftFerret extends Pet {
   }
 }
 
+class Tyrannosaurus extends Pet {
+  get stats() {
+    return {
+      strength: 0.75 * this.level,
+      crit_chance: 0.05 * this.level,
+      ferocity: 0.25 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Close Combat",
+      desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more §cdamage §7to enemies within 1.5 blocks.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.1 });
+
+    return {
+      name: "§6Ferocious Roar",
+      desc: [`§7Attacks have a §a${round(this.level * mult, 1)}% §7chance to stun the target.`, `§8Cooldown: 10s`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Tyrant",
+      desc: [`§7Stats granted by pet items on this pet are increased by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+}
+
+class Spinosaurus extends Pet {
+  get stats() {
+    return {
+      sea_creature_chance: 0.08 * this.level,
+      fishing_speed: 0.25 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.15 });
+
+    return {
+      name: "§6Sharp Attitude",
+      desc: [`§bSea Creatures §7spawn with §a${round(this.level * mult, 1)}% §7of their maximum health missing.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.08 });
+
+    return {
+      name: "§6Pursuit",
+      desc: [`§7Gain §b+${round(this.level * mult, 1)} ${SYMBOLS.magic_find} Magic Find §7against §bSea Creatures§7.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.75 });
+
+    return {
+      name: "§6Primoridal Fisher",
+      desc: [
+        `§7During §9rain§7, increases this pet's base stats and stats granted by perks by §a${round(this.level * mult, 1)}%§7.`,
+      ],
+    };
+  }
+}
+
+class Goblin extends Pet {
+  get stats() {
+    return {
+      speed: 0.2 * this.level,
+      crit_chance: 0.1 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Pickpocket",
+      desc: [`§7Increases the coins obtained from goblin coin bags by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Offensive Odor",
+      desc: [`§7The Kings scent potion effect lasts §a${round(this.level * mult, 1)}% §7longer on you.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Free-range Eggs",
+      desc: [`§7Increases the chances of finding rare goblin eggs by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+}
+
+class Ankylosaurus extends Pet {
+  get stats() {
+    return {
+      health: 1.5 * this.level,
+      defense: 0.5 * this.level,
+      true_defense: 0.15 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.15 });
+
+    return {
+      name: "§6Armored Tank",
+      desc: [
+        `§7Gain §a${round(this.level * mult, 1)}% §7of your §a${SYMBOLS.defense} Defense §7as §c${SYMBOLS.strength} Strength§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Unyielding",
+      desc: [`§7Increases the effectiveness of §dLast Stand §7and §cLifeline by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Superior",
+      desc: [
+        `§7Every 5th hit deals §a${round(this.level * mult, 1)}% §7of your final damage to enemies within 5 blocks. Enemies hit deal 10 less damage for 10s.`,
+      ],
+    };
+  }
+}
+
+class Penguin extends Pet {
+  get stats() {
+    return {
+      sea_creature_chance: 0.3 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const val = getValue(this.rarity, { legendary: 20 });
+
+    return {
+      name: "§6Thick Blubber",
+      desc: [
+        `§7Each time you catch a Sea Creature, reduce your §b${SYMBOLS.cold_resistence} Cold §7by §a${round(1 + floor(this.level / val), 1)}§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Expert Glacite Fisher ",
+      desc: [`§7The fishing speed reduction from being underground is reduced by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.75 });
+
+    return {
+      name: "§6Subzero Hero",
+      desc: [
+        `§7Gain §b+${round(this.level * mult, 1)} ${SYMBOLS.fishing_speed} Fishing Speed §7while in the §bGlacite Tunnels§7.`,
+      ],
+    };
+  }
+}
+
+class Mammoth extends Pet {
+  get stats() {
+    return {
+      defense: 0.5 * this.level,
+      cold_resistence: 0.1 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Wooly Coat",
+      desc: [
+        `§7Gain a §a${round(this.level * mult, 1)}% §7chance for mobs to not inflict §b${SYMBOLS.cold_resistence} Cold §7when damaging you in the §bGlacite Mineshafts§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.005 });
+
+    return {
+      name: "§6Tusk Luck",
+      desc: [
+        `§7Gain §b+${round(this.level * mult, 1)} ${SYMBOLS.magic_find} Magic Find §7for every §6100 ${SYMBOLS.mining_fortune} Mining Fortune§7, doubled in the §bGlacite Tunnels §7and §bGlacite Mineshafts§7.`,
+      ],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.3 });
+
+    return {
+      name: "§6Superior",
+      desc: [
+        `§7Gain §6+${round(this.level * mult, 1)} ${SYMBOLS.mining_fortune} Mining Fortune §7for each §bFrozen Corpse §7looted in your current §bGlacite Mineshaft§7.`,
+      ],
+    };
+  }
+}
+
+class Mole extends Pet {
+  get stats() {
+    return {
+      intelligence: 1 * this.level,
+      mining_speed: 0.75 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.25 });
+
+    return {
+      name: "§6Archaeologist",
+      desc: [
+        `§7Increases your chance of finding §cScavenged Items §7in the §aMines of Divan §7by §a${round(this.level * mult, 1)}%§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Blind as a Mole",
+      desc: [`§7Gain a §a${round(this.level * mult, 1)}% §7chance for §eProfessor Robot §7to ask for 1 less part.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Nucleic Explorer",
+      desc: [
+        `§7Gain a §a${round(this.level * mult, 1)}% §7chance to receive an extra drop when completing the §dCrystal Nucleus§7.`,
+      ],
+    };
+  }
+}
+
+class GlaciteGolem extends Pet {
+  get stats() {
+    return {
+      mining_speed: 1.25 * this.level,
+      cold_resistence: 0.05 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.2 });
+
+    return {
+      name: "§6Powder-powered",
+      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7more §bGlacite Powder §7from most sources.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Iceborn",
+      desc: [
+        `§7Gain §a+${round(this.level * mult, 1)} §6${SYMBOLS.mining_fortune} Mining Fortune §7while in the §bGlacite Mineshafts§7.`,
+      ],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.01 });
+
+    return {
+      name: "§6Frozen Perfection",
+      desc: [
+        `§7Gain §a+${round(this.level * mult, 1)} §5${SYMBOLS.pristine} Pristine §7for every §bFrozen Corpse §7you've looted in the current §bGlacite Mineshaft§7.`,
+      ],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3717,6 +4081,7 @@ class QuestionMark extends Pet {
 export const PET_STATS = {
   "???": QuestionMark,
   AMMONITE: Ammonite,
+  ANKYLOSAURUS: Ankylosaurus,
   ARMADILLO: Armadillo,
   BABY_YETI: BabyYeti,
   BAL: Bal,
@@ -3740,11 +4105,14 @@ export const PET_STATS = {
   FLYING_FISH: FlyingFish,
   GHOUL: Ghoul,
   GIRAFFE: Giraffe,
+  GLACITE_GOLEM: GlaciteGolem,
+  GOBLIN: Goblin,
   GOLDEN_DRAGON: GoldenDragon,
   GOLEM: Golem,
   GRANDMA_WOLF: GrandmaWolf,
   GRIFFIN: Griffin,
   GUARDIAN: Guardian,
+  FRACTURED_MONTEZUMA_SOUL: Montezuma,
   HORSE: Horse,
   HOUND: Hound,
   JELLYFISH: Jellyfish,
@@ -3752,14 +4120,16 @@ export const PET_STATS = {
   KUUDRA: Kuudra,
   LION: Lion,
   MAGMA_CUBE: MagmaCube,
+  MAMMOTH: Mammoth,
   MEGALODON: Megalodon,
   MITHRIL_GOLEM: MithrilGolem,
   MONKEY: Monkey,
-  FRACTURED_MONTEZUMA_SOUL: Montezuma,
+  MOLE: Mole,
   MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
   OWL: Owl,
   PARROT: Parrot,
+  PENGUIN: Penguin,
   PHOENIX: Phoenix,
   PIG: Pig,
   PIGMAN: Pigman,
@@ -3777,11 +4147,13 @@ export const PET_STATS = {
   SNAIL: Snail,
   SNOWMAN: Snowman,
   SPIDER: Spider,
+  SPINOSAURUS: Spinosaurus,
   SPIRIT: Spirit,
   SQUID: Squid,
   TARANTULA: Tarantula,
   TIGER: Tiger,
   TURTLE: Turtle,
+  TYRANNOSAURUS: Tyrannosaurus,
   WITHER_SKELETON: WitherSkeleton,
   WOLF: Wolf,
   ZOMBIE: Zombie,
