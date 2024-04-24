@@ -575,6 +575,65 @@ export const PET_DATA = {
     emoji: "🦉",
     passivePerks: true,
   },
+  TYRANNOSAURUS: {
+    head: "/head/93f28ec96df59c67e9d2fc2e7e3d055fa31646e4111add9fe26a692801964126",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦖",
+    name: {
+      default: "T-Rex",
+    },
+  },
+  SPINOSAURUS: {
+    head: "/head/d3c9d479471a2f13f22548315159591720992e70c920fef83a901b7186720e3c",
+    type: "fishing",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦖",
+  },
+  GOBLIN: {
+    head: "/head/7309d8dc35a638a04b915a3b15a1452ceeae0d7ea42bcdadb21b03046987515c",
+    type: "mining",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "👺",
+  },
+  ANKYLOSAURUS: {
+    head: "/head/c1aa836b9096c417903299a6c5ab41738c19648ac439fed4bcbe6c32605338dc",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦖",
+  },
+  PENGUIN: {
+    head: "/head/37534e97f36e5a8335928e171ec99608bee7fb16e260afb301025b3b17eeefc4",
+    type: "fishing",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐧",
+  },
+  MAMMOTH: {
+    head: "/head/6b10715732cd1fd49fa1b6187947c307dd4687105cf033840607f9d6234743ad",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐘",
+  },
+  MOLE: {
+    head: "/head/727baaafc09978d4bda73e16afdde85ec13b0f95ad989524c5fcaa717cf06b4a",
+    type: "mining",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦡",
+  },
+  GLACITE_GOLEM: {
+    head: "/head/af132a6593876d3c377d503fd66eca3fb938743251f7b16a9870c60b7388c8a3",
+    type: "mining",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🗿",
+  },
 };
 
 export const PET_VALUE = {
