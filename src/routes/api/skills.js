@@ -4,6 +4,7 @@ import express from "express";
 
 import { tableify } from "../api.js";
 import { db } from "../../mongo.js";
+import { getSkills, getSlayer, getSkyBlockLevel } from "../../stats.js";
 
 const router = express.Router();
 
@@ -14,45 +15,51 @@ router.use((req, res, next) => {
 
 router.use(async (req, res, next) => {
   try {
-    const { profile, allProfiles, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
+    const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
+    const hypixelProfile = await helper.getRank(profile.uuid, db, req.options);
     const userProfile = profile.members[uuid];
-
-    const items = await lib.getItems(userProfile, false, undefined, req.options);
-    const calculated = await lib.getStats(db, profile, allProfiles, items, req.options);
 
     const response = [];
 
-    for (const skill in calculated.levels) {
-      const pushArr = [helper.titleCase(skill), calculated.levels[skill].level.toString()];
-
-      if ("progress" in req.query) {
-        pushArr.push(
-          calculated.levels[skill].maxLevel,
-          calculated.levels[skill].xp,
-          calculated.levels[skill].xpCurrent,
-          calculated.levels[skill].xpForNext
-        );
-      }
-
-      response.push(pushArr);
-    }
-
-    for (const slayer in calculated.slayers) {
-      const pushArr = [helper.titleCase(slayer), calculated.slayers[slayer].level.currentLevel.toString()];
-
-      if ("progress" in req.query) {
-        pushArr.push(
-          calculated.slayers[slayer].level.maxLevel,
-          calculated.slayers[slayer].xp,
-          calculated.slayers[slayer].xp,
-          calculated.slayers[slayer].level.xpForNext
-        );
-      }
+    const { skills } = await getSkills(userProfile, hypixelProfile, profile.members);
+    for (const skill in skills) {
+      const pushArr = [
+        helper.titleCase(skill),
+        skills[skill].level.toString(),
+        skills[skill].maxLevel,
+        skills[skill].xp,
+        skills[skill].xpCurrent,
+        skills[skill].xpForNext,
+      ];
 
       response.push(pushArr);
     }
 
-    response.push(["Fairy Souls", calculated.fairy_souls.collected.toString()]);
+    const { slayers } = getSlayer(userProfile);
+    for (const slayer in slayers) {
+      const pushArr = [
+        helper.titleCase(slayer),
+        slayers[slayer].level.currentLevel.toString(),
+        slayers[slayer].level.maxLevel,
+        slayers[slayer].level.xp,
+        slayers[slayer].level.xpForNext,
+      ];
+
+      response.push(pushArr);
+    }
+
+    const skyblockLevel = await getSkyBlockLevel(userProfile);
+    response.push([
+      "SkyBlock Level",
+      skyblockLevel.level,
+      skyblockLevel.maxLevel,
+      skyblockLevel.xp,
+      skyblockLevel.xpCurrent,
+      skyblockLevel.xpForNext,
+      skyblockLevel.maxExperience,
+    ]);
+
+    response.push(["Fairy Souls", userProfile.fairy_soul.total_collected.toString()]);
 
     res.send(tableify(response));
   } catch (e) {

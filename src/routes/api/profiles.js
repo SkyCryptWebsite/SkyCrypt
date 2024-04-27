@@ -27,6 +27,7 @@ router.use(async (req, res, next) => {
         profile_id: profile.profile_id,
         cute_name: profile.cute_name,
         members: members.join(", "),
+        selected: profile.selected,
       });
     }
 

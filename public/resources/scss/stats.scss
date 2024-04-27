@@ -242,7 +242,11 @@
   opacity: 0;
   transform: translateX(-25px);
   pointer-events: none;
-  transition: visibility 0.2s, opacity 0.2s, transform 0.2s, left 0.1s;
+  transition:
+    visibility 0.2s,
+    opacity 0.2s,
+    transform 0.2s,
+    left 0.1s;
   visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
@@ -500,7 +504,9 @@
   background-color: rgba(var(--grey_background-rgb), 0.95);
   min-width: 260px;
   clip-path: ellipse(0% 0% at 0% 0%);
-  transition: clip-path 0.3s, visibility 0.3s;
+  transition:
+    clip-path 0.3s,
+    visibility 0.3s;
   visibility: hidden;
   border-radius: 17px;
   padding: 0;
@@ -546,6 +552,10 @@
     font-size: 15px;
     color: rgba(var(--text-rgb), 0.8);
     line-height: normal;
+  }
+
+  .kicked {
+    text-decoration: line-through;
   }
 }
 
@@ -834,7 +844,9 @@ a.additional-player-stat:hover {
       padding-bottom: 12px;
       margin-left: 8px;
       font-weight: 600;
-      transition: background-color 0.1s, color 0.1s;
+      transition:
+        background-color 0.1s,
+        color 0.1s;
       position: relative;
       color: rgba(var(--text-rgb), 0.8);
       text-decoration: none;
@@ -861,7 +873,9 @@ a.additional-player-stat:hover {
         top: 100%;
         background-color: var(--icon-hex);
         border-radius: 4px;
-        transition: height 0.1s, top 0.1s;
+        transition:
+          height 0.1s,
+          top 0.1s;
       }
 
       &[aria-current]::after {
@@ -878,19 +892,23 @@ a.additional-player-stat:hover {
   }
 }
 
-.stat-health,
-.stat-strength,
-.stat-ferocity,
-.stat-ability-damage,
-.color-health,
-.color-strength,
+.color-ability-damage,
 .color-ferocity,
-.color-ability-damage {
+.color-health,
+.color-health-regen,
+.color-strength,
+.stat-ability-damage,
+.stat-ferocity,
+.stat-health,
+.stat-health-regen,
+.stat-strength {
   color: var(--§c);
 }
 
 .stat-defense,
-.color-defense {
+.stat-mending,
+.color-defense,
+.color-mending {
   color: var(--§a);
 }
 
@@ -916,16 +934,37 @@ a.additional-player-stat:hover {
   color: var(--§b);
 }
 
+.stat-alchemy-wisdom,
+.color-alchemy-wisdom,
+.stat-carpentry-wisdom,
+.color-carpentry-wisdom,
+.stat-combat-wisdom,
+.color-combat-wisdom,
+.stat-enchanting-wisdom,
+.color-carpentry-wisdom,
+.stat-farming-wisdom,
+.color-farming-wisdom,
+.stat-fishing-wisdom,
+.color-fishing-wisdom,
+.stat-foraging-wisdom,
+.color-foraging-wisdom,
+.stat-mining-wisdom,
+.color-mining-wisdom,
+.stat-runecrafting-wisdom,
+.color-runecrafting-wisdom,
 .stat-sea-creature-chance,
-.color-sea-creature-chance {
+.color-sea-creature-chance,
+.stat-social-wisdom,
+.color-social-wisdom {
   color: var(--§3);
 }
 
 .stat-magic-find,
-.color-magic-find {
+.color-magic-find,
+.stat-fishing-speed,
+.color-fishing-speed {
   color: var(--§b);
 }
-
 .stat-pet-luck,
 .color-pet-luck {
   color: var(--§d);
@@ -964,6 +1003,11 @@ a.additional-player-stat:hover {
 .stat-true-defense,
 .color-true-defense {
   color: var(--§f);
+}
+
+.stat-vitality,
+.color-vitality {
+  color: var(--§4);
 }
 
 .stat-container {
@@ -1109,11 +1153,15 @@ a.additional-player-stat:hover {
       max-height: 360px;
       overflow: hidden;
       overflow: clip;
-      transition: max-height 0.2s, gap 0.2s;
+      transition:
+        max-height 0.2s,
+        gap 0.2s;
       .armor-placeholder {
         transition: height 0.2s;
         .piece-icon {
-          transition: mask-size 0.2s, -webkit-mask-size 0.2s;
+          transition:
+            mask-size 0.2s,
+            -webkit-mask-size 0.2s;
         }
       }
 
@@ -1641,7 +1689,9 @@ a.additional-player-stat:hover {
           top: 100%;
           background-color: var(--icon-hex);
           border-radius: 4px;
-          transition: height 0.1s, top 0.1s;
+          transition:
+            height 0.1s,
+            top 0.1s;
         }
 
         &.active-inventory {
@@ -1679,7 +1729,7 @@ a.additional-player-stat:hover {
 inventory-view {
   display: grid;
   place-content: center center;
-  --inventory-width: clamp(300px, calc(100vw - 40px), 700px);
+  --inventory-width: clamp(300px, calc(100vw - 40px), 780px);
   gap: calc(var(--inventory-width) * 0.01);
   padding: calc(var(--inventory-width) * 0.01);
   grid-template-columns: repeat(9, calc(var(--inventory-width) * 0.1));
@@ -1966,6 +2016,15 @@ inventory-view {
   margin-top: 15px;
   height: 32px;
   line-height: 32px;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .category-header {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 }
 
 .category-header-maxed {
@@ -2008,6 +2067,7 @@ inventory-view {
 .minions,
 .stat-farming-crops,
 .sea-creatures,
+.bestiary,
 .trophy-fish {
   display: flex;
   flex-wrap: wrap;
@@ -2033,7 +2093,7 @@ inventory-view {
 
   &[data-missing="true"] {
     filter: grayscale(1);
-    opacity: 0.75;
+    opacity: 0.5;
   }
 
   .chip-icon-wrapper {
@@ -2058,11 +2118,13 @@ inventory-view {
   }
 }
 
-.collection-name {
+.collection-name,
+.bestiary-name {
   font-size: 18px;
 }
 
-.collection-amount {
+.collection-amount,
+.bestiary-amount {
   font-size: 14px;
 }
 
@@ -2235,7 +2297,9 @@ inventory-view {
   z-index: 7500;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
   display: grid;
   place-items: center;
 
@@ -2339,7 +2403,9 @@ inventory-view {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
-    transition: opacity 0.2s, visibility 0.2s !important;
+    transition:
+      opacity 0.2s,
+      visibility 0.2s !important;
   }
 
   #stats_content.show-stats:not(.sticky-stats) {
@@ -2440,6 +2506,7 @@ inventory-view {
   .minions,
   .stat-farming-crops,
   .sea-creatures,
+  .bestiary,
   .trophy-fish {
     flex-wrap: nowrap;
     overflow-x: auto;

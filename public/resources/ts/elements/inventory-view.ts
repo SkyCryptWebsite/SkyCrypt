@@ -15,6 +15,9 @@ export class InventoryView extends LitElement {
   preview = false;
 
   protected render(): TemplateResult[] {
+    // TODO: fix types for items
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     let inventory = items[this.inventoryType] ?? [];
 
     let pagesize = 5 * 9;
@@ -40,21 +43,25 @@ export class InventoryView extends LitElement {
           html`<div class="view-backpack" @click="${() => showBackpack(backpack)}">
             <span>View Backpack</span>
             <small>(Right click backpack to immediately open)</small>
-          </div>`
+          </div>`,
         );
       }
     } else if (this.inventoryType === "hotm") {
-      pagesize = 7 * 9;
+      pagesize = 10 * 9;
+    } else if (this.inventoryType === "bingo_card") {
+      pagesize = 6 * 9;
+    } else if (this.inventoryType === "museum") {
+      pagesize = 6 * 9;
     }
 
-    inventory.forEach((item, index) => {
+    inventory.forEach((item: Item, index: number) => {
       if (index % pagesize === 0 && index !== 0) {
         itemTemplateResults.push(html`<hr />`);
       }
 
       if (isSlotItem(item)) {
         itemTemplateResults.push(
-          html`<rich-item tabindex="0" class="inventory-slot rich-item" data-item-id="${item.itemId}"></rich-item>`
+          html`<rich-item tabindex="0" class="inventory-slot rich-item" data-item-id="${item.itemId}"></rich-item>`,
         );
       } else {
         itemTemplateResults.push(html`<div class="inventory-slot"></div>`);
@@ -65,7 +72,7 @@ export class InventoryView extends LitElement {
   }
 
   // disable shadow root
-  protected createRenderRoot(): Element | ShadowRoot {
+  protected createRenderRoot(): HTMLElement | ShadowRoot {
     return this;
   }
 }

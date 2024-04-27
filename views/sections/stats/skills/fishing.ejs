@@ -1,0 +1,236 @@
+<% 
+
+const trophyFishOrder = ["bronze", "silver", "gold", "diamond"];
+
+const seaCreatures = [ 
+  "pond_squid",
+  "plhlegblast",
+  "sea_walker",
+  "night_squid",
+  "frozen_steve",
+  "sea_guardian",
+  "frosty_the_snowman",
+  "scarecrow",
+  "nurse_shark",
+  "sea_witch",
+  "sea_archer",
+  "oasis_rabbit",
+  "oasis_sheep",
+  "monster_of_the_deep",
+  "grinch",
+  "blue_shark",
+  "catfish",
+  "nightmare",
+  "carrot_king",
+  "water_worm",
+  "sea_leech",
+  "poisoned_water_worm",
+  "flaming_worm",
+  "magma_slug",
+  "baby_magma_slug",
+  "nutcracker",
+  "moogma",
+  "lava_leech",
+  "pyroclastic_worm",
+  "lava_flame",
+  "fire_eel",
+  "pig_rider",
+  "guardian_defender",
+  "werewolf",
+  "deep_sea_protector",
+  "tiger_shark",
+  "lava_blaze",
+  "lava_pigman",
+  "water_hydra",
+  "sea_emperor",
+  "phantom_fisherman",
+  "great_white_shark",
+  "zombie_miner",
+  "yeti",
+  "grim_reaper",
+  "thunder",
+  "lord_jawbus", 
+  "agarimoo"
+];
+
+function itemIcon(item, classes) { %>
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
+      item-icon
+      <% if (isEnchanted(item)) { %> is-enchanted <% } %>
+      <% if (item.texture_path) { %> custom-icon <% } %>
+      <% if (item.Damage != 0) { %> icon-<%= item.id %>_0 <% } %>
+      icon-<%= item.id %>_<%= item.Damage %>
+    ">
+  </div>
+<% } %>
+
+<div class="stat-fishing">
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-346_0"></div>
+    </div>
+    <span class="category-name">fishing</span>
+  </div>
+
+  <%
+  let totalSeaCreatureKills = 0;
+  if (calculated.kills?.kills !== undefined) {
+    for (const creature of calculated.kills.kills) {
+      if (seaCreatures.includes(creature.entity_id)) {
+        totalSeaCreatureKills += creature.amount;
+      }
+    }
+  }
+  %>
+
+  <% if (calculated.fishing !== undefined) { %>
+    <p class="stat-raw-values">
+      <!-- Items fished -->
+      <span class="stat-name">Items fished: </span>
+      <span class="stat-value"><%= calculated.fishing.total.toLocaleString() %></span>
+      <br>
+
+      <!-- Tresures fished -->
+      <span class="stat-name">Treasures fished: </span>
+      <span class="stat-value"><%= calculated.fishing.treasure.toLocaleString() %></span>
+      <br>
+
+      <!-- Large treasures fished -->
+      <span class="stat-name">Large treasures fished: </span>
+      <span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span>
+      <br>
+    
+      <!-- Sea Creatures Killed -->
+      <span class="stat-name">Sea Creatures killed: </span>
+      <span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span>
+      <br>
+
+      <% if (calculated.fishing.shredder_fished > 0 && calculated.fishing.shredder_bait > 0) { %>
+        <span data-tippy-content='
+          <span class="stat-name">Fished with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span><br>
+          <span class="stat-name">Bait used with Shredder: </span><span class="stat-value"><%= calculated.fishing.shredder_bait.toLocaleString() %></span><br>
+        '>
+          <span class="stat-name">Fished with Shredder: </span>
+          <span class="stat-value"><%= calculated.fishing.shredder_fished.toLocaleString() %></span>
+        </span>
+        <br>
+      <% } %>
+
+      <!-- Trophy Fish fished -->
+      <% if (calculated.fishing.trophy_fish !== undefined) { %> 
+        <span class="stat-name">Trophy Fish fished: </span>
+        <span class="stat-value"><%= calculated.fishing.trophy_fish.toLocaleString() %></span>
+        <br>
+      <% } %>
+    </p>
+  <% } %>
+
+  <% if (items.fishing_tools.tools.length > 0) { %>
+    <p class="stat-sub-header">Fishing Rods</p>
+    <% if (items.fishing_tools.highest_priority_tool) { %>
+      <p class="stat-raw-values">
+        <span class="stat-name">Active Rod: </span>
+        <span class="stat-active-rod stat-value"><%- helper.renderLore(items.fishing_tools.highest_priority_tool.tag.display.Name) %></span>
+      </p>
+    <% } else if (items.fishing_tools.tools.length > 0) { %>
+      <p class="stat-raw-values">
+        <span class="stat-name">Active Rod: </span>
+        <span class="stat-active-rod stat-value piece-common-fg">None</span>
+      </p>
+    <% } %>
+
+    <div class="pieces">
+      <% for (const item of items.fishing_tools.tools) { %>
+        <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+          <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+            <div class="piece-shine"></div>
+          <% } %>
+
+          <% itemIcon(item, ['piece-icon']); %>
+        </div>
+      <% }; %>
+    </div>
+  <% } %>
+
+  <% if (totalSeaCreatureKills > 0) { %>
+    <button class="stat-sub-header extender" aria-controls="missing-seacreatures" aria-expanded="false">Sea Creatures</button>
+    <div class="sea-creatures extendable" id="missing-seacreatures">
+      <% for (const creatureId of seaCreatures) {
+        const creature = calculated.kills.kills.find(creature => creature.entity_id == creatureId);
+        if (creature?.amount > 0 === false) {
+            continue;
+        } %>
+
+        <div class="sea-creature">
+          <div class="sea-creature-name">
+            <span><%= creature.entity_name %></span>
+          </div>
+
+          <div class="sea-creature-image" style="background-image: url(/resources/img/sea_creatures/<%= creature.entity_id %>.webp)"></div>
+          <div class="sea-creature-kills">
+            <span class="stat-value"><%= creature.amount.toLocaleString() %></span>
+            <span class="stat-name"> Kill<%= creature.amount != 1 ? 's' : '' %></span>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+                
+  <% if (calculated?.crimson_isle?.trophy_fish !== undefined && calculated?.crimson_isle?.trophy_fish?.total_caught > 0) { %>
+    <button class="stat-sub-header extender" aria-controls="fishing-trophyfish" aria-expanded="false">Trophy Fish</button>
+    <div class="trophyfish extendable" id="fishing-trophyfish">
+      <p class="stat-raw-values">
+        <!-- Total Trophy Fish Caught -->
+        <span class="stat-name">Total Caught:</span>
+        <span class="stat-value"><%= calculated.crimson_isle.trophy_fish.total_caught.toLocaleString() %></span>
+        <br>
+
+        <!-- Current Stage -->
+        <% const max = calculated.crimson_isle.trophy_fish.maxed ? 'golden-text' : ''; %>
+        <span class="stat-name <%= max %>">Current Stage:</span>
+        <span class="stat-value <%= max %>"><%= calculated.crimson_isle.trophy_fish.stage %></span>
+        <br>
+      </p>
+
+
+      <div class="trophy-fish">
+        <% for (const fish of calculated.crimson_isle.trophy_fish.fish) { %>
+          <div class="chip" data-tippy-content="<%= helper.renderLore(fish.description) %>">
+            <div class="chip-icon-wrapper">
+              <div style="background-image:url(/head/<%= fish.texture %>)" class="item-icon custom-icon"></div>
+            </div>
+
+            <div class="chip-text">
+              <div class="trophy-fish-data">
+                <div class="trophy-fish-info">
+                  <span class="stat-name"> <%= fish.display_name %> </span>
+                  <span class="trophy-fish-amount"> x<%= fish.total.toLocaleString() %> </span>
+                </div>
+                <div class="trophy-fish-count">
+                  <% for (const tier of trophyFishOrder) { %>
+                    <% const count = fish[tier] ?? 0; %>
+                    <div class="<%= tier %>-count count-format"></div>
+
+                    <% if (count > 0) { %>
+                      <span class="count-value">
+                        <%= fish[tier].toLocaleString() %>
+                      </span>
+                    <% } else { %>
+                      <span class="count-value">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="4 2 24 20">
+                        <path fill="currentColor" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" />
+                        </svg>
+                      </span>
+                    <% } %>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>

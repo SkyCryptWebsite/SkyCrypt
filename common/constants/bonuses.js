@@ -39,7 +39,9 @@ export const STATS_BONUS = {
     51: { health: 0 },
   },
   skill_social: {},
-  skill_carpentry: {},
+  skill_carpentry: {
+    1: { health: 1 },
+  },
   skill_runecrafting: {},
   // Slayers
   slayer_zombie: {
@@ -47,12 +49,13 @@ export const STATS_BONUS = {
     3: { health: 3 },
     5: { health: 4 },
     7: { health: 5 },
+    8: { health: 5, health_regen: 50 },
     9: { health: 6 },
   },
   slayer_spider: {
     1: { crit_damage: 1 },
     5: { crit_damage: 2 },
-    7: { crit_chance: 1 },
+    7: { crit_damage: 2 },
     8: { crit_damage: 3 },
   },
   slayer_wolf: {
@@ -68,11 +71,11 @@ export const STATS_BONUS = {
   },
   slayer_enderman: {
     1: { health: 1 },
-    2: { intelligence: 1 },
+    2: { intelligence: 2 },
     3: { health: 2 },
     4: { intelligence: 2 },
     5: { health: 3 },
-    6: { intelligence: 3 },
+    6: { intelligence: 5 },
     7: { health: 4 },
     8: { intelligence: 4 },
     9: { health: 5 },
@@ -83,9 +86,27 @@ export const STATS_BONUS = {
     3: { health: 4 },
     4: { true_defense: 1 },
     5: { health: 5 },
-    6: {},
+    6: { strength: 2 },
     7: { health: 6 },
     8: { true_defense: 2 },
     9: { health: 7 },
+  },
+  HOTM_perk_mining_speed: {
+    1: { mining_speed: 20 },
+  },
+  HOTM_perk_mining_speed_2: {
+    1: { mining_speed: 40 },
+  },
+  HOTM_perk_mining_fortune: {
+    1: { mining_fortune: 5 },
+  },
+  HOTM_perk_mining_fortune_2: {
+    1: { mining_fortune: 5 },
+  },
+  HOTM_perk_mining_madness: {
+    1: { mining_speed: 50, mining_fortune: 50 },
+  },
+  HOTM_perk_mining_experience: {
+    1: { mining_wisdom: 0.1 },
   },
 };

@@ -1,4 +1,4 @@
-export const themes = new Map<string, Promise<Theme>>();
+export const THEMES = new Map<string, Promise<Theme>>();
 
 /**
  * converts a hex color to it's rgb components
@@ -10,7 +10,7 @@ function convertHex(code: string) {
   const hex = code.substring(1, 7);
   return `${parseInt(hex.substring(0, 2), 16)}, ${parseInt(hex.substring(2, 4), 16)}, ${parseInt(
     hex.substring(4, 6),
-    16
+    16,
   )}`;
 }
 
@@ -33,12 +33,12 @@ async function fetchTheme(urlString: string): Promise<Theme> {
 }
 
 export function getTheme(urlString: string): Promise<Theme> {
-  const themeFromMap = themes.get(urlString);
+  const themeFromMap = THEMES.get(urlString);
   if (themeFromMap !== undefined) {
     return themeFromMap;
   } else {
     const themeFromFetch = fetchTheme(urlString);
-    themes.set(urlString, themeFromFetch);
+    THEMES.set(urlString, themeFromFetch);
     return themeFromFetch;
   }
 }
@@ -125,7 +125,7 @@ export function sanitizeTheme(theme: unknown): Theme {
             }
           } else {
             throw new Error(
-              "Invalid theme: backgrounds must be an object of objects with a type property of either color or stripes"
+              "Invalid theme: backgrounds must be an object of objects with a type property of either color or stripes",
             );
           }
         }
@@ -196,7 +196,9 @@ function processTheme(theme: Theme): ProcessedTheme {
   return processedTheme;
 }
 
+const REFRESH_THEMES = ["/resources/themes/april-fools-2024.json"];
 export async function loadTheme(themeUrl: string): Promise<void> {
+  const oldThemeUrl = localStorage.getItem("currentThemeUrl") ?? "";
   const theme = await getTheme(themeUrl);
 
   const processedTheme = processTheme(theme);
@@ -209,6 +211,12 @@ export async function loadTheme(themeUrl: string): Promise<void> {
 
   localStorage.setItem("currentThemeUrl", themeUrl);
   localStorage.setItem("processedTheme", JSON.stringify(processedTheme));
+
+  if (themeUrl !== oldThemeUrl) {
+    if (REFRESH_THEMES.includes(themeUrl) || REFRESH_THEMES.includes(oldThemeUrl)) {
+      location.reload();
+    }
+  }
 }
 
 window.addEventListener("storage", (event) => {
@@ -251,8 +259,15 @@ window.addEventListener(
       }
     }
   },
-  { capture: false, passive: true }
+  { capture: false, passive: true },
 );
+
+let themeUrl = localStorage.getItem("currentThemeUrl");
+
+// workaround for potential cached april fools theme
+if (themeUrl != null && themeUrl.includes("?") && themeUrl.includes("default")) {
+  localStorage.setItem("currentThemeUrl", `/resources/themes/default.json`);
+}
 
 // Load the theme from localStorage if it exists
 {
@@ -263,7 +278,7 @@ window.addEventListener(
     localStorage.removeItem("currentTheme");
   }
 
-  const themeUrl = localStorage.getItem("currentThemeUrl");
+  themeUrl = localStorage.getItem("currentThemeUrl");
   if (themeUrl != null) {
     loadTheme(themeUrl);
   }

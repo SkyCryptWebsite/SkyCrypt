@@ -1,0 +1,174 @@
+<% 
+
+const badgeOrder = ["gold", "silver", "bronze"];
+
+function itemIcon(item, classes) { %>
+  <div <% if (item.texture_path) { %> style='background-image: url("<%= item.texture_path %>")' <% } %> class="
+    <%= classes.join(" ") %>
+      item-icon
+      <% if (isEnchanted(item)) { %> is-enchanted <% } %>
+      <% if (item.texture_path) { %> custom-icon <% } %>
+      <% if (item.Damage != 0) { %> icon-<%= item.id %>_0 <% } %>
+      icon-<%= item.id %>_<%= item.Damage %>
+    ">
+  </div>
+<% } %>
+
+<div class="stat-farming">
+  <div class="category-header">
+    <div class="category-icon" onclick="window.open('https://www.youtube.com/watch?v=pZaY1jV96jI')">
+      <div class="item-icon icon-294_0"></div>
+    </div>
+    <span class="category-name">farming</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <% const farmingWeight = calculated.weight?.farming;
+    if (farmingWeight !== undefined) { %>
+      <!-- Farming Weight -->
+      <span class="interactive-tooltip" data-tippy-content="
+        <span class='stat-name'>Farming Weight</span><br>
+        <span class='stat-info'>Weight calculations by <a href='https://elitebot.dev' target='_blank' rel='noreferrer'>Elite</a></span>
+        <br/>
+        <br/>
+        <% const crops = Object.values(farmingWeight.crops).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())); %>
+        <% for (const crop of crops) {
+           if (crop.weight === 0) {
+            continue;
+          } %>
+            
+          <span class='stat-name'><%= crop.name %>: </span>
+          <span class='stat-value'> <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %> </span><br/>
+        <% } %>
+        <br/>
+
+        <% for (const [key, value] of Object.entries(farmingWeight.bonuses)) { %>
+          <span class='stat-name'><%= helper.titleCase(key.replaceAll("_", " ")) %>: </span>
+          <span class='stat-value'><%= value.weight.toLocaleString() %></span>
+          <br>
+        <% } %>
+        ">
+
+        <span class="stat-name">Farming Weight: </span>
+        <span class="stat-value"><%= parseFloat(farmingWeight.weight.toFixed(2)).toLocaleString() %></span>
+      </span>
+      <br>
+    <% } %>
+
+    <!-- Pelts -->
+    <% if (calculated.farming.pelts !== undefined) { %> 
+      <span class="stat-name">Pelts: </span>
+      <span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span>
+      <br>
+    <% } %>
+
+    <% 
+    const farming = calculated.farming;
+    if (farming.talked && farming.contests.attended_contests > 0) { %>
+      <!-- Contests Attended -->
+      <span class="stat-name">Contests attended: </span>
+      <span class="stat-value"><%= farming.contests.attended_contests.toLocaleString() %></span>
+      <br>
+
+      <!-- Unique Gold Medals-->
+      <% max = farming.unique_golds == 10 ? 'golden-text' : '' %>
+      <span class="stat-name <%= max %>">Unique Golds: </span>
+      <span class="stat-value <%= max %>"><%= farming.unique_golds.toLocaleString() %></span>
+      <br>
+    <% } %>
+  </p>
+
+  <!-- Medals -->
+  <% if (farming.talked && farming.contests.attended_contests > 0) {%>
+    <p class="stat-raw-values">
+      <% for (const badge of badgeOrder) { %>
+        <span data-tippy-content='
+          <span class="stat-name">Current: </span><span class="stat-value"><%= farming.current_badges[badge].toLocaleString() %> Medals</span><br>
+          <span class="stat-name">Total: </span><span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %> Medals</span>
+          '>
+
+          <span class="stat-name"><%= badge %> medals: </span>
+          <span class="stat-value"><%= farming.total_badges[badge].toLocaleString() %></span>
+        </span>
+        <br>
+      <% } %>
+    </p>
+  <% } else { %>
+    <p class="stat-raw-values">
+      <%= calculated.display_name %> hasn't attended any contests yet.
+    </p>
+  <% } %>
+
+  <!-- Farming Tools -->
+  <% if (items.farming_tools.tools.length > 0) { %>
+    <p class="stat-sub-header">Farming Tools</p>
+    <% if (items.farming_tools.highest_priority_tool) { %>
+      <p class="stat-raw-values">
+        <span class="stat-name">Active Tool: </span>
+        <span class="stat-active-hoe stat-value"><%- helper.renderLore(items.farming_tools.highest_priority_tool.tag.display.Name) %></span>
+      </p>
+    <% } else { %>
+      <p class="stat-raw-values">
+        <span class="stat-name">Active Tool: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
+      </p>
+    <% } %>
+ 
+    <div class="pieces"> 
+      <% for (const item of items.farming_tools.tools) { %>
+        <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
+          <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
+            <div class="piece-shine"></div>
+          <% } %>
+
+          <% itemIcon(item, ['piece-icon']); %>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+    
+  <!-- Farming Crops -->
+  <% if (farming.talked) { %>
+    <% if (Object.keys(calculated.farming.crops).length > 0) { %>
+    <button class="stat-sub-header extender" aria-controls="farming-crops" aria-expanded="false">Farming Crops</button>
+    <div class="stat-farming-crops extendable" id="farming-crops">
+      <%
+      const crops = Object.values(calculated.farming.crops).sort((a, b) => b.contests - a.contests);
+
+      for (const crop of crops) {
+        if (crop.attended === false) {
+          continue;
+        }
+
+        let amountsTooltip = '';
+        for (const badge of badgeOrder)
+          amountsTooltip += `
+            <span class="stat-name">${helper.titleCase(badge)} Medals: </span>
+            <span class="stat-value">${crop.badges[badge].toLocaleString()}</span><br>
+          `;%>
+
+          <div class="chip" data-tippy-content="<%= amountsTooltip %>">
+            <div class="chip-icon-wrapper">
+              <div class="item-icon icon-<%= crop.icon %>"></div>
+            </div>
+
+            <div class="chip-text">
+              <div class="collection-name <%= crop.unique_gold ? 'max-stat' : '' %>">
+                <span class="stat-name"><%= crop.name %></span>
+              </div>
+
+              <div class="collection-amount">
+                <small class="stat-name">Personal Best: </small>
+                <small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small>
+                <br>
+                
+                <small class="stat-name">Contests: </small>
+                <small class="stat-value"><%= crop.contests.toLocaleString() %></small>
+                <br>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  <% } %>
+</div>

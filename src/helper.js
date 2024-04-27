@@ -2,10 +2,12 @@ import cluster from "cluster";
 import axios from "axios";
 import sanitize from "mongo-sanitize";
 import retry from "async-retry";
-// import path from "path";
+import path from "path";
 import "axios-debug-log";
 import { v4 } from "uuid";
 import { getPrices } from "skyhelper-networth";
+import { getTexture } from "./custom-resources.js";
+import { fileURLToPath } from "url";
 // import { execSync } from "child_process";
 
 import { titleCase } from "../common/helper.js";
@@ -16,6 +18,7 @@ export * from "../common/helper.js";
 
 export * from "./helper/cache.js";
 export * from "./helper/item.js";
+export * from "./helper/metrics.js";
 
 import {
   GUILD_XP,
@@ -36,7 +39,9 @@ import {
 } from "./constants.js";
 
 import credentials from "./credentials.js";
+import { SkyCryptError } from "./constants/error.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hypixel = axios.create({
   baseURL: "https://api.hypixel.net/",
 });
@@ -127,6 +132,10 @@ export function getId(item) {
   return item?.tag?.ExtraAttributes?.id ?? "";
 }
 
+export function getTextureValue(item) {
+  return item?.tag?.SkullOwner?.Properties?.textures?.at(0)?.Value ?? "";
+}
+
 export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   let user = null;
 
@@ -168,7 +177,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
   }
 
   if (cacheOnly === false && (user == undefined || +new Date() - user.date > 7200 * 1000)) {
-    const profileRequest = axios(`https://api.ashcon.app/mojang/v2/user/${uuid}`, { timeout: 5000 });
+    const profileRequest = axios(`https://mowojang.matdoes.dev/mojang/v2/user/${uuid}`, { timeout: 5000 });
 
     profileRequest
       .then(async (response) => {
@@ -240,7 +249,7 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
         if (isUuid) {
           return { uuid, display_name: uuid, skin_data: skinData };
         } else {
-          throw new Error(e?.response?.data?.reason ?? "Failed resolving username.");
+          throw new SkyCryptError(e?.response?.data?.reason ?? "Failed resolving username.");
         }
       }
     }
@@ -250,121 +259,6 @@ export async function resolveUsernameOrUuid(uuid, db, cacheOnly = false) {
     return { uuid: user.uuid, display_name: user.username, emoji: user.emoji, skin_data: skinData };
   } else {
     return { uuid, display_name: uuid, skin_data: skinData };
-  }
-}
-
-export async function getGuild(uuid, db, cacheOnly = false) {
-  uuid = sanitize(uuid);
-  const guildMember = await db.collection("guildMembers").findOne({ uuid });
-
-  let guildObject = null;
-
-  if (cacheOnly && guildMember == undefined) {
-    return null;
-  }
-
-  if (guildMember != undefined && guildMember.gid !== null) {
-    guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
-  }
-
-  if (
-    cacheOnly ||
-    (guildMember != undefined &&
-      guildMember.gid !== null &&
-      (guildObject == undefined || Date.now() - guildMember.last_updated < 7200 * 1000))
-  ) {
-    if (guildMember.gid !== null) {
-      const guildObject = await db.collection("guilds").findOne({ gid: sanitize(guildMember.gid) });
-
-      if (guildObject == undefined) {
-        return null;
-      }
-
-      guildObject.level = getGuildLevel(guildObject.exp);
-      guildObject.gmUser = guildObject.gm ? await resolveUsernameOrUuid(guildObject.gm, db, cacheOnly) : "None";
-      guildObject.rank = guildMember.rank;
-
-      return guildObject;
-    }
-
-    return null;
-  } else {
-    if (guildMember == undefined || Date.now() - guildMember.last_updated > 7200 * 1000) {
-      try {
-        const guildResponse = await hypixel.get("guild", {
-          params: { player: uuid, key: credentials.hypixel_api_key },
-        });
-
-        const { guild } = guildResponse.data;
-
-        let gm;
-
-        if (guild && guild !== null) {
-          for (const member of guild.members) {
-            if (["guild master", "guildmaster"].includes(member.rank.toLowerCase())) {
-              gm = member.uuid;
-            }
-          }
-
-          for (const member of guild.members) {
-            if (!gm && guild.ranks.find((a) => a.name.toLowerCase() == member.rank.toLowerCase()) == undefined) {
-              gm = member.uuid;
-            }
-
-            await db
-              .collection("guildMembers")
-              .updateOne(
-                { uuid: member.uuid },
-                { $set: { gid: guild._id, rank: member.rank, last_updated: new Date() } },
-                { upsert: true }
-              );
-          }
-
-          const guildMembers = await db.collection("guildMembers").find({ gid: guild._id }).toArray();
-
-          for (const member of guildMembers) {
-            if (guild.members.find((a) => a.uuid == member.uuid) == undefined) {
-              await db
-                .collection("guildMembers")
-                .updateOne({ uuid: member.uuid }, { $set: { gid: null, last_updated: new Date() } });
-            }
-          }
-
-          const guildObject = await db.collection("guilds").findOneAndUpdate(
-            { gid: guild._id },
-            {
-              $set: {
-                name: guild.name,
-                tag: guild.tag,
-                exp: guild.exp,
-                created: guild.created,
-                gm,
-                members: guild.members.length,
-                last_updated: new Date(),
-              },
-            },
-            { returnOriginal: false, upsert: true }
-          );
-
-          guildObject.value.level = getGuildLevel(guildObject.value.exp);
-          guildObject.value.gmUser = await resolveUsernameOrUuid(guildObject.value.gm, db);
-          guildObject.value.rank = guild.members.find((a) => a.uuid == uuid).rank;
-
-          return guildObject.value;
-        } else {
-          await db
-            .collection("guildMembers")
-            .findOneAndUpdate({ uuid }, { $set: { gid: null, last_updated: new Date() } }, { upsert: true });
-        }
-
-        return null;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    } else {
-      return null;
-    }
   }
 }
 
@@ -498,14 +392,14 @@ export function parseRank(player) {
   const rankName = player.prefix
     ? getRawLore(player.prefix).replaceAll(/\[|\]/g, "")
     : player.rank && player.rank != "NORMAL"
-    ? player.rank
-    : player.monthlyPackageRank && player.monthlyPackageRank != "NONE"
-    ? player.monthlyPackageRank
-    : player.newPackageRank
-    ? player.newPackageRank
-    : player.packageRank
-    ? player.packageRank
-    : "NONE";
+      ? player.rank
+      : player.monthlyPackageRank && player.monthlyPackageRank != "NONE"
+        ? player.monthlyPackageRank
+        : player.newPackageRank
+          ? player.newPackageRank
+          : player.packageRank
+            ? player.packageRank
+            : "NONE";
 
   if (RANKS[rankName]) {
     const { tag, color, plus, plusColor } = RANKS[rankName];
@@ -655,7 +549,7 @@ export async function fetchMembers(profileId, db, returnUuid = false) {
         .replaceOne(
           { profile_id: profileId, uuid: profileMember.uuid },
           { profile_id: profileId, uuid: profileMember.uuid, username: profileMember.display_name },
-          { upsert: true }
+          { upsert: true },
         );
     }
 
@@ -685,9 +579,9 @@ export function getClusterId(fullName = false) {
   return cluster.isWorker ? `w${cluster.worker.id}` : "m";
 }
 
-export const generateDebugId = (endpointName = "unknown") => {
+export function generateDebugId(endpointName = "unknown") {
   return `${getClusterId()}/${endpointName}_${Date.now()}.${Math.floor(Math.random() * 9000 + 1000)}`;
-};
+}
 
 export function generateUUID() {
   let u = "",
@@ -722,28 +616,29 @@ export function parseItemGems(gems, rarity) {
 
   const parsed = [];
   for (const [key, value] of Object.entries(gems)) {
-    const slot_type = key.split("_")[0];
+    const slotType = key.split("_")[0];
 
-    if (slots.ignore.includes(key) || (slots.special.includes(slot_type) && key.endsWith("_gem"))) {
+    if (slots.ignore.includes(key) || (slots.special.includes(slotType) && key.endsWith("_gem"))) {
       continue;
     }
 
-    if (slots.special.includes(slot_type)) {
+    if (slots.special.includes(slotType)) {
       parsed.push({
-        slot_type,
+        slot_type: slotType,
         slot_number: +key.split("_")[1],
         gem_type: gems[`${key}_gem`],
         gem_tier: value?.quality || value,
       });
-    } else if (slots.normal.includes(slot_type)) {
+    } else if (slots.normal.includes(slotType)) {
       parsed.push({
-        slot_type,
+        slot_type: slotType,
         slot_number: +key.split("_")[1],
         gem_type: key.split("_")[0],
         gem_tier: value?.quality || value,
       });
     } else {
-      throw new Error(`Error! Unknown gemstone slot key: ${key}`);
+      console.log(key);
+      // throw new Error(`Error! Unknown gemstone slot key: ${key}`);
     }
   }
 
@@ -769,24 +664,28 @@ export function generateGemLore(type, tier, rarity) {
   const lore = [];
   const stats = [];
 
+  if (!GEMSTONES[type.toUpperCase()]) {
+    return "§c§oMISSING GEMSTONE DATA§r";
+  }
+
   // Gem color
   const color = `§${GEMSTONES[type.toUpperCase()].color}`;
 
   // Gem stats
   if (rarity) {
-    const gemstone_stats = GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
-    if (gemstone_stats) {
-      Object.keys(gemstone_stats).forEach((stat) => {
-        let stat_value = gemstone_stats[stat][rarityNameToInt(rarity)];
+    const gemstoneStats = GEMSTONES[type.toUpperCase()]?.stats?.[tier.toUpperCase()];
+    if (gemstoneStats) {
+      Object.keys(gemstoneStats).forEach((stat) => {
+        let statValue = gemstoneStats[stat][rarityNameToInt(rarity)];
 
         // Fallback since skyblock devs didn't code all gemstone stats for divine rarity yet
         // ...they didn't expect people to own divine tier items other than divan's drill
-        if (rarity.toUpperCase() === "DIVINE" && stat_value === null) {
-          stat_value = gemstone_stats[stat][rarityNameToInt("MYTHIC")];
+        if (rarity.toUpperCase() === "DIVINE" && statValue === null) {
+          statValue = gemstoneStats[stat][rarityNameToInt("MYTHIC")];
         }
 
-        if (stat_value) {
-          stats.push(["§", STATS_DATA[stat].color, "+", stat_value, " ", STATS_DATA[stat].symbol].join(""));
+        if (statValue) {
+          stats.push(["§", STATS_DATA[stat].color, "+", statValue, " ", STATS_DATA[stat].symbol].join(""));
         } else {
           stats.push("§c§oMISSING VALUE§r");
         }
@@ -836,7 +735,7 @@ export function generateItem(data) {
     };
   }
 
-  const default_data = {
+  const DEFAULT_DATA = {
     id: 389,
     Damage: 0,
     Count: 1,
@@ -859,8 +758,24 @@ export function generateItem(data) {
     data.rarity = data.rarity.toLowerCase();
   }
 
+  if (data.name && (data.display_name === undefined || data.display_name?.length === 0)) {
+    data.display_name = data.name;
+  }
+
+  if (!data.rarity && data.tier) {
+    data.rarity = data.tier.toLowerCase();
+  }
+
+  if (data.item_id) {
+    data.id = data.item_id;
+  }
+
+  if (data.damage) {
+    data.Damage = data.damage;
+  }
+
   // Setting tag.display.Name using display_name if not specified
-  if (data.display_name && !data.tag.display.Name) {
+  if (data.display_name && !data.tag?.display?.Name) {
     data.tag = data.tag ?? {};
     data.tag.display = data.tag.display ?? {};
     const rarityColor = data.rarity ? `§${RARITY_COLORS[data.rarity ?? "common"]}` : "";
@@ -868,7 +783,7 @@ export function generateItem(data) {
   }
 
   // Creating final item
-  return Object.assign(default_data, data);
+  return Object.assign(DEFAULT_DATA, data);
 }
 
 /**
@@ -924,8 +839,8 @@ export function convertHMS(seconds, format = "clock", alwaysTwoDigits = false) {
 export function parseItemTypeFromLore(lore, item) {
   const regex = new RegExp(
     `^(?<recomb>a )?(?<shiny>SHINY )?(?:(?<rarity>${RARITIES.map((x) => x.replaceAll("_", " ").toUpperCase()).join(
-      "|"
-    )}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`
+      "|",
+    )}) ?)(?<dungeon>DUNGEON )?(?<type>[A-Z ]+)?(?<recomb2>a)?$`,
   );
 
   // Executing the regex on every lore line
@@ -967,8 +882,8 @@ function getCategories(type, item) {
   const enchantments = item?.tag?.ExtraAttributes?.enchantments || {};
   Object.keys(enchantments).forEach((enchantment) =>
     Object.entries(ENCHANTMENTS_TO_CATEGORIES).forEach(
-      ([category, enchantmentList]) => enchantmentList.includes(enchantment) && categories.push(category)
-    )
+      ([category, enchantmentList]) => enchantmentList.includes(enchantment) && categories.push(category),
+    ),
   );
 
   return [...new Set(categories.concat(TYPE_TO_CATEGORIES[type]))];
@@ -1013,7 +928,7 @@ export function generateDebugPets(type = "ALL") {
           heldItem: null,
           skin: null,
           uuid: generateUUID(),
-        }
+        },
       );
     }
   }
@@ -1055,6 +970,43 @@ export function getAnimatedTexture(item) {
   return deepResults[0] ?? false;
 }
 
+export function romanize(num) {
+  const lookup = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 };
+  let roman = "";
+
+  for (const i in lookup) {
+    while (num >= lookup[i]) {
+      roman += i;
+      num -= lookup[i];
+    }
+  }
+  return roman;
+}
+
+export async function getBingoGoals(db, cacheOnly = false) {
+  const cachedBingoData = await db.collection("bingoData").findOne({ _id: "cardData" });
+
+  const output = cachedBingoData?.output;
+  if (cacheOnly === true) {
+    return output;
+  }
+
+  // Check if it's the first day of the month and the data hasn't been updated in the last 24 hours,
+  // or if the data hasn't been updated in the last 12 hours (in case Hypixel changes goals).
+  if (
+    output == null ||
+    output.last_save + 43200000 < Date.now() ||
+    (new Date().getUTCDate() === 1 && output.last_save + 86400000 < Date.now())
+  ) {
+    const { data: output } = await axios.get("https://api.hypixel.net/resources/skyblock/bingo");
+    output.last_save = Date.now();
+
+    await db.collection("bingoData").updateOne({ _id: "cardData" }, { $set: { output } }, { upsert: true });
+  }
+
+  return output;
+}
+
 /**
  * Returns the price of the item. Returns 0 if the item is not found or if the item argument is falsy.
  * @param {string} item - The ID of the item to retrieve the price for.
@@ -1083,6 +1035,11 @@ export function getMagicalPower(rarity, id = null) {
     if (id === "HEGEMONY_ARTIFACT") {
       return 2 * (MAGICAL_POWER[rarity] ?? 0);
     }
+
+    // Rift Prism grants 11 MP
+    if (id === "RIFT_PRISM") {
+      return 11;
+    }
   }
 
   return MAGICAL_POWER[rarity] ?? 0;
@@ -1099,8 +1056,97 @@ export function getCommitHash() {
     */
 }
 
-export function RGBtoHex(rgb) {
+export function rgbToHex(rgb) {
   const [r, g, b] = rgb.split(",").map((c) => parseInt(c.trim()));
 
   return [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Returns a formatted progress bar string based on the given amount and total.
+ *
+ * @param {number} amount - The current amount.
+ * @param {number} total - The total amount.
+ * @param {string} [color="a"] - The color of the progress bar.
+ * @returns {string} The formatted progress bar string.
+ */
+export function formatProgressBar(amount, total, completedColor = "a", missingColor = "f") {
+  const barLength = 25;
+  const progress = Math.min(1, amount / total);
+  const progressBars = Math.floor(progress * barLength);
+  const emptyBars = barLength - progressBars;
+
+  return `${`§${completedColor}§l§m-`.repeat(progressBars)}${`§${missingColor}§l§m-`.repeat(emptyBars)}§r`;
+}
+
+/**
+ * Adds lore to an item's display tag.
+ *
+ * @param {Item} item - The item to add lore to.
+ * @param {string|string[]} lore - The lore to add to the item. If a string is provided, it will be converted to an array.
+ * @returns {Item} The modified item.
+ */
+export function addToItemLore(item, lore) {
+  if (typeof lore === "string") {
+    lore = [lore];
+  }
+
+  item.tag ??= {};
+  item.tag.display ??= {};
+  item.tag.display.Lore ??= [];
+  item.tag.display.Lore = item.tag.display.Lore.concat(lore);
+
+  return item;
+}
+
+/**
+ * Applies a resource pack to an item, modifying its texture and animation properties if a custom texture is found.
+ *
+ * @param {Item} item - The item to apply the resource pack to.
+ * @param {string[]} packs - The ID or array of IDs of the resource pack(s) to search for the custom texture.
+ * @returns {Promise<Item>} A Promise that resolves with the modified item.
+ */
+export async function applyResourcePack(item, packs) {
+  const customTexture = getTexture(item, {
+    ignore_id: false,
+    pack_ids: packs,
+  });
+
+  if (customTexture) {
+    item.animated = customTexture.animated;
+    item.texture_path = "/" + customTexture.path;
+    item.texture_pack = customTexture.pack.config;
+    item.texture_pack.base_path =
+      "/" + path.relative(path.resolve(__dirname, "..", "public"), customTexture.pack.base_path);
+  }
+
+  return item;
+}
+
+export async function sendWebhookMessage(e, { username, profile }) {
+  try {
+    const webhookUrl = credentials.discord_webhook;
+    if (webhookUrl === undefined || username === undefined) {
+      return;
+    }
+
+    let description = `Username: \`${username}\`\n`;
+    if (profile) {
+      description += `Profile: \`${profile}\`\n`;
+    }
+
+    description += `Link: https://sky.shiiyu.moe/stats/${username}${profile ? `/${profile}` : ""}\n`;
+    description += `\`\`\`${e.stack}\`\`\``;
+
+    const embed = {
+      title: "Error",
+      description: description,
+      color: 16711680,
+      fields: [],
+    };
+
+    await axios.post(webhookUrl, { embeds: [embed] });
+  } catch (e) {
+    console.error(e);
+  }
 }

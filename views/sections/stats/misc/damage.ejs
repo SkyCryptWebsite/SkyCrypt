@@ -1,0 +1,15 @@
+<% if ('damage' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon icon-267_0"></div>
+    </div>
+
+    <span class="category-name">Damage</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <span class="stat-name">Highest Critical Damage: </span>
+    <span class="stat-value"><%= calculated.misc.damage.highest_critical_damage.toLocaleString() %></span>
+    <br>
+  </p>
+<% } %>

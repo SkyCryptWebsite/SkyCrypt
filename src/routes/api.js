@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import sanitize from "mongo-sanitize";
+import * as helper from "../helper.js";
 
 import { db } from "../mongo.js";
 
@@ -36,6 +37,7 @@ router.get("/bazaar", bazaar.router);
 
 router.use((req, res, next) => {
   if (!req.isHtml) {
+    helper.sendMetric("endpoint_api_fail_jsondisabled");
     handleError(req, res, new Error("Old JSON API has been disabled."), 403, false);
     return;
   }
@@ -60,17 +62,20 @@ router.get("/:player/:profile/weapons", handleParams, weapons.router);
 
 // Handler of non-existing endpoints
 router.get("/*", async (req, res) => {
+  helper.sendMetric("endpoint_apiv2_fail_notfound");
   handleError(req, res, new Error("Endpoint was not found."), 404, false);
 });
 
 // Handler of unsupported methods
 router.all("/*", async (req, res) => {
+  helper.sendMetric("endpoint_apiv2_fail_onlyget");
   handleError(req, res, new Error("API only supports GET requests."), 405, false);
 });
 
 // Error handler for all /api endpoints
 // Meant to be a safenet if some endpoint returns an error.
 router.use((err, req, res, next) => {
+  helper.sendMetric("endpoint_apiv2_fail");
   handleError(req, res, err);
 });
 

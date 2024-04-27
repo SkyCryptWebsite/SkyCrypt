@@ -13,31 +13,25 @@ router.use((req, res, next) => {
 
 router.get("/:player/:profile", async (req, res, next) => {
   try {
-    const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
+    const { allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
-    let output = {
-      error: "Invalid Profile Name!",
-    };
-
+    const output = {};
     for (const singleProfile of allProfiles) {
-      const cuteName = singleProfile.cute_name;
-
-      if (cuteName.toLowerCase() != req.params.profile.toLowerCase()) {
+      const profileId = req.params.profile;
+      if (singleProfile.cute_name.toLowerCase() !== profileId.toLowerCase()) {
         continue;
       }
 
-      const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
-      const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
-
-      output = {
+      const data = await lib.getStats(db, singleProfile, null, allProfiles, [], req.options);
+      output[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
-        slayer_xp: data.slayer_xp,
-        slayers: data.slayers,
-        slayer_coins_spent: data.slayer_coins_spent,
+        selected: singleProfile.selected,
+        data: data.slayer,
       };
     }
 
+    helper.sendMetric("endpoint_apiv2_slayers_profile_success");
     res.json(output);
   } catch (e) {
     next(e);
@@ -46,25 +40,20 @@ router.get("/:player/:profile", async (req, res, next) => {
 
 router.get("/:player", async (req, res, next) => {
   try {
-    const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
+    const { allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
 
-    const output = { profiles: {} };
-
+    const output = {};
     for (const singleProfile of allProfiles) {
-      const userProfile = singleProfile.members[profile.uuid];
-
-      const items = await lib.getItems(userProfile, false, "", req.options);
-      const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
-
-      output.profiles[singleProfile.profile_id] = {
+      const data = await lib.getStats(db, singleProfile, null, allProfiles, [], req.options);
+      output[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
-        slayer_xp: data.slayer_xp,
-        slayers: data.slayers,
-        slayer_coins_spent: data.slayer_coins_spent,
+        selected: singleProfile.selected,
+        data: data.slayer,
       };
     }
 
+    helper.sendMetric("endpoint_apiv2_slayers_profile_success");
     res.json(output);
   } catch (e) {
     next(e);

@@ -1,0 +1,73 @@
+<% if ('effects' in calculated.misc) { 
+  if (Object.keys(calculated.misc.effects).some((key) => Object.keys(calculated.misc.effects[key]).length > 0)) { %>
+    <div class="category-header">
+      <div class="category-icon">
+        <div class="item-icon custom-icon" style="background-image: url(/head/60226d4c1d30fbebecae939da900603e4cd0fed8592a1bb3e11f9ac92391a45a)"></div>
+      </div>
+
+      <span  class="category-name">Potions</span>
+    </div>
+
+    <% let effects_tooltips = [];
+    for (const key of Object.keys(calculated.misc.effects).sort()) {
+      for (let potion of calculated.misc.effects[key]) {
+        effects_tooltips[key] ??= [];
+        if (key === "active") {
+          if ("effect" in potion === false || "level" in potion === "false") {
+            continue;
+          }
+
+          const potionData = constants.POTION_EFFECTS[potion.effect];
+          if (potionData === undefined) { %>
+            <script>
+                console.log("Unknown potion effect: <%= potion.effect %>")    
+            </script>
+          <% }
+          continue;
+        
+            
+          effects_tooltips[key].push(`
+            <span class="stat-value">${potionData.name ?? helper.titleCase(potion.effect.replace("_", " "))}</span>
+            <br>
+          `);
+        } else {
+          potion = potion?.effect ?? potion;
+
+          effects_tooltips[key].push(`
+            <span class="stat-value">${helper.titleCase(potion.replace("_", " "))}</span>
+            <br>
+          `);
+        }
+      }
+    } %>
+    
+    <p class="stat-raw-values">
+      <!-- Active Potion Effects -->
+      <% if (calculated.misc.effects.active.length > 0) { %>
+        <span <%- effects_tooltips['active'] ? `data-tippy-content='<span class="stat-name">Active Potion Effects: :</span><br>${effects_tooltips['active'].join("")}'` : "" %>>
+          <span class="stat-name">Active Potion Effects: </span>
+          <span class="stat-value"><%= calculated.misc.effects.active.length %></span>
+        </span>
+        <br>
+      <% } %>
+
+      <!-- Paused Potion Effects -->
+      <% if (calculated.misc.effects.paused.length > 0 ) { %>
+        <span <%- effects_tooltips['paused'] ? `data-tippy-content='<span class="stat-name">Paused Potion Effects: </span><br>${effects_tooltips['paused'].join("")}'` : "" %>>
+          <span class="stat-name">Paused Potion Effects: </span>
+          <span class="stat-value"><%= calculated.misc.effects.paused.length %></span>
+        </span>
+        <br>
+      <% } %>
+
+      <!-- Disabled Potion Effects -->
+      <% if (calculated.misc.effects.disabled.length > 0 ) { %>
+        <span <%- effects_tooltips['disabled'] ? `data-tippy-content='<span class="stat-name">Disabled Potion Effects: </span><br>${effects_tooltips['disabled'].join("")}'` : "" %>>
+          <span class="stat-name">Disabled Potion Effects: </span>
+          <span class="stat-value"><%= calculated.misc.effects.disabled.length %></span>
+        </span>
+        <br>
+      <% } %>
+    </p>
+  <% } %>
+<% } %>

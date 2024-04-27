@@ -115,6 +115,25 @@
     --§f: #929292;
   }
 
+  .april-fools-2024 {
+    --§0: #ff1493;
+    --§1: #ff4500;
+    --§2: #ff00b3;
+    --§3: #ff2f7f;
+    --§4: #4c0b1d;
+    --§5: #e87da7;
+    --§6: #d95c8f;
+    --§7: #fd3995;
+    --§8: #c556b3;
+    --§9: #f5b0c7;
+    --§a: #f9d5e1;
+    --§b: #8f1f47;
+    --§c: #4c0b1d;
+    --§d: #b93e6d;
+    --§e: #ff69b4;
+    --§f: #fcf0f5;
+  }
+
   &:not(.light),
   &:not(.light) .nice-colors-auto,
   .nice-colors-light {
@@ -458,7 +477,9 @@ header .lookup-player {
 
     &:-webkit-autofill,
     &:-webkit-autofill:focus {
-      transition: background-color 600000s 0s, color 600000s 0s;
+      transition:
+        background-color 600000s 0s,
+        color 600000s 0s;
     }
   }
 
@@ -493,10 +514,14 @@ header .lookup-player {
 
 .page-index header .lookup-player {
   transform: translateY(0%);
-  transition: transform 0.15s, visibility 0s linear 0s;
+  transition:
+    transform 0.15s,
+    visibility 0s linear 0s;
   &:not(.show-user-search) {
     transform: translateY(150%);
-    transition: transform 0.15s, visibility 0s linear 0.15s;
+    transition:
+      transform 0.15s,
+      visibility 0s linear 0.15s;
     visibility: hidden;
   }
 }
@@ -561,7 +586,12 @@ input[type="search"]::-webkit-search-cancel-button {
   span {
     display: block;
     transform: scaleX(1);
-    transition: transform 0.2s, font-size, 0.2s, opacity 0.2s, padding-right 0.2s;
+    transition:
+      transform 0.2s,
+      font-size,
+      0.2s,
+      opacity 0.2s,
+      padding-right 0.2s;
     padding: 0 6px 0 4px;
   }
 }
@@ -619,7 +649,9 @@ input[type="search"]::-webkit-search-cancel-button {
     right: 0;
     visibility: hidden;
     background-color: rgba(0, 0, 0, 0);
-    transition: background-color 0.3s ease-in-out, visibility 0.3s linear;
+    transition:
+      background-color 0.3s ease-in-out,
+      visibility 0.3s linear;
   }
 
   &[aria-expanded="true"]::before {
@@ -645,7 +677,9 @@ input[type="search"]::-webkit-search-cancel-button {
 
     visibility: hidden;
     clip-path: circle(0% at var(--clip-center));
-    transition: clip-path 0.3s ease-in-out, visibility 0.3s linear;
+    transition:
+      clip-path 0.3s ease-in-out,
+      visibility 0.3s linear;
   }
 
   &[aria-expanded="true"] + .expandable {

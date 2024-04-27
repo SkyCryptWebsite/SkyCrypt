@@ -8,12 +8,13 @@ const EPIC = RARITIES.indexOf("epic");
 const LEGENDARY = RARITIES.indexOf("legendary");
 const MYTHIC = RARITIES.indexOf("mythic");
 
-function formatStat(stat) {
-  const statFloored = Math.floor(stat);
-  if (statFloored > 0) {
-    return `§a+${statFloored}`;
+function formatStat(stat, red = false) {
+  const formattedStat = stat.toFixed(2).replace(/\.?0+$/, "");
+  const color = red ? "§c" : "§a";
+  if (stat > 0) {
+    return `${color}+${formattedStat}`;
   } else {
-    return `§a${statFloored}`;
+    return `${color}${formattedStat}`;
   }
 }
 
@@ -40,7 +41,8 @@ function getValue(rarity, data) {
     case MYTHIC:
       return mythic;
     default:
-      throw new Error("Unknown rarity");
+      console.log(`Unknown rarity: ${rarity}`);
+    // throw new Error("Unknown rarity");
   }
 }
 
@@ -66,13 +68,13 @@ class Pet {
           list.push(`§7Defense: ${formatStat(newStats[stat])}`);
           break;
         case "strength":
-          list.push(`§7Strength: ${formatStat(newStats[stat])}`);
+          list.push(`§7Strength: ${formatStat(newStats[stat], true)}`);
           break;
         case "crit_chance":
-          list.push(`§7Crit Chance: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Crit Chance: ${formatStat(newStats[stat], true)}%`);
           break;
         case "crit_damage":
-          list.push(`§7Crit Damage: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Crit Damage: ${formatStat(newStats[stat], true)}%`);
           break;
         case "intelligence":
           list.push(`§7Intelligence: ${formatStat(newStats[stat])}`);
@@ -81,10 +83,10 @@ class Pet {
           list.push(`§7Speed: ${formatStat(newStats[stat])}`);
           break;
         case "bonus_attack_speed":
-          list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Bonus Attack Speed: ${formatStat(newStats[stat], true)}%`);
           break;
         case "sea_creature_chance":
-          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat])}%`);
+          list.push(`§7Sea Creature Chance: ${formatStat(newStats[stat], true)}%`);
           break;
         case "magic_find":
           list.push(`§7Magic Find: ${formatStat(newStats[stat])}`);
@@ -102,7 +104,7 @@ class Pet {
           list.push(`§7Damage: ${formatStat(newStats[stat])}`);
           break;
         case "ferocity":
-          list.push(`§7Ferocity: ${formatStat(newStats[stat])}`);
+          list.push(`§7Ferocity: ${formatStat(newStats[stat], true)}`);
           break;
         case "mining_speed":
           list.push(`§7Mining Speed: ${formatStat(newStats[stat])}`);
@@ -119,6 +121,27 @@ class Pet {
         case "fishing_speed":
           list.push(`§7Fishing Speed: ${formatStat(newStats[stat])}`);
           break;
+        case "rift_time":
+          list.push(`§7Rift Time: §a${formatStat(newStats[stat])}s`);
+          break;
+        case "mana_regen":
+          list.push(`§7Mana Regen: §a${formatStat(newStats[stat])}%`);
+          break;
+        case "foraging_fortune":
+          list.push(`§7Foraging Fortune: ${formatStat(newStats[stat])}`);
+          break;
+        case "vitality":
+          list.push(`§7Vitality: ${formatStat(newStats[stat])}`);
+          break;
+        case "mending":
+          list.push(`§7Mending: ${formatStat(newStats[stat])}`);
+          break;
+        case "swing_range":
+          list.push(`§7Swing Range: ${formatStat(newStats[stat])}`);
+          break;
+        case "cold_resistence":
+          list.push(`§7Cold Resistence: ${formatStat(newStats[stat])}`);
+          break;
         default:
           list.push(`§cUNKNOWN: ${stat}`);
           break;
@@ -130,6 +153,18 @@ class Pet {
 
 class Bee extends Pet {
   get stats() {
+    if (this.rarity >= RARE) {
+      const fortMult = getValue(this.rarity, { rare: 0.2, epic: 0.3 });
+      return {
+        strength: 5 + this.level * 0.25,
+        intelligence: this.level * 0.5,
+        speed: this.level * 0.1,
+        mining_fortune: this.level * fortMult,
+        farming_fortune: this.level * fortMult,
+        foraging_fortune: this.level * fortMult,
+      };
+    }
+
     return {
       strength: 5 + this.level * 0.25,
       intelligence: this.level * 0.5,
@@ -149,26 +184,32 @@ class Bee extends Pet {
   }
 
   get first() {
-    const intMult = getValue(this.rarity, { common: 0.02, uncommon: 0.04, rare: 0.09, epic: 0.14, legendary: 0.19 });
-    const strMult = getValue(this.rarity, { common: 0.02, uncommon: 0.04, rare: 0.07, epic: 0.11, legendary: 0.14 });
+    const intMult = getValue(this.rarity, { common: 0.03, rare: 0.06, epic: 0.1 });
+    const strMult = getValue(this.rarity, { common: 0.03, rare: 0.05, epic: 0.08 });
+    const defMult = getValue(this.rarity, { common: 0.02, rare: 0.03, epic: 0.05 });
 
     return {
       name: "§6Hive",
       desc: [
-        `§7Gain §b+${round(this.level * intMult + 1, 1)} ${SYMBOLS.intelligence} Intelligence §7and §c+${round(
-          this.level * strMult + 1,
-          1
-        )} ${SYMBOLS.strength} Strength §7for each nearby bee.`,
-        `§8Max 15 bees`,
+        `§7For each player within §a25 §7blocks:`,
+        `§b+${round(this.level * intMult, 1)} ${SYMBOLS.intelligence} Intelligence`,
+        `§c+${round(this.level * strMult, 1)} ${SYMBOLS.strength} Strength`,
+        `§a+${round(this.level * defMult, 1)} ${SYMBOLS.defense} Defense`,
+        `§8Max 15 players`,
       ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { rare: 0.5, epic: 1 });
+    const mult = getValue(this.rarity, { rare: 0.2, epic: 0.3 });
     return {
       name: "§6Busy Buzz Buzz",
-      desc: [`§7Has §a${round(this.level * mult, 1)}% §7chance for flowers to drop an extra one§7.`],
+      desc: [
+        `§7Grants §a+${round(this.level * mult, 1)} §7of each to your pet:`,
+        `§6${SYMBOLS.farming_fortune} Farming Fortune`,
+        `§6${SYMBOLS.foraging_fortune} Foraging Fortune`,
+        `§6${SYMBOLS.mining_fortune} Mining Fortune`,
+      ],
     };
   }
 
@@ -224,6 +265,67 @@ class Chicken extends Pet {
   }
 }
 
+class Eerie extends Pet {
+  get stats() {
+    return {
+      speed: this.level * 0.1,
+      intelligence: this.level * 0.5,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+
+    if (this.rarity >= RARE) {
+      list.push(this.second);
+    }
+
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.third);
+    }
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Fearnesy",
+      desc: [
+        "§5Fear §7from §5Great Spook §5Armor §7in your §bwardrobe §7applies to you, even if you aren't wearing it.",
+      ],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Fearama",
+      desc: [`§7Increases §cdamage §7dealt to Spooky Mobs by §a0.1 §7or §a1% §7for every §5Fear §7you have.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.01 });
+
+    const primalFearKills = this.profile.kills
+      ? this.profile.kills.kills.find((mob) => mob.entityId === "primal_fear")?.amount ?? 0
+      : 0;
+    const kills = Math.max(primalFearKills, 150);
+
+    const killsFormatted = kills >= 150 ? `§a${kills}` : `§c${kills}`;
+
+    return {
+      name: "§6Fearcreasing",
+      desc: [
+        `§7Gives §a${round(
+          (this.level / 2) * mult,
+          1,
+        )} §5Fear §7for every §a10 §cPrimal Fears §7killed, up to §a150 §cPrimal Fears§7.`,
+        `§cPrimal Fear Kills§7: (${killsFormatted}§7/§a150§7)`,
+      ],
+    };
+  }
+}
+
 class Elephant extends Pet {
   get stats() {
     return {
@@ -268,7 +370,7 @@ class Elephant extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 1.8 });
+    const mult = getValue(this.rarity, { legendary: 1.5 });
     return {
       name: "§6Trunk Efficiency",
       desc: [
@@ -320,7 +422,7 @@ class Pig extends Pet {
       desc: [
         `§7While holding an §aEnchanted Carrot on a Stick§7, increase the speed of your mount by §a${round(
           this.level * mult,
-          1
+          1,
         )}%§7.`,
       ],
     };
@@ -367,7 +469,7 @@ class Rabbit extends Pet {
     const mult = getValue(this.rarity, { rare: 0.25, epic: 0.3 });
     return {
       name: "§6Farming Wisdom Boost ",
-      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.wisdom} Farming Wisdom§7.`],
+      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.farming_wisdom} Farming Wisdom§7.`],
     };
   }
 
@@ -417,7 +519,7 @@ class Armadillo extends Pet {
   get third() {
     return {
       name: "§6Earth Surfer",
-      desc: [`§7The Armadillo moves faster based on your §fSpeed`],
+      desc: [`§7The Armadillo moves faster based on your §f${SYMBOLS.speed} Speed§7.`],
     };
   }
 
@@ -434,9 +536,9 @@ class Armadillo extends Pet {
     return {
       name: "§6Mobile Tank",
       desc: [
-        `§7For every §a${round(100 - this.level * mult, 1)} §7Defense, gain §f+1 ${SYMBOLS.speed} Speed §7and §6+1 ${
-          SYMBOLS.mining_speed
-        } Mining Speed§7.`,
+        `§7For every §a${round(100 - this.level * mult, 1)} ${SYMBOLS.defense} Defense§7, gain §f+1 ${
+          SYMBOLS.speed
+        } Speed §7and §6+1 ${SYMBOLS.mining_speed} Mining Speed§7.`,
       ],
     };
   }
@@ -484,7 +586,7 @@ class Bat extends Pet {
       desc: [
         `§7During night, gain §a${round(this.level * multIntel, 1)} §b${SYMBOLS.intelligence} Intelligence§7, §a${round(
           this.level * multSpeed,
-          1
+          1,
         )} §f${SYMBOLS.speed} Speed §7and §aNight Vision§7.`,
       ],
     };
@@ -539,7 +641,7 @@ class Endermite extends Pet {
       desc: [
         `§7Gain more exp orbs for breaking end stone and gain a +§a${round(
           this.level * mult,
-          1
+          1,
         )}% §7chance to get an extra block dropped.`,
       ],
     };
@@ -570,7 +672,7 @@ class Endermite extends Pet {
       desc: [
         `§7Increases the odds of rolling for bonus items in the §cDraconic Altar §7by §a${round(
           this.level * 0.1,
-          1
+          1,
         )}%§7.`,
       ],
     };
@@ -592,6 +694,9 @@ class MithrilGolem extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -609,7 +714,7 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { rare: 0.1, epic: 0.2 });
     return {
       name: "§6The Smell Of Powder",
-      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7chance to gain extra §2Mithril Powder §7while mining.`],
+      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7more §2Mithril Powder §7while mining.`],
     };
   }
 
@@ -617,7 +722,20 @@ class MithrilGolem extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.2 });
     return {
       name: "§6Danger Averse",
-      desc: [`§7Increases your combat stats by §a+${round(this.level * mult, 1)}% §7on mining islands.`],
+      desc: [`§7Increases MOST combat stats by §a+${round(this.level * mult, 1)}% §7on mining islands.`],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, { mythic: 0.1 });
+    return {
+      name: "§6Refined Senses",
+      desc: [
+        `§7Increases your §b${SYMBOLS.magic_find} Magic find §7by §a${round(
+          this.level * mult,
+          1,
+        )}% §7when on a Mining Island.`,
+      ],
     };
   }
 }
@@ -757,7 +875,7 @@ class Silverfish extends Pet {
     const mult = getValue(this.rarity, { rare: 0.25, epic: 0.3 });
     return {
       name: "§6Mining Wisdom Boost",
-      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.wisdom} Mining Wisdom§7.`],
+      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.mining_wisdom} Mining Wisdom§7.`],
     };
   }
 
@@ -765,6 +883,57 @@ class Silverfish extends Pet {
     return {
       name: "§6Dexterity",
       desc: [`§7Gives permanent haste III§7.`],
+    };
+  }
+}
+
+class Slug extends Pet {
+  get stats() {
+    return {
+      intelligence: this.level * 0.25,
+      defense: this.level * 0.2,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second];
+
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.third);
+    }
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { epic: 0.2 });
+    return {
+      name: "§6Slow and Steady",
+      desc: [
+        `§7When fishing in the §cCrimson §cIsle§7, §aSlugfish §7take §a${round(
+          this.level * mult,
+          1,
+        )}% §7less time to catch.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { epic: 0.4 });
+    return {
+      name: "§6Pest Friends",
+      desc: [`§7Grants §a${round(this.level * mult, 1)} §a${SYMBOLS.bonus_pest_chance} Bonus Pest Chance.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+    return {
+      name: "§6Repugnant Aroma",
+      desc: [
+        `§7When farming in a plot affected by a §aSprayonator§7, gain §6+${round(this.level * mult, 1)} ${
+          SYMBOLS.farming_fortune
+        } Farming Fortune§7.`,
+      ],
     };
   }
 }
@@ -800,7 +969,7 @@ class WitherSkeleton extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.25 });
+    const mult = getValue(this.rarity, { epic: 1.25 });
     return {
       name: "§6Wither Blood",
       desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to wither mobs.`],
@@ -814,7 +983,7 @@ class WitherSkeleton extends Pet {
       desc: [
         `§7Upon hitting an enemy inflict the wither effect for §a${round(
           this.level * mult,
-          1
+          1,
         )}% §7damage over 3 seconds.`,
         `§8Does not stack`,
       ],
@@ -855,7 +1024,7 @@ class Bal extends Pet {
       desc: [
         `§7Every §a5s §7while in combat on public islands, Bal will strike nearby enemies with his fire whip dealing §c${round(
           this.level * mult,
-          1
+          1,
         )}% §7of your damage as §ftrue damage§7.`,
       ],
     };
@@ -875,6 +1044,8 @@ class BlackCat extends Pet {
     return {
       speed: this.level * 0.25,
       intelligence: this.level * 1,
+      magic_find: this.level * 0.15,
+      pet_luck: this.level * 0.15,
     };
   }
 
@@ -885,6 +1056,9 @@ class BlackCat extends Pet {
     }
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
+    }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
     }
     return list;
   }
@@ -910,6 +1084,14 @@ class BlackCat extends Pet {
     return {
       name: "§6Supernatural",
       desc: [`§7Grants §b${floor(this.level * mult, 1)} ${SYMBOLS.magic_find} Magic Find§7.`],
+    };
+  }
+
+  get fourth() {
+    const value = getValue(this.rarity, { mythic: 0.15 });
+    return {
+      name: "§6Looting",
+      desc: [`§7Gain §c${floor(this.level * value, 1)}% §7more collection items from monsters!`],
     };
   }
 }
@@ -1006,11 +1188,13 @@ class GoldenDragon extends Pet {
   get stats() {
     const stats = {};
     if (this.level >= 100) {
-      const goldCollectionDigits = this.profile?.collections?.GOLD_INGOT?.totalAmount.toString().length ?? 0;
+      const goldCollectionDigits = this.profile.collections?.mining?.collections
+        ?.find((collection) => collection.id === "GOLD_INGOT")
+        ?.amount.toString().length;
 
-      stats.strength = round(25 + Math.max(0, this.level - 100) * 0.25, 0) + 10 * goldCollectionDigits;
-      stats.bonus_attack_speed = round(25 + Math.max(0, this.level - 100) * 0.25, 0);
-      stats.magic_find = round(5 + Math.max(0, (this.level - 100) / 10) * 0.5, 0) + 2 * goldCollectionDigits;
+      stats.strength = Math.floor(25 + Math.max(0, this.level - 100) * 0.25) + 10 * goldCollectionDigits;
+      stats.bonus_attack_speed = Math.floor(25 + Math.max(0, this.level - 100) * 0.25);
+      stats.magic_find = Math.floor(5 + Math.max(0, (this.level - 100) / 10) * 0.5) + 2 * goldCollectionDigits;
     }
     return stats;
   }
@@ -1124,10 +1308,10 @@ class Enderman extends Pet {
   }
 
   get fourth() {
-    const mult = getValue(this.rarity, { mythic: 0.4 });
+    const mult = getValue(this.rarity, { mythic: 0.004 });
     return {
       name: "§6Enderman Slayer",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §3${SYMBOLS.wisdom} Combat Wisdom §7against §aEndermen§7.`],
+      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aEndermen§7.`],
     };
   }
 }
@@ -1138,6 +1322,8 @@ class Ghoul extends Pet {
       health: this.level * 1,
       intelligence: this.level * 0.75,
       ferocity: this.level * 0.05,
+      vitality: this.level * 0.25,
+      mending: this.level * 0.25,
     };
   }
 
@@ -1153,31 +1339,31 @@ class Ghoul extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { epic: 0.25 });
+    const mult = getValue(this.rarity, { epic: 0.005 });
     return {
-      name: "§6Amplified Healing",
-      desc: [
-        `§7Grants §4${round(this.level * mult, 1)} ${
-          SYMBOLS.vitality
-        } Vitality§7, which increases your incoming healing.`,
-      ],
+      name: "§6Undead Slayer",
+      desc: [`§7Gain §b${round(1 + this.level * mult, 3)}x §7Combat XP against §aZombies.`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.5 });
+    const mult = getValue(this.rarity, { epic: 0.2 });
     return {
-      name: "§6Zombie Arm",
-      desc: [`§7Increase the health and range of the Zombie sword by §a${round(this.level * mult, 1)}%§7.`],
+      name: "§6Army of the Dead",
+      desc: [
+        `§7Increases the amount of souls you can store by §a2 §7and the chance of getting a mob's soul by §a${round(this.level * mult, 1)}%§7.`,
+      ],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 1 });
+    const costMult = getValue(this.rarity, { legendary: 0.3 });
+    const damageMult = getValue(this.rarity, { legendary: 0.2 });
+    const healthMult = getValue(this.rarity, { legendary: 1 });
     return {
       name: "§6Reaper Soul",
       desc: [
-        `§7Increases the health and lifespan of the Reaper Scythe zombies by §a${round(this.level * mult, 1)}%§7.`,
+        `§7Reduces the summoning cost of mobs by §a${round(this.level * costMult, 1)}% §7and increases their damage output by §a${round(this.level * damageMult, 1)}%§7. Increases the health of all summoned mobs by §a${round(this.level * healthMult, 1)}%§7.`,
       ],
     };
   }
@@ -1188,6 +1374,7 @@ class Golem extends Pet {
     return {
       health: this.level * 1.5,
       strength: this.level * 0.5,
+      swing_range: this.level * 0.01,
     };
   }
 
@@ -1203,15 +1390,17 @@ class Golem extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { epic: 0.3 });
     return {
       name: "§6Last Stand",
-      desc: [`§7While less than 25% HP, deal §a${round(this.level * mult, 1)}% §7more damage§7.`],
+      desc: [
+        "§7While at less than §a20% HP§7, reduce incoming damage by §a20%§7. Additionally, gain a temporary shield equal to §a40% §7of your maximum health and deal §a40% §7more damage§7.",
+        "§8(Lasts 12s, 60s cooldown)",
+      ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.2, legendary: 0.25 });
+    const mult = getValue(this.rarity, { epic: 0.25 });
     return {
       name: "§6Ricochet",
       desc: [
@@ -1221,15 +1410,9 @@ class Golem extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 3 });
     return {
       name: "§6Toss",
-      desc: [
-        `§7Every 5 hits, throw the enemy up into the air and deal §a${round(
-          200 + this.level * mult,
-          1
-        )}% §7damage (10s cooldown)`,
-      ],
+      desc: [`§7Every 5 hits, throw the enemy up into the air and deal §a5x §7damage §8(5s cooldown)`],
     };
   }
 }
@@ -1315,11 +1498,21 @@ class Guardian extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.02, uncommon: 0.06, rare: 0.1, epic: 0.15, legendary: 0.2 });
+    const mult = getValue(this.rarity, {
+      common: 0.02,
+      uncommon: 0.06,
+      rare: 0.1,
+      epic: 0.15,
+      legendary: 0.2,
+      mythic: 1.2,
+    });
     return {
       name: "§6Lazerbeam",
       desc: [
@@ -1334,7 +1527,7 @@ class Guardian extends Pet {
     const mult = getValue(this.rarity, { rare: 0.25, epic: 0.3 });
     return {
       name: "§6Enchanting Wisdom Boost",
-      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.wisdom} Enchanting Wisdom§7.`],
+      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.enchanting_wisdom} Enchanting Wisdom§7.`],
     };
   }
 
@@ -1343,6 +1536,14 @@ class Guardian extends Pet {
     return {
       name: "§6Mana Pool",
       desc: [`§7Regenerate §b${round(this.level * mult, 1)}% §7extra mana, doubled when near or in water§7.`],
+    };
+  }
+
+  get fourth() {
+    const mult = getValue(this.rarity, { mythic: 0.07 });
+    return {
+      name: "§6Lucky Seven",
+      desc: [`§7Gain §b +${round(this.level * mult, 1)}% §7chance to find §5ultra rare §7books in §dSuperpairs.`],
     };
   }
 }
@@ -1393,8 +1594,9 @@ class Horse extends Pet {
 class Hound extends Pet {
   get stats() {
     return {
+      speed: this.level * 0.1,
       strength: this.level * 0.4,
-      bonus_attack_speed: this.level * 0.15,
+      bonus_attack_speed: this.level * 0.25,
       ferocity: this.level * 0.05,
     };
   }
@@ -1414,12 +1616,12 @@ class Hound extends Pet {
     const mult = getValue(this.rarity, { epic: 0.05 });
     return {
       name: "§6Scavenger",
-      desc: [`§7Gain +§a${round(this.level * mult, 1)} §7coins per monster kill§7.`],
+      desc: [`§7Gain §a+${round(this.level * mult, 1)} §7coins per monster kill§7.`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { legendary: 0.1 });
+    const mult = getValue(this.rarity, { epic: 0.3 });
     return {
       name: "§6Finder",
       desc: [`§7Increases the chance for monsters to drop their armor by §a${round(this.level * mult, 1)}%§7.`],
@@ -1427,10 +1629,10 @@ class Hound extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.1 });
+    const mult = getValue(this.rarity, { epic: 0.005 });
     return {
       name: "§6Fury Claws",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}%	§e${SYMBOLS.bonus_attack_speed} Bonus Attack Speed§7.`],
+      desc: [`§7Gain §b${round(1 + this.level * mult, 3)}x §7Combat XP against §aWolves.`],
     };
   }
 }
@@ -1579,10 +1781,9 @@ class Pigman extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.25 });
     return {
       name: "§6Giant Slayer",
-      desc: [`§7Deal §a${round(this.level * mult, 1)}% §7extra damage to monsters level 100 and up§7.`],
+      desc: [`§7Deal §c+50% §7damage to monsters Level 50+ and §c+75% §7damage to monsters Level 100+.`],
     };
   }
 }
@@ -1634,7 +1835,7 @@ class Rat extends Pet {
           SYMBOLS.magic_find
         } Magic Find §7for §a${round(
           20 + this.level * multTime,
-          0
+          0,
         )} §7seconds after finding a yummy piece of Cheese! If the player gets a drop during this buff, you have a §a20% §7chance to get it too.`,
       ],
     };
@@ -1705,10 +1906,10 @@ class Skeleton extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.1, uncommon: 0.15, epic: 0.2 });
+    const mult = getValue(this.rarity, { common: 0.15, uncommon: 0.2, rare: 0.25, epic: 0.5, legendary: 0.75 });
     return {
       name: "§6Bone Arrows",
-      desc: [`§7Increase arrow damage by §a${round(this.level * mult, 1)}% §7which is tripled while in dungeons§7.`],
+      desc: [`§7Increase arrow damage by §a${round(this.level * mult, 1)}% §7which is doubled while in dungeons§7.`],
     };
   }
 
@@ -1719,7 +1920,7 @@ class Skeleton extends Pet {
       desc: [
         `§7Gain a combo stack for every bow hit granting §c+3 ${SYMBOLS.strength} Strength§7. Max §a${round(
           this.level * mult,
-          1
+          1,
         )} §7stacks, stacks disappear after 8 seconds§7.`,
       ],
     };
@@ -1738,44 +1939,60 @@ class Skeleton extends Pet {
 class Snowman extends Pet {
   get stats() {
     return {
-      damage: this.level * 0.25,
-      crit_damage: this.level * 0.25,
       strength: this.level * 0.25,
+      crit_damage: this.level * 0.25,
+      damage: this.level * 0.25,
     };
   }
 
   get abilities() {
     const list = [this.first, this.second, this.third];
+
+    if (this.rarity >= LEGENDARY) {
+      list.push(this.fourth);
+    }
+
     return list;
   }
 
   get first() {
-    const mult = getValue(this.rarity, { legendary: 0.04 });
+    const blockMult = getValue(this.rarity, { legendary: 0.08 });
+    const damageMult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Blizzard",
-      desc: [`§7Slow all enemies within §a${4 + round(this.level * mult, 1)} §7blocks.`],
+      desc: [
+        `§7Enemies within §a${8 + round(this.level * blockMult, 1)} §7blocks are slowed by §a25% §7and deal §a${round(this.level * damageMult, 1)}% §7less damage.`,
+      ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { legendary: 0.15 });
+    const mult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Frostbite",
       desc: [
         `§7Your freezing aura slows enemy attacks causing you to take §a${floor(
           this.level * mult,
-          1
+          1,
         )}% §7reduced damage.`,
       ],
     };
   }
 
   get third() {
+    const mult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Snow Cannon",
       desc: [
-        `§7Your snowman fires a snowball dealing §a5x §7your §c${SYMBOLS.strength} Strength §7when a mob gets close to you (1s cooldown).`,
+        `§7Shoots a snowball towards an enemy when you attack dealing §a${round(this.level * mult)}% §7 of your last dealt melee damage, capped at §f200,000§7. §8(1s cooldown).`,
       ],
+    };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Ouch!",
+      desc: [`§7Your snowballs have §a50% §7chance chance of dealing §cdouble §7damage!`],
     };
   }
 }
@@ -1783,7 +2000,7 @@ class Snowman extends Pet {
 class Spider extends Pet {
   get stats() {
     return {
-      strength: this.level * 0.1,
+      strength: this.level * 0.5,
       crit_chance: this.level * 0.1,
     };
   }
@@ -1796,22 +2013,24 @@ class Spider extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.05, uncommon: 0.075, epic: 0.1 });
+    const mult = getValue(this.rarity, { common: 0.02, uncommon: 0.04, rare: 0.06, epic: 0.08, legendary: 0.1 });
     return {
       name: "§6One With The Spider",
       desc: [
-        `§7Gain §a${round(this.level * mult, 1)} §c${SYMBOLS.strength} Strength §7for every nearby spider.`,
-        `§8Max 10 spiders`,
+        `§7Applies §c+${5 + round(this.level * mult, 1)} ${SYMBOLS.strength} Strength §7to all §4Arachnal ${SYMBOLS.arachnal} §7weapons, armor, and equipment you have equipped.`,
       ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { rare: 0.3, epic: 0.4 });
+    const mult = getValue(this.rarity, { epic: 0.4 });
     return {
       name: "§6Web-weaver",
       desc: [`§7Upon hitting a monster it becomes slowed by §a${round(this.level * mult, 1)}%§7.`],
@@ -1823,6 +2042,15 @@ class Spider extends Pet {
     return {
       name: "§6Spider Whisperer",
       desc: [`§7Spider and tarantula minions work §a${round(this.level * mult, 1)}% §7faster while on your island.`],
+    };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Web Battlefield",
+      desc: [
+        `§7Killing mobs grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`,
+      ],
     };
   }
 }
@@ -1882,6 +2110,9 @@ class Tarantula extends Pet {
     if (this.rarity >= LEGENDARY) {
       list.push(this.third);
     }
+    if (this.rarity >= MYTHIC) {
+      list.push(this.fourth);
+    }
     return list;
   }
 
@@ -1902,10 +2133,19 @@ class Tarantula extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.5 });
+    const mult = getValue(this.rarity, { legendary: 0.005 });
     return {
       name: "§6Arachnid Slayer",
-      desc: [`§7Grants §a${round(this.level * mult, 1)}% §3${SYMBOLS.wisdom} Combat Wisdom §7against §aSpiders§7.`],
+      desc: [`§7Gain §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aSpiders§7.`],
+    };
+  }
+
+  get fourth() {
+    return {
+      name: "§6Web Battlefield",
+      desc: [
+        `§7Killing mob grants §c+6 ${SYMBOLS.strength} Strength §7and §b+1 ${SYMBOLS.magic_find} Magic Find §7for §a40s §7to all players staying within §a20 §7blocks of where they died. §8Stacks up to 10 times.`,
+      ],
     };
   }
 }
@@ -1961,8 +2201,9 @@ class Tiger extends Pet {
 class Turtle extends Pet {
   get stats() {
     return {
-      defense: this.level * 1,
-      health: this.level * 0.5,
+      health: 50 + this.level * 0.25,
+      defense: 100 + this.level * 0.5,
+      true_defense: this.level * 0.15,
     };
   }
 
@@ -1979,18 +2220,18 @@ class Turtle extends Pet {
     const mult = getValue(this.rarity, { epic: 0.27 });
     return {
       name: "§6Turtle Tactics",
-      desc: [`§7Gain §a+${round(3 + this.level * mult, 1)}% ${SYMBOLS.defense} Defense§7.`],
+      desc: [
+        `§7Gain §a+${round(3 + this.level * mult, 1)}% ${SYMBOLS.defense} Defense §7and an additional §a+10% §a${SYMBOLS.defense} Defense §7when standing still.`,
+      ],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.15, legendary: 0.25 });
+    const mult = getValue(this.rarity, { epic: 0.015 });
     return {
       name: "§6Genius Amniote",
       desc: [
-        `§7Grants §a+${round(5 + this.level * mult, 1)} ${
-          SYMBOLS.defense
-        } Defense §7for every player around you, up to 4 nearby players.`,
+        `§7Grants §a+${round(1 + this.level * mult, 1)} ${SYMBOLS.defense}% Defense §7to 4 players within 50 blocks of you.`,
       ],
     };
   }
@@ -2003,10 +2244,13 @@ class Turtle extends Pet {
   }
 
   get fourth() {
-    const mult = getValue(this.rarity, { legendary: 0.25 });
+    const damageMult = getValue(this.rarity, { legendary: 0.25 });
+    const vitalityMult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Turtle Shell",
-      desc: [`§7When under §c33% §7maximum HP, you take §a${round(this.level * mult, 1)}% §7less damage.`],
+      desc: [
+        `§7When under §c40% §7maximum HP, you take §a${round(this.level * damageMult, 1)}% §7less damage. Gain §4+${round(10 + this.level * vitalityMult, 1)}♨ Vitality §7for 15 seconds after taking 10 hits.`,
+      ],
     };
   }
 }
@@ -2057,7 +2301,7 @@ class Wolf extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.3 });
     return {
       name: "§6Combat Wisdom Boost",
-      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.wisdom} Combat Wisdom§7.`],
+      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.combat_wisdom} Combat Wisdom§7.`],
     };
   }
 }
@@ -2090,7 +2334,7 @@ class GrandmaWolf extends Pet {
         `§a15 Combo §8(lasts §a${Math.floor((4 + this.level * 0.02) * 10) / 10}s§8)`,
         `§8+ §b3% §b${SYMBOLS.magic_find} Magic Find`,
         `§a20 Combo §8(lasts §a${Math.floor((3 + this.level * 0.02) * 10) / 10}s§8)`,
-        `§8+ §315 ${SYMBOLS.wisdom} Combat Wisdom`,
+        `§8+ §315 ${SYMBOLS.combat_wisdom} Combat Wisdom`,
         `§a25 Combo §8(lasts §a${Math.floor((3 + this.level * 0.01) * 10) / 10}s§8)`,
         `§8+ §b3% §b${SYMBOLS.magic_find} Magic Find`,
         `§a30 Combo §8(lasts §a${Math.floor((2 + this.level * 0.01) * 10) / 10}s§8)`,
@@ -2120,18 +2364,19 @@ class Zombie extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.15, epic: 0.25 });
+    const base = getValue(this.rarity, { common: 5, uncommon: 10, epic: 15 });
+    const mult = getValue(this.rarity, { common: 0.1 });
     return {
-      name: "§6Chomp",
-      desc: [`§7Heal §c+${round(this.level * mult, 1)} ${SYMBOLS.health} §7per Zombie kill.`],
+      name: "§6Bite Shield",
+      desc: [`§7Reduce the damage taken from zombies by §a${round(base + this.level * mult, 1)}%§7.`],
     };
   }
 
   get second() {
-    const mult = getValue(this.rarity, { rare: 0.2, epic: 0.25 });
+    const mult = getValue(this.rarity, { rare: 1.25 });
     return {
       name: "§6Rotten Blade",
-      desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more damage to zombies.`],
+      desc: [`§7Deal §a${round(25 + this.level * mult, 1)}% §7more damage to zombies.`],
     };
   }
 
@@ -2139,7 +2384,7 @@ class Zombie extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.25 });
     return {
       name: "§6Living Dead",
-      desc: [`§7Increases the defense of all undead armor sets by §a${round(this.level * mult, 1)}%§7.`],
+      desc: [`§7Increases all stats on §7§2Undead ${SYMBOLS.undead} §7armor by §a${round(this.level * mult, 1)}%§7.`],
     };
   }
 }
@@ -2149,6 +2394,7 @@ class Giraffe extends Pet {
     return {
       health: this.level * 1,
       crit_chance: this.level * 0.05,
+      swing_range: this.level * 0.01,
     };
   }
 
@@ -2164,32 +2410,31 @@ class Giraffe extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.05, uncommon: 0.1, rare: 0.15, epic: 0.2, legendary: 0.25 });
+    const base = getValue(this.rarity, { common: 1, uncommon: 1.5, epic: 2 });
+    const mult = getValue(this.rarity, { common: 0.99, uncommon: 1.485, epic: 1.98 });
     return {
       name: "§6Good Heart",
-      desc: [`§7Regen §c${round(this.level * mult, 1)} ${SYMBOLS.health} §7per second§7.`],
+      desc: [`§7Grants §c+${round(base + this.level * mult, 1)} ${SYMBOLS.health_regen} Health Regen§7.`],
     };
   }
 
   get second() {
-    const multStrength = getValue(this.rarity, { rare: 0.4, epic: 0.5 });
-    const multCd = getValue(this.rarity, { rare: 0.1, epic: 0.25, legendary: 0.4 });
+    const mult = getValue(this.rarity, { rare: 0.0015 });
     return {
       name: "§6Higher Ground",
       desc: [
-        `§7Grants §c+${round(this.level * multStrength, 1)} ${SYMBOLS.strength} Strength §7and §9+${round(
-          this.level * multCd + 20,
-          1
-        )} ${SYMBOLS.crit_damage} Crit Damage §7when mid air or jumping§7.`,
+        `§7Increases your §9${SYMBOLS.crit_damage} Crit Damage §7and §c${SYMBOLS.strength} Strength §7by §c${round(this.level * mult, 2)}% §7for every §e0.1 ${SYMBOLS.swing_range} Swing Range §7over §e3${SYMBOLS.swing_range} §7(up to §e6${SYMBOLS.swing_range}§7).`,
       ],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.25 });
+    const mult = getValue(this.rarity, { legendary: 0.5 });
     return {
       name: "§6Long Neck",
-      desc: [`§7See enemies from afar and gain §a${round(this.level * mult, 1)}% §7dodge chance§7.`],
+      desc: [
+        `§7Increases your melee damage by §c${50 + round(this.level * mult, 1)}% §7if you are more than 3 blocks away from the target.`,
+      ],
     };
   }
 }
@@ -2295,6 +2540,40 @@ class Monkey extends Pet {
   }
 }
 
+class Montezuma extends Pet {
+  get stats() {
+    const riftSouls = (this.profile?.rift?.dead_cats?.found_cats ?? []).length;
+
+    return {
+      rift_time: 10 + riftSouls * 15,
+      mana_regen: riftSouls * 2,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+    if (this.rarity >= RARE) {
+      list.push(this.second);
+    }
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Nine Lives",
+      desc: [`§7Gain §a+15${SYMBOLS.rift_time} Rift Time §7per Soul piece.`],
+    };
+  }
+
+  get second() {
+    return {
+      name: "§6Trickery",
+      desc: [`§7Gain §b+2 ${SYMBOLS.mana_regen} Mana Regen §7per soul piece found.`],
+    };
+  }
+}
+
 class Ocelot extends Pet {
   get stats() {
     return {
@@ -2318,7 +2597,7 @@ class Ocelot extends Pet {
     const mult = getValue(this.rarity, { common: 0.2, uncommon: 0.25, epic: 0.3 });
     return {
       name: "§6Foraging Wisdom Boost",
-      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.wisdom} Foraging Wisdom§7.`],
+      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.foraging_wisdom} Foraging Wisdom§7.`],
     };
   }
 
@@ -2339,6 +2618,44 @@ class Ocelot extends Pet {
   }
 }
 
+class Owl extends Pet {
+  get stats() {
+    return {};
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Training Refunds",
+      desc: [`§7The more coins to spend on Fann's Sessions, the less coins they will cost. §8(max 5% off).`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.1 });
+    return {
+      name: "§6Efficient Trainer",
+      desc: [
+        `§7Makes training sessions at Fann more efficient when added into a session.`,
+        ``,
+        `§7Increased EXP: §b+${round(this.level * mult, 1)}% EXP.`,
+      ],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.05 });
+    return {
+      name: "§6Fast Learner",
+      desc: [`§7Passively grants §3+${round(this.level * mult, 2)} ${SYMBOLS.taming_wisdom} Taming Wisdom§7`],
+    };
+  }
+}
 class BabyYeti extends Pet {
   get stats() {
     return {
@@ -2439,7 +2756,7 @@ class BlueWhale extends Pet {
 class Ammonite extends Pet {
   get stats() {
     return {
-      sea_creature_chance: this.level * 0.05 + (this.profile?.mining?.core?.tier?.level || 0),
+      sea_creature_chance: this.level * (0.05 + 0.01 * (this.profile?.mining?.core?.level?.level || 0)),
     };
   }
 
@@ -2481,7 +2798,7 @@ class Ammonite extends Pet {
           SYMBOLS.fishing_speed
         } Fishing Speed§7, §f+${round(this.level * speed, 2)} ${SYMBOLS.speed} Speed §7and §a+${round(
           this.level * def,
-          2
+          2,
         )} ${SYMBOLS.defense} Defense§7.`,
       ],
     };
@@ -2596,9 +2913,11 @@ class FlyingFish extends Pet {
 class Megalodon extends Pet {
   get stats() {
     return {
-      ferocity: this.level * 0.05,
       strength: this.level * 0.5,
       magic_find: this.level * 0.1,
+      ferocity: this.level * 0.05,
+      sea_creature_chance: this.level * 0.05,
+      fishing_speed: this.level * 0.3,
     };
   }
 
@@ -2611,11 +2930,11 @@ class Megalodon extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { epic: 0.25 });
+    const mult = getValue(this.rarity, { epic: 1 });
     return {
       name: "§6Blood Scent",
       desc: [
-        `§7Deal up to §c+${round(mult * this.level, 1)}% ${
+        `§7Deal up to §c+${round(50 + mult * this.level, 1)}% ${
           SYMBOLS.strength
         } Damage §7based on the enemy's missing health.`,
       ],
@@ -2623,21 +2942,18 @@ class Megalodon extends Pet {
   }
 
   get second() {
-    const mult = getValue(this.rarity, { epic: 0.2 });
     return {
       name: "§6Enhanced scales",
-      desc: [`§7Increases the stats of Shark Armor by §a${round(mult * this.level, 1)}%§7.`],
+      desc: [`§7Doubles the pet's base stats during the §bFishing Festival§7.`],
     };
   }
 
   get third() {
-    const mult = getValue(this.rarity, { legendary: 0.5 });
+    const mult = getValue(this.rarity, { legendary: 0.1 });
     return {
       name: "§6Feeding frenzy",
       desc: [
-        `§7On kill gain §c${round(mult * this.level, 1)} ${SYMBOLS.strength} Damage §7and §f${
-          SYMBOLS.speed
-        } Speed §7for 5 seconds§7.`,
+        `§7Increases your chance to catch Sharks during the §bFishing Festival §7by §a${round(10 + this.level * mult, 1)}%§7.`,
       ],
     };
   }
@@ -2678,7 +2994,7 @@ class Squid extends Pet {
       desc: [
         `§7Buffs the Ink Wand by §a${round(this.level * multDamage, 1)} §c${SYMBOLS.strength} Damage §7and §a${round(
           this.level * multStrength,
-          1
+          1,
         )} §c${SYMBOLS.strength} Strength§7.`,
       ],
     };
@@ -2688,7 +3004,7 @@ class Squid extends Pet {
     const mult = getValue(this.rarity, { legendary: 0.3 });
     return {
       name: "§6Fishing Wisdom Boost",
-      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.wisdom} Fishing Wisdom§7.`],
+      desc: [`§7Grants §3+${round(this.level * mult, 1)} ${SYMBOLS.fishing_wisdom} Fishing Wisdom§7.`],
     };
   }
 }
@@ -2724,7 +3040,7 @@ class Jellyfish extends Pet {
       desc: [
         `§7While in dungeons, for every §c2,000 HP §7you heal teammates the cooldown of §aWish §7is reduced by §a${round(
           this.level * mult,
-          2
+          2,
         )}s§7, up to §a30s§7.`,
       ],
     };
@@ -2792,7 +3108,7 @@ class Parrot extends Pet {
       desc: [
         `§7When summoned or in your pets menu, boost the duration of consumed §cGod Potions §7by §a${round(
           this.level * mult,
-          1
+          1,
         )}%§7.`,
       ],
     };
@@ -2962,7 +3278,7 @@ class Bingo extends Pet {
       desc: [
         `§7Upon death, your active potion effects will be retained with §c${round(
           25 + this.level * mult,
-          1
+          1,
         )}% §7of their time.`,
       ],
     };
@@ -2980,6 +3296,7 @@ class Bingo extends Pet {
 
 class Wisp extends Pet {
   get stats() {
+    const damageMulitiplier = getValue(this.rarity, { common: 0.1, uncommon: 0.15, rare: 0.2, epic: 0.25 });
     const trueDefenseMultiplier = getValue(this.rarity, { rare: 0.15, epic: 0.3, legendary: 0.35 });
     const healthMultiplier = getValue(this.rarity, { uncommon: 1, rare: 2.5, epic: 4, legendary: 6 });
     const intelligenceMultiplier = getValue(this.rarity, { rare: 0.5, epic: 1.25, legendary: 2.5 });
@@ -2987,10 +3304,12 @@ class Wisp extends Pet {
     if (this.rarity <= UNCOMMON) {
       return {
         health: this.level * healthMultiplier,
+        damage: this.level * damageMulitiplier,
       };
     } else {
       return {
         intelligence: this.level * intelligenceMultiplier,
+        damage: this.level * damageMulitiplier,
         true_defense: this.level * trueDefenseMultiplier,
         health: this.level * healthMultiplier,
       };
@@ -3009,9 +3328,14 @@ class Wisp extends Pet {
   }
 
   get first() {
+    const mult = getValue(this.rarity, { common: 15, uncommon: 25, epic: 40, legendary: 50 });
     return {
       name: "§6Drophammer",
-      desc: [`§7Lets you break fire pillars§7.`],
+      desc: [
+        "§7Lets you break fire pillars,",
+        `§7which heals you for §c${mult}% §7of`,
+        `§7your max §c${SYMBOLS.health} §7over §a3s§7.`,
+      ],
     };
   }
 
@@ -3069,12 +3393,11 @@ class Wisp extends Pet {
   }
 
   get third() {
-    const mult = getValue(this.rarity, { uncommon: 0.3, rare: 0.4, epic: 0.45, legendary: 0.5 });
-    const prc = round(this.level * mult, 1);
+    const mult = getValue(this.rarity, { uncommon: 0.003, rare: 0.004, legendary: 0.005 });
 
     return {
       name: "§6Blaze Slayer",
-      desc: [`§7Grants §a+${prc}% §3${SYMBOLS.wisdom} Combat Wisdom §7from §aBlazes§7.`],
+      desc: [`§7Grants §b${round(1 + this.level * mult, 1)}x §7Combat XP against §aBlazes§7.`],
     };
   }
 
@@ -3135,7 +3458,7 @@ class MooshroomCow extends Pet {
       desc: [
         `§7When breaking crops, there is a §a${round(
           this.level * mult + 1.01,
-          1
+          1,
         )}% §7chance that a mushroom will drop§7.`,
       ],
     };
@@ -3147,7 +3470,7 @@ class MooshroomCow extends Pet {
     return {
       name: "§6Farming Strength",
       desc: [
-        `§7Gain §6+1 ${SYMBOLS.farming_fortune} Farming Fortune §7per every §c${round(40 - this.level * mult, 1)} ${
+        `§7Gain §6+0.7 ${SYMBOLS.farming_fortune} Farming Fortune §7per every §c${round(40 - this.level * mult, 1)} ${
           SYMBOLS.strength
         } Strength§7.`,
       ],
@@ -3174,7 +3497,7 @@ class Snail extends Pet {
   }
 
   get first() {
-    const mult = getValue(this.rarity, { common: 0.1, uncommon: 0.2, rare: 0.3 });
+    const mult = getValue(this.rarity, { comMONTEZUMA: 0.1, uncommon: 0.2, rare: 0.3 });
 
     return {
       name: "§6Red Sand Enjoyer",
@@ -3334,6 +3657,389 @@ class Reindeer extends Pet {
   }
 }
 
+class RiftFerret extends Pet {
+  get stats() {
+    return {
+      speed: 0.5 * this.level,
+      intelligence: -0.02 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first];
+
+    return list;
+  }
+
+  get first() {
+    return {
+      name: "§6Orbs are Fun",
+      desc: [`§7Gain §a+10% §7experience from §bXP Orbs§7.`],
+    };
+  }
+}
+
+class Tyrannosaurus extends Pet {
+  get stats() {
+    return {
+      strength: 0.75 * this.level,
+      crit_chance: 0.05 * this.level,
+      ferocity: 0.25 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Close Combat",
+      desc: [`§7Deal §a${round(this.level * mult, 1)}% §7more §cdamage §7to enemies within 1.5 blocks.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.1 });
+
+    return {
+      name: "§6Ferocious Roar",
+      desc: [`§7Attacks have a §a${round(this.level * mult, 1)}% §7chance to stun the target.`, `§8Cooldown: 10s`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Tyrant",
+      desc: [`§7Stats granted by pet items on this pet are increased by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+}
+
+class Spinosaurus extends Pet {
+  get stats() {
+    return {
+      sea_creature_chance: 0.08 * this.level,
+      fishing_speed: 0.25 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.15 });
+
+    return {
+      name: "§6Sharp Attitude",
+      desc: [`§bSea Creatures §7spawn with §a${round(this.level * mult, 1)}% §7of their maximum health missing.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.08 });
+
+    return {
+      name: "§6Pursuit",
+      desc: [`§7Gain §b+${round(this.level * mult, 1)} ${SYMBOLS.magic_find} Magic Find §7against §bSea Creatures§7.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.75 });
+
+    return {
+      name: "§6Primoridal Fisher",
+      desc: [
+        `§7During §9rain§7, increases this pet's base stats and stats granted by perks by §a${round(this.level * mult, 1)}%§7.`,
+      ],
+    };
+  }
+}
+
+class Goblin extends Pet {
+  get stats() {
+    return {
+      speed: 0.2 * this.level,
+      crit_chance: 0.1 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Pickpocket",
+      desc: [`§7Increases the coins obtained from goblin coin bags by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Offensive Odor",
+      desc: [`§7The Kings scent potion effect lasts §a${round(this.level * mult, 1)}% §7longer on you.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Free-range Eggs",
+      desc: [`§7Increases the chances of finding rare goblin eggs by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+}
+
+class Ankylosaurus extends Pet {
+  get stats() {
+    return {
+      health: 1.5 * this.level,
+      defense: 0.5 * this.level,
+      true_defense: 0.15 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.15 });
+
+    return {
+      name: "§6Armored Tank",
+      desc: [
+        `§7Gain §a${round(this.level * mult, 1)}% §7of your §a${SYMBOLS.defense} Defense §7as §c${SYMBOLS.strength} Strength§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Unyielding",
+      desc: [`§7Increases the effectiveness of §dLast Stand §7and §cLifeline by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.5 });
+
+    return {
+      name: "§6Superior",
+      desc: [
+        `§7Every 5th hit deals §a${round(this.level * mult, 1)}% §7of your final damage to enemies within 5 blocks. Enemies hit deal 10 less damage for 10s.`,
+      ],
+    };
+  }
+}
+
+class Penguin extends Pet {
+  get stats() {
+    return {
+      sea_creature_chance: 0.1 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const val = getValue(this.rarity, { legendary: 20 });
+
+    return {
+      name: "§6Thick Blubber",
+      desc: [
+        `§7Each time you catch a Sea Creature, reduce your §b${SYMBOLS.cold_resistence} Cold §7by §a${round(1 + floor(this.level / val), 1)}§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Expert Glacite Fisher ",
+      desc: [`§7The fishing speed reduction from being underground is reduced by §a${round(this.level * mult, 1)}%§7.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.75 });
+
+    return {
+      name: "§6Subzero Hero",
+      desc: [
+        `§7Gain §b+${round(this.level * mult, 1)} ${SYMBOLS.fishing_speed} Fishing Speed §7while in the §bGlacite Tunnels§7.`,
+      ],
+    };
+  }
+}
+
+class Mammoth extends Pet {
+  get stats() {
+    return {
+      defense: 0.5 * this.level,
+      cold_resistence: 0.1 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Wooly Coat",
+      desc: [
+        `§7Gain a §a${round(this.level * mult, 1)}% §7chance for mobs to not inflict §b${SYMBOLS.cold_resistence} Cold §7when damaging you in the §bGlacite Mineshafts§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 0.005 });
+
+    return {
+      name: "§6Tusk Luck",
+      desc: [
+        `§7Gain §b+${round(this.level * mult, 1)} ${SYMBOLS.magic_find} Magic Find §7for every §6100 ${SYMBOLS.mining_fortune} Mining Fortune§7, doubled in the §bGlacite Tunnels §7and §bGlacite Mineshafts§7.`,
+      ],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.3 });
+
+    return {
+      name: "§6Superior",
+      desc: [
+        `§7Gain §6+${round(this.level * mult, 1)} ${SYMBOLS.mining_fortune} Mining Fortune §7for each §bFrozen Corpse §7looted in your current §bGlacite Mineshaft§7.`,
+      ],
+    };
+  }
+}
+
+class Mole extends Pet {
+  get stats() {
+    return {
+      intelligence: 1 * this.level,
+      mining_speed: 0.75 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.25 });
+
+    return {
+      name: "§6Archaeologist",
+      desc: [
+        `§7Increases your chance of finding §cScavenged Items §7in the §aMines of Divan §7by §a${round(this.level * mult, 1)}%§7.`,
+      ],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Blind as a Mole",
+      desc: [`§7Gain a §a${round(this.level * mult, 1)}% §7chance for §eProfessor Robot §7to ask for 1 less part.`],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Nucleic Explorer",
+      desc: [
+        `§7Gain a §a${round(this.level * mult, 1)}% §7chance to receive an extra drop when completing the §dCrystal Nucleus§7.`,
+      ],
+    };
+  }
+}
+
+class GlaciteGolem extends Pet {
+  get stats() {
+    return {
+      mining_speed: 1.25 * this.level,
+      cold_resistence: 0.05 * this.level,
+    };
+  }
+
+  get abilities() {
+    const list = [this.first, this.second, this.third];
+
+    return list;
+  }
+
+  get first() {
+    const mult = getValue(this.rarity, { legendary: 0.2 });
+
+    return {
+      name: "§6Powder-powered",
+      desc: [`§7Gain §a+${round(this.level * mult, 1)}% §7more §bGlacite Powder §7from most sources.`],
+    };
+  }
+
+  get second() {
+    const mult = getValue(this.rarity, { legendary: 1 });
+
+    return {
+      name: "§6Iceborn",
+      desc: [
+        `§7Gain §a+${round(this.level * mult, 1)} §6${SYMBOLS.mining_fortune} Mining Fortune §7while in the §bGlacite Mineshafts§7.`,
+      ],
+    };
+  }
+
+  get third() {
+    const mult = getValue(this.rarity, { legendary: 0.01 });
+
+    return {
+      name: "§6Frozen Perfection",
+      desc: [
+        `§7Gain §a+${round(this.level * mult, 1)} §5${SYMBOLS.pristine} Pristine §7for every §bFrozen Corpse §7you've looted in the current §bGlacite Mineshaft§7.`,
+      ],
+    };
+  }
+}
+
 class QuestionMark extends Pet {
   get stats() {
     return {};
@@ -3375,6 +4081,7 @@ class QuestionMark extends Pet {
 export const PET_STATS = {
   "???": QuestionMark,
   AMMONITE: Ammonite,
+  ANKYLOSAURUS: Ankylosaurus,
   ARMADILLO: Armadillo,
   BABY_YETI: BabyYeti,
   BAL: Bal,
@@ -3390,6 +4097,7 @@ export const PET_STATS = {
   FROST_WISP: Wisp,
   GLACIAL_WISP: Wisp,
   SUBZERO_WISP: Wisp,
+  EERIE: Eerie,
   ELEPHANT: Elephant,
   ENDER_DRAGON: EnderDragon,
   ENDERMAN: Enderman,
@@ -3397,11 +4105,14 @@ export const PET_STATS = {
   FLYING_FISH: FlyingFish,
   GHOUL: Ghoul,
   GIRAFFE: Giraffe,
+  GLACITE_GOLEM: GlaciteGolem,
+  GOBLIN: Goblin,
   GOLDEN_DRAGON: GoldenDragon,
   GOLEM: Golem,
   GRANDMA_WOLF: GrandmaWolf,
   GRIFFIN: Griffin,
   GUARDIAN: Guardian,
+  FRACTURED_MONTEZUMA_SOUL: Montezuma,
   HORSE: Horse,
   HOUND: Hound,
   JELLYFISH: Jellyfish,
@@ -3409,32 +4120,40 @@ export const PET_STATS = {
   KUUDRA: Kuudra,
   LION: Lion,
   MAGMA_CUBE: MagmaCube,
+  MAMMOTH: Mammoth,
   MEGALODON: Megalodon,
   MITHRIL_GOLEM: MithrilGolem,
   MONKEY: Monkey,
+  MOLE: Mole,
   MOOSHROOM_COW: MooshroomCow,
   OCELOT: Ocelot,
+  OWL: Owl,
   PARROT: Parrot,
+  PENGUIN: Penguin,
   PHOENIX: Phoenix,
   PIG: Pig,
   PIGMAN: Pigman,
   RABBIT: Rabbit,
   RAT: Rat,
   REINDEER: Reindeer,
+  RIFT_FERRET: RiftFerret,
   ROCK: Rock,
   SCATHA: Scatha,
   SHEEP: Sheep,
   SILVERFISH: Silverfish,
+  SLUG: Slug,
   SKELETON_HORSE: SkeletonHorse,
   SKELETON: Skeleton,
   SNAIL: Snail,
   SNOWMAN: Snowman,
   SPIDER: Spider,
+  SPINOSAURUS: Spinosaurus,
   SPIRIT: Spirit,
   SQUID: Squid,
   TARANTULA: Tarantula,
   TIGER: Tiger,
   TURTLE: Turtle,
+  TYRANNOSAURUS: Tyrannosaurus,
   WITHER_SKELETON: WitherSkeleton,
   WOLF: Wolf,
   ZOMBIE: Zombie,

@@ -1,0 +1,8 @@
+{
+    "parent": "item/hplus_generated",
+    "textures": {
+        "layer0": "mcpatcher/cit/ui/achoo.png",
+        "layer1": "./mixin_glass",
+        "layer2": "./mushed_mushroom_mixin"
+    }
+}

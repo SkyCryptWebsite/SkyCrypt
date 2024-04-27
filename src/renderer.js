@@ -353,7 +353,7 @@ async function renderHead(textureId, scale) {
   ctx.drawImage(
     head_canvas,
     (scale * 20 - scale * 20 * hat_factor) / 2,
-    (scale * 18.5 - scale * 18.5 * hat_factor) / 2
+    (scale * 18.5 - scale * 18.5 * hat_factor) / 2,
   );
   ctx.drawImage(hat_canvas, 0, 0);
 

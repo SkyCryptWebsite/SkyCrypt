@@ -3,21 +3,11 @@ export const BLOCKED_PLAYERS = [
   "20934ef9488c465180a78f861586b4cf", // Minikloon (Admin)
   "f025c1c7f55a4ea0b8d93f47d17dfe0f", // Plancke (Admin)
   "c552c04a40fb4a17bf549a031b3ab1a1", // LandonHP (Admin)
+  "fc7e31ef7bfe41e7aa5d7e2db14bedd0", // Kazius1 (Admin)
 ];
-
-// Number of kills required for each level of expertise
-export const EXPERTISE_KILLS_LADDER = [50, 100, 250, 500, 1000, 2500, 5500, 10000, 15000];
 
 // Walking distance required for each rarity level of the prehistoric egg
 export const PREHISTORIC_EGG_BLOCKS_WALKED_LADDER = [4000, 10000, 20000, 40000, 100000];
-
-// Number of S runs required for each level of hecatomb
-export const hecatomb_s_runs_ladder = [2, 5, 10, 20, 30, 40, 60, 80, 100];
-
-// xp required for each level of champion
-export const champion_xp_ladder = [50000, 100000, 250000, 500000, 1000000, 1500000, 2000000, 2500000, 3000000];
-
-export const cultivating_crops_ladder = [1000, 5000, 25000, 100000, 300000, 1500000, 5000000, 20000000, 100000000];
 
 // api names and their max value from the profile upgrades
 export const PROFILE_UPGRADES = {
@@ -85,11 +75,6 @@ export const SLAYER_COST = {
   5: 100000,
 };
 
-export const MOB_MOUNTS = {
-  sea_emperor: ["guardian_emperor", "skeleton_emperor"],
-  monster_of_the_deep: ["zombie_deep", "chicken_deep"],
-};
-
 export const MOB_NAMES = {
   pond_squid: "Squid",
   unburried_zombie: "Crypt Ghoul",
@@ -110,40 +95,14 @@ export const MOB_NAMES = {
   pig_rider: "Taurus",
 };
 
-export const RACE_OBJECTIVE_TO_STAT_NAME = {
-  complete_the_end_race: "end_race_best_time",
-  complete_the_woods_race: "foraging_race_best_time",
-  complete_the_chicken_race: "chicken_race_best_time_2",
-  complete_the_giant_mushroom_anything_with_return_race: "dungeon_hub_giant_mushroom_anything_with_return_best_time",
-  complete_the_giant_mushroom_no_pearls_with_return_race: "dungeon_hub_giant_mushroom_no_pearls_with_return_best_time",
-  complete_the_giant_mushroom_no_abilities_with_return_race:
-    "dungeon_hub_giant_mushroom_no_abilities_with_return_best_time",
-  complete_the_giant_mushroom_nothing_with_return_race: "dungeon_hub_giant_mushroom_nothing_with_return_best_time",
-  complete_the_precursor_ruins_anything_with_return_race: "dungeon_hub_precursor_ruins_anything_with_return_best_time",
-  complete_the_precursor_ruins_no_pearls_with_return_race:
-    "dungeon_hub_precursor_ruins_no_pearls_with_return_best_time",
-  complete_the_precursor_ruins_no_abilities_with_return_race:
-    "dungeon_hub_precursor_ruins_no_abilities_with_return_best_time",
-  complete_the_precursor_ruins_nothing_with_return_race: "dungeon_hub_precursor_ruins_nothing_with_return_best_time",
-  complete_the_crystal_core_anything_with_return_race: "dungeon_hub_crystal_core_anything_with_return_best_time",
-  complete_the_crystal_core_no_pearls_with_return_race: "dungeon_hub_crystal_core_no_pearls_with_return_best_time",
-  complete_the_crystal_core_no_abilities_with_return_race:
-    "dungeon_hub_crystal_core_no_abilities_with_return_best_time",
-  complete_the_crystal_core_nothing_with_return_race: "dungeon_hub_crystal_core_nothing_with_return_best_time",
-  complete_the_giant_mushroom_anything_no_return_race: "dungeon_hub_giant_mushroom_anything_no_return_best_time",
-  complete_the_giant_mushroom_no_pearls_no_return_race: "dungeon_hub_giant_mushroom_no_pearls_no_return_best_time",
-  complete_the_giant_mushroom_no_abilities_no_return_race:
-    "dungeon_hub_giant_mushroom_no_abilities_no_return_best_time",
-  complete_the_giant_mushroom_nothing_no_return_race: "dungeon_hub_giant_mushroom_nothing_no_return_best_time",
-  complete_the_precursor_ruins_anything_no_return_race: "dungeon_hub_precursor_ruins_anything_no_return_best_time",
-  complete_the_precursor_ruins_no_pearls_no_return_race: "dungeon_hub_precursor_ruins_no_pearls_no_return_best_time",
-  complete_the_precursor_ruins_no_abilities_no_return_race:
-    "dungeon_hub_precursor_ruins_no_abilities_no_return_best_time",
-  complete_the_precursor_ruins_nothing_no_return_race: "dungeon_hub_precursor_ruins_nothing_no_return_best_time",
-  complete_the_crystal_core_anything_no_return_race: "dungeon_hub_crystal_core_anything_no_return_best_time",
-  complete_the_crystal_core_no_pearls_no_return_race: "dungeon_hub_crystal_core_no_pearls_no_return_best_time",
-  complete_the_crystal_core_no_abilities_no_return_race: "dungeon_hub_crystal_core_no_abilities_no_return_best_time",
-  complete_the_crystal_core_nothing_no_return_race: "dungeon_hub_crystal_core_nothing_no_return_best_time",
+export const RACE_NAMES = {
+  crystal_core: "Crystal Core",
+  giant_mushroom: "Giant Mushroom",
+  precursor_ruins: "Precursor Ruins",
+  foraging_race: "Foraging",
+  end_race: "End",
+  chicken_race_2: "Chicken",
+  rift_race: "Rift",
 };
 
 export const AREA_NAMES = {
@@ -164,6 +123,8 @@ export const AREA_NAMES = {
   instanced: "Kuudra's End",
   garden: "The Garden",
   rift: "Rift",
+  kuudra: "Kuudra's Hollow",
+  mineshaft: "Glacite Mineshaft",
 };
 
 export const COLOR_NAMES = {
@@ -342,18 +303,10 @@ export const EXPERIMENTS = {
 
 export const MAX_FAVORITES = 10;
 
-export const INCREASE_MOST_STATS_EXCLUDE = [
-  "mining_speed",
-  "mining_fortune",
-  "farming_fortune",
-  "foraging_fortune",
-  "pristine",
-];
-
 export const FAIRY_SOULS = {
   max: {
-    normal: 240,
-    stranded: 3,
+    normal: 247,
+    stranded: 4,
   },
 };
 
@@ -394,30 +347,30 @@ export const ESSENCE = {
   },
 };
 
-export const STAT_MAPPINGS = {
+export const CENTURY_CAKE_STATS = {
   walk_speed: "speed",
 };
 
 export const KUUDRA_TIERS = {
   none: {
     name: "Basic",
-    head: "bfd3e71838c0e76f890213120b4ce7449577736604338a8d28b4c86db2547e71",
+    head: "/head/bfd3e71838c0e76f890213120b4ce7449577736604338a8d28b4c86db2547e71",
   },
   hot: {
     name: "Hot",
-    head: "c0259e8964c3deb95b1233bb2dc82c986177e63ae36c11265cb385180bb91cc0",
+    head: "/head/c0259e8964c3deb95b1233bb2dc82c986177e63ae36c11265cb385180bb91cc0",
   },
   burning: {
     name: "Burning",
-    head: "330f6f6e63b245f839e3ccdce5a5f22056201d0274411dfe5d94bbe449c4ece",
+    head: "/head/330f6f6e63b245f839e3ccdce5a5f22056201d0274411dfe5d94bbe449c4ece",
   },
   fiery: {
     name: "Fiery",
-    head: "bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06",
+    head: "/head/bd854393bbf9444542502582d4b5a23cc73896506e2fc739d545bc35bc7b1c06",
   },
   infernal: {
     name: "Infernal",
-    head: "82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
+    head: "/head/82ee25414aa7efb4a2b4901c6e33e5eaa705a6ab212ebebfd6a4de984125c7a0",
   },
 };
 
@@ -628,6 +581,11 @@ export const ESSENCE_SHOP = {
       description: "Gain 1-10% extra Gifts from the Gift Attack event.",
       maxLevel: 10,
     },
+    drake_piper: {
+      name: "Drake Piper",
+      description: "Increases the chance to spawn a Reindrake by 10% while fishing on Jerry's Workshop.",
+      maxLevel: 1,
+    },
   },
   crimson: {
     strongarm_kuudra: {
@@ -672,10 +630,125 @@ export const ESSENCE_SHOP = {
       maxLevel: 5,
     },
   },
+  gold: {
+    heart_of_gold: {
+      name: "Heart of Gold",
+      description: "Increases Healer class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    treasures_of_the_earth: {
+      name: "Treasure of the Earth",
+      description: "Increases your chances of spawning a Worm or Scatha when mining Hard Stone by 2-10%.",
+      maxLevel: 5,
+    },
+    dwarven_training: {
+      name: "Dwarven Training",
+      description: "Increases your Mining Wisdom by 3-10 while on Mining Islands.",
+      maxLevel: 3,
+    },
+    unbreaking: {
+      name: "Unbreaking",
+      description: "Increases your Vitality by 2-10.",
+      maxLevel: 5,
+    },
+    eager_miner: {
+      name: "Eager Miner",
+      description: "Increases your Mining Speed by 10-100 while on Mining Islands.",
+      maxLevel: 10,
+    },
+    midas_lure: {
+      name: "Midas Lure",
+      description: "Increases your chances of fishing up a Golden Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+  },
+  diamond: {
+    radiant_fisher: {
+      name: "Radiant Fisher",
+      description: "Increases your chances of fishing up a Diamond Trophy Fish in the Crimson Isle by 2-20%.",
+      maxLevel: 10,
+    },
+    diamond_in_the_rough: {
+      name: "Diamond in the Rough",
+      description: "Increases Tank class experience gain by 2-10%.",
+      maxLevel: 5,
+    },
+    rhinestone_infusion: {
+      name: "Rhinestone Infusion",
+      description: "Adds 1 Breaking Power to all Diamond Pickaxes.",
+      maxLevel: 1,
+    },
+    under_pressure: {
+      name: "Under Pressure",
+      description: "Increase your Strength by 5-25 while on Mining Islands.",
+      maxLevel: 5,
+    },
+    high_roller: {
+      name: "High Roller",
+      description: "Gain 1 extra random drop when obtaining a Crystal Nucleus Bundle.",
+      maxLevel: 1,
+    },
+    return_to_sender: {
+      name: "Return to Sender",
+      description: "Increases the chances of a Diamond Goblin spawning by 10-100%.",
+      maxLevel: 10,
+    },
+  },
 };
 
 export const BANK_COOLDOWN = {
   1: "20 minutes",
   2: "5 minutes",
   3: "None",
+};
+
+export const SLAYER_INFO = {
+  zombie: {
+    name: "Revenant Horror",
+    head: "/head/1fc0184473fe882d2895ce7cbc8197bd40ff70bf10d3745de97b6c2a9c5fc78f",
+  },
+  spider: {
+    name: "Tarantula Broodfather",
+    head: "/head/9d7e3b19ac4f3dee9c5677c135333b9d35a7f568b63d1ef4ada4b068b5a25",
+  },
+  wolf: {
+    name: "Sven Packmaster",
+    head: "/head/f83a2aa9d3734b919ac24c9659e5e0f86ecafbf64d4788cfa433bbec189e8",
+  },
+  enderman: {
+    name: "Voidgloom Seraph",
+    head: "/head/1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e",
+  },
+  blaze: {
+    name: "Inferno Demonlord",
+    head: "/head/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b",
+  },
+  vampire: {
+    name: "Riftstalker Bloodfiend",
+    head: "/head/5aa29ea961757dc3c90bfabf302c5abe9d308fb4a7d3864e5788ad2cc9160aa2",
+  },
+};
+
+export const MILESTONE_RARITIES = ["common", "uncommon", "rare", "epic", "legendary"];
+
+export const PET_MILESTONES = {
+  sea_creatures_killed: [250, 1000, 2500, 5000, 10000],
+  ores_mined: [2500, 7500, 20000, 100000, 250000],
+};
+
+export const ENCHANTMENT_LADDERS = {
+  // Number of S runs required for each level of hecatomb
+  hecatomb_s_runs: [2, 5, 10, 20, 30, 40, 60, 80, 100],
+
+  // Number of xp required for each level of champion
+  champion_xp: [50000, 100000, 250000, 500000, 1000000, 1500000, 2000000, 2500000, 3000000],
+
+  // Number of crops harvested for each level of cultivating crops
+  cultivating_crops: [1000, 5000, 25000, 100000, 300000, 1500000, 5000000, 20000000, 100000000],
+
+  // Number of kills required for each level of expertise
+  expertise_kills: [50, 100, 250, 500, 1000, 2500, 5500, 10000, 15000],
+
+  // Number of ores mined required for each level of compact ores
+  compact_ores: [100, 500, 1500, 5000, 15000, 50000, 150000, 500000, 1000000],
 };

@@ -4,6 +4,7 @@ import express from "express";
 
 import { tableify } from "../api.js";
 import { db } from "../../mongo.js";
+import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -17,17 +18,18 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
     const userProfile = profile.members[uuid];
 
-    const items = await lib.getItems(userProfile, false, undefined, req.options);
+    const items = await getItems(userProfile, null, false, undefined, req.options);
 
-    const accessories = items.accessories
+    const accessories = items.accessories.accessories
       .filter((a) => a.isUnique)
       .map((a) => {
         return {
-          id: a.tag.ExtraAttributes.id,
+          id: helper.getId(a),
           rarity: a.rarity,
-          reforge: a.reforge,
-          name: a.base_name,
-          isActive: a.isInactive ? "false" : "true",
+          name: a.display_name,
+          recombobulated: a.recombobulated,
+          enrichment: a.enrichment,
+          isActive: !a.isInactive,
         };
       });
 

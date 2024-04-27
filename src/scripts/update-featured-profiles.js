@@ -7,7 +7,7 @@ const FEATURED_PROFILES = [
     // metalcupcake5
     uuid: "b44d2d5272dc49c28185b2d6a158d80a",
     type: "MAINTAINER",
-    message: "a dev or something idk",
+    message: "nyaaaa~ :3",
   },
   {
     // MartinNemi03
@@ -32,6 +32,18 @@ const FEATURED_PROFILES = [
     uuid: "d705483c5157460dad39712e4d74dfe1",
     type: "HOST",
     message: '<span class="stat-name">Last online: </span><span class="stat-value">January 1st, 1970</span>',
+  },
+  {
+    // WarpWing
+    uuid: "7d7b04b49c24433cacc60a3da66eba01",
+    type: "HOST",
+    message: "Grandmaster of Unit Testing",
+  },
+  {
+    // DuckySoLucky
+    uuid: "dec987bbfa734d63bb9d566139232f81",
+    type: "CONTRIBUTOR",
+    message: "btw i use arch",
   },
   {
     // LeaPhant
@@ -66,11 +78,11 @@ const FEATURED_PROFILES = [
 
       FEATURED_PROFILES[index].username = profile.display_name;
       FEATURED_PROFILES[index].emoji = profile?.emoji;
-    })
+    }),
   );
 
   const cachePath = helper.getCacheFolderPath(helper.getFolderPath());
   await fs.writeJson(helper.getCacheFilePath(cachePath, "json", "featured-profiles", "json"), FEATURED_PROFILES);
 
-  console.log("Featured profiles updated!");
+  // console.log("Featured profiles updated!");
 }

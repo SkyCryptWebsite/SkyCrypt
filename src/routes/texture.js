@@ -18,7 +18,7 @@ router.all("/:textureId", cors(), async (req, res, next) => {
       return;
     }
 
-    const texture = await getTexture(textureId);
+    const texture = getTexture(textureId);
 
     if (!texture) {
       handleError(res, new Error("texture not found"), 404);

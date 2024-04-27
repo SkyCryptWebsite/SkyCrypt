@@ -54,7 +54,34 @@ interface ProcessedTheme {
 
 declare function applyProcessedTheme(processedTheme: ProcessedTheme): void;
 
-declare const items: { [key: string]: (ItemSlot | Item | Backpack)[] };
+declare const items: {
+  accessories: {
+    accessories: (ItemSlot | Item | Backpack)[];
+  };
+  equipment: {
+    equipment: (ItemSlot | Item | Backpack)[];
+    set_name: string;
+    set_rarity: string;
+  };
+  armor: {
+    armor: (ItemSlot | Item | Backpack)[];
+    set_name: string;
+    set_rarity: string;
+  };
+  hotm: (ItemSlot | Item | Backpack)[];
+  inventory: (ItemSlot | Item | Backpack)[];
+  enderchest: (ItemSlot | Item | Backpack)[];
+  accessory_bag: (ItemSlot | Item | Backpack)[];
+  fishing_bag: (ItemSlot | Item | Backpack)[];
+  quiver: (ItemSlot | Item | Backpack)[];
+  potion_bag: (ItemSlot | Item | Backpack)[];
+  personal_vault: (ItemSlot | Item | Backpack)[];
+  wardrobe_inventory: (ItemSlot | Item | Backpack)[];
+  candy_bag: (ItemSlot | Item | Backpack)[];
+  storage: (ItemSlot | Item | Backpack)[];
+  bingo_card: (ItemSlot | Item | Backpack)[];
+  museum: (ItemSlot | Item | Backpack)[];
+};
 
 type StatName =
   | "health"
@@ -75,7 +102,21 @@ type StatName =
   | "mining_fortune"
   | "farming_fortune"
   | "foraging_fortune"
-  | "pristine";
+  | "pristine"
+  | "fishing_speed"
+  | "health_regen"
+  | "vitality"
+  | "mending"
+  | "combat_wisdom"
+  | "mining_wisdom"
+  | "farming_wisdom"
+  | "foraging_wisdom"
+  | "fishing_wisdom"
+  | "enchanting_wisdom"
+  | "alchemy_wisdom"
+  | "carpentry_wisdom"
+  | "runecrafting_wisdom"
+  | "social_wisdom";
 
 interface DisplayItem {
   display_name: string;
@@ -104,6 +145,7 @@ interface Item extends DisplayItem, ItemSlot {
   tag: ItemTag;
   texture_pack?: Pack;
   isInactive?: boolean;
+  containsItems: Item[];
 }
 
 interface ItemTag {
@@ -163,6 +205,7 @@ interface Level {
   levelWithProgress: number;
   rank?: number;
   unlockableLevelWithProgress: number;
+  maxExperience?: number;
 }
 
 declare namespace constants {
@@ -189,11 +232,14 @@ declare const calculated: SkyCryptPlayer & {
   };
   current_area: string;
   deaths: {
-    amount: number;
-    entityId: string;
-    entityName: string;
-    type: "deaths";
-  }[];
+    deaths: {
+      amount: number;
+      entity_id: string;
+      entity_name: string;
+      type: "deaths";
+    }[];
+    total: number;
+  };
   dungeons: {
     boss_collections: {
       [key: string]: {
@@ -251,9 +297,12 @@ declare const calculated: SkyCryptPlayer & {
       visited: boolean;
     };
     classes: {
-      [key: string]: {
-        current: boolean;
-        experience: Level;
+      selected_class: string;
+      classes: {
+        [key: string]: {
+          level: Level;
+          current: boolean;
+        };
       };
     };
     dungeonsWeight: number;
@@ -342,7 +391,7 @@ declare const calculated: SkyCryptPlayer & {
     progress: number;
     total: number;
   };
-  farming: {
+  farming?: {
     contests: {
       all_contests: {
         claimed: boolean;
@@ -385,31 +434,26 @@ declare const calculated: SkyCryptPlayer & {
     treasure: number;
     treasure_large: number;
   };
-  guild: {
-    created: number;
-    exp: number;
-    gid: string;
-    gm: string;
-    gmUser: SkyCryptPlayer;
-    last_updated: string;
-    level: number;
-    members: number;
-    name: string;
-    rank: string;
-    tag: string;
-  } | null;
   kills: {
-    amount: number;
-    entityId: string;
-    entityName: string;
-    type: "kills";
-  }[];
+    kills: {
+      amount: number;
+      entity_id: string;
+      entity_name: string;
+      type: "kills";
+    }[];
+    total: number;
+  };
   last_updated: SkyCryptRelativeTime;
   level_caps: {
     [key: string]: number;
   };
-  levels: {
-    [key: string]: Level;
+  skills: {
+    skills: {
+      [key: string]: Level;
+    };
+    averageSkillLevel: number;
+    averageSkillLevelWithoutProgress: number;
+    totalSkillXp: number;
   };
   members: SkyCryptPlayer[];
   mining: {
@@ -493,19 +537,52 @@ declare const calculated: SkyCryptPlayer & {
       most_winter_magma_damage_dealt: number;
       most_winter_snowballs_hit: number;
     };
+    uncategorized?: {
+      [key: string]: {
+        raw?: number;
+        formatted?: string;
+        maxed?: boolean;
+      };
+    };
+    effects: {
+      active: {
+        effect: string;
+        level: number;
+        modifiers: {
+          key: string;
+          amp: number;
+        }[];
+        ticks_remaining: number;
+        infinite: boolean;
+      }[];
+      inactive: string[];
+      disabled: string[];
+    };
   };
-  missingPets: PetBase[];
-  missingAccessories: {
+  accessories: {
     [key in "missing" | "upgrades"]: DisplayItem[];
   };
   petScore: number;
   pet_bonus: {
     [key in StatName]?: number;
   };
-  pet_score_bonus: {
-    [key in StatName]?: number;
+  pets: {
+    pets: Pet[];
+    missing: PetBase[];
+    pet_score: {
+      total: number;
+      amount: number;
+      bonus: {
+        magic_find: number;
+      };
+    };
+    amount_pets: number;
+    total_pets: number;
+    total_pet_skins: number;
+    amount_pet_skins: number;
+    total_candy_used: number;
+    total_pet_xp: number;
   };
-  pets: Pet[];
   profile: Profile;
   profiles: {
     [key: string]: Profile & {
@@ -523,29 +600,32 @@ declare const calculated: SkyCryptPlayer & {
     zombie: number;
     blaze: number;
   };
-  slayer_xp: number;
-  slayers: {
-    [key in SlayerName]: {
-      boss_kills_tier_0?: number;
-      boss_kills_tier_1?: number;
-      boss_kills_tier_2?: number;
-      boss_kills_tier_3?: number;
-      claimed_levels: {
-        [key: string]: true;
+  slayer: {
+    slayers?: {
+      [key in SlayerName]: {
+        boss_kills_tier_0?: number;
+        boss_kills_tier_1?: number;
+        boss_kills_tier_2?: number;
+        boss_kills_tier_3?: number;
+        claimed_levels: {
+          [key: string]: true;
+        };
+        kills: {
+          [key: number]: number;
+        };
+        level: {
+          currentLevel: number;
+          maxLevel: number;
+          progress: number;
+          weight: { weight: number; weight_overflow: number };
+          xp: number;
+          xpForNext: number;
+        };
+        xp?: number;
       };
-      kills: {
-        [key: number]: number;
-      };
-      level: {
-        currentLevel: number;
-        maxLevel: number;
-        progress: number;
-        weight: { weight: number; weight_overflow: number };
-        xp: number;
-        xpForNext: number;
-      };
-      xp?: number;
     };
+    total_slayer_xp: number;
+    total_coins_spent: number;
   };
   social: {
     DISCORD: string;
@@ -571,8 +651,20 @@ declare const calculated: SkyCryptPlayer & {
     stat: string;
     amount: number;
   }[];
-  reaper_peppers_eaten: number;
   skyblock_level: Level;
+  bestiary?: {
+    categories: BestiaryCategory[];
+    tiersUnlocked: number;
+    totalTiers: number;
+    milestone: number;
+    maxMilestone: number;
+  };
+  harp_quest: {
+    [key: string]: number;
+  };
+  perks: {
+    [key: string]: number;
+  };
 };
 
 interface SkyCryptRelativeTime {
@@ -685,7 +777,13 @@ type BonusType =
   | "slayer_spider"
   | "slayer_wolf"
   | "slayer_enderman"
-  | "slayer_blaze";
+  | "slayer_blaze"
+  | "HOTM_perk_mining_speed"
+  | "HOTM_perk_mining_speed_2"
+  | "HOTM_perk_mining_fortune"
+  | "HOTM_perk_mining_fortune_2"
+  | "HOTM_perk_mining_madness"
+  | "HOTM_perk_mining_experience";
 
 type StatsBonus = {
   [key in BonusType]: StatBonusType;
@@ -695,4 +793,95 @@ interface StatBonusType {
   [key: string]: {
     [key in StatName]?: number;
   };
+}
+
+type ColorCode = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
+
+interface RarityColors {
+  [key: string]: ColorCode;
+}
+
+interface BestiaryCategory {
+  name: string;
+  texture: string;
+  mobs: BestiaryMob[];
+  mobsUnlocked: number;
+  mobsMaxed: number;
+}
+
+interface BestiaryMob {
+  name: string;
+  texture: string;
+  kills: number;
+  nextTierKills: number;
+  maxKills: number;
+  tier: number;
+  maxTier: number;
+}
+
+type HarpQuestSongs =
+  | "song_hymn_joy_best_completion"
+  | "song_frere_jacques_best_completion"
+  | "song_amazing_grace_best_completion"
+  | "song_brahms_best_completion"
+  | "song_happy_birthday_best_completion"
+  | "song_greensleeves_best_completion"
+  | "song_jeopardy_best_completion"
+  | "song_minuet_best_completion"
+  | "song_joy_world_best_completion"
+  | "song_pure_imagination_best_completion"
+  | "song_vie_en_rose_best_completion"
+  | "song_fire_and_flames_best_completion"
+  | "song_pachelbel_best_completion";
+
+type PotionEffectIDs =
+  | "true_defense"
+  | "strength"
+  | "regeneration"
+  | "enchanting_xp_boost"
+  | "stun"
+  | "experience"
+  | "rabbit"
+  | "magic_find"
+  | "water_breathing"
+  | "combat_xp_boost"
+  | "fire_resistance"
+  | "jump_boost"
+  | "resistance"
+  | "fishing_xp_boost"
+  | "agility"
+  | "archery"
+  | "critical"
+  | "speed"
+  | "farming_xp_boost"
+  | "adrenaline"
+  | "spelunker"
+  | "dodge"
+  | "spirit"
+  | "pet_luck"
+  | "mining_xp_boost"
+  | "haste"
+  | "burning"
+  | "mana"
+  | "foraging_xp_boost"
+  | "alchemy_xp_boost"
+  | "jerry_candy"
+  | "night_vision";
+
+type Guild = GuildResponse | null;
+
+interface GuildResponse {
+  guildMaster: {
+    uuid?: string;
+    username?: string;
+  };
+  level: number;
+  members: number;
+  name: string;
+  player: {
+    uuid: string;
+    username: string;
+    rank: string;
+  };
+  tag?: string;
 }

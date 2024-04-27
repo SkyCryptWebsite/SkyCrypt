@@ -210,7 +210,7 @@ export const PET_DATA = {
   SNOWMAN: {
     head: "/head/11136616d8c4a87a54ce78a97b551610c2b2c8f6d410bc38b858f974b113b208",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "⛄",
     subLore: "§7Fight alongside your pet Snowman!",
@@ -239,7 +239,7 @@ export const PET_DATA = {
   GUARDIAN: {
     head: "/head/221025434045bda7025b3e514b316a4b770c6faa4ba9adb4be3809526db77f9d",
     type: "enchanting",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🐡",
   },
@@ -274,7 +274,7 @@ export const PET_DATA = {
   SPIDER: {
     head: "/head/cd541541daaff50896cd258bdbdd4cf80c3ba816735726078bfe393927e57f1",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🕷️",
   },
@@ -367,14 +367,14 @@ export const PET_DATA = {
   TARANTULA: {
     head: "/head/8300986ed0a04ea79904f6ae53f49ed3a0ff5b1df62bba622ecbd3777f156df8",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🕸️",
   },
   BLACK_CAT: {
     head: "/head/e4b45cbaa19fe3d68c856cd3846c03b5f59de81a480eec921ab4fa3cd81317",
     type: "combat",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🐈‍⬛",
   },
@@ -397,7 +397,7 @@ export const PET_DATA = {
   MITHRIL_GOLEM: {
     head: "/head/c1b2dfe8ed5dffc5b1687bc1c249c39de2d8a6c3d90305c95f6d1a1a330a0b1",
     type: "mining",
-    maxTier: "legendary",
+    maxTier: "mythic",
     maxLevel: 100,
     emoji: "🗿",
   },
@@ -534,6 +534,105 @@ export const PET_DATA = {
     maxTier: "legendary",
     maxLevel: 100,
     emoji: "🦌",
+  },
+  RIFT_FERRET: {
+    head: "/head/b6b11399448260185da1d17e54c984515faab6d8585f00972451ec2b43d46f94",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦝",
+  },
+  FRACTURED_MONTEZUMA_SOUL: {
+    head: "/head/df656c06e8a5cb4692564ee21748bddec9d785d1834284aaa1439601bba47d6b",
+    name: {
+      default: "Montezuma",
+    },
+    type: "combat",
+    maxTier: "epic",
+    maxLevel: 100,
+    emoji: "💀",
+    ignoredInPetScoreCalculation: true,
+  },
+  EERIE: {
+    head: "/head/c3af70c6ff76ba48f24ee8a2063a5b50bbfabf409f4795248a292f8289f47c98",
+    type: "combat",
+    maxTier: "common",
+    maxLevel: 100,
+    emoji: "🕷️",
+  },
+  SLUG: {
+    head: "/head/7a79d0fd677b54530961117ef84adc206e2cc5045c1344d61d776bf8ac2fe1ba",
+    type: "farming",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐌",
+  },
+  OWL: {
+    head: "/head/da3216da54e7368fb40b721239ad95e07ef4f97d93f1c42ff319bab9a53882af",
+    type: "taming",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦉",
+    passivePerks: true,
+  },
+  TYRANNOSAURUS: {
+    head: "/head/93f28ec96df59c67e9d2fc2e7e3d055fa31646e4111add9fe26a692801964126",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦖",
+    name: {
+      default: "T-Rex",
+    },
+  },
+  SPINOSAURUS: {
+    head: "/head/d3c9d479471a2f13f22548315159591720992e70c920fef83a901b7186720e3c",
+    type: "fishing",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦖",
+  },
+  GOBLIN: {
+    head: "/head/7309d8dc35a638a04b915a3b15a1452ceeae0d7ea42bcdadb21b03046987515c",
+    type: "mining",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "👺",
+  },
+  ANKYLOSAURUS: {
+    head: "/head/c1aa836b9096c417903299a6c5ab41738c19648ac439fed4bcbe6c32605338dc",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦖",
+  },
+  PENGUIN: {
+    head: "/head/37534e97f36e5a8335928e171ec99608bee7fb16e260afb301025b3b17eeefc4",
+    type: "fishing",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐧",
+  },
+  MAMMOTH: {
+    head: "/head/6b10715732cd1fd49fa1b6187947c307dd4687105cf033840607f9d6234743ad",
+    type: "combat",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🐘",
+  },
+  MOLE: {
+    head: "/head/727baaafc09978d4bda73e16afdde85ec13b0f95ad989524c5fcaa717cf06b4a",
+    type: "mining",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🦡",
+  },
+  GLACITE_GOLEM: {
+    head: "/head/af132a6593876d3c377d503fd66eca3fb938743251f7b16a9870c60b7388c8a3",
+    type: "mining",
+    maxTier: "legendary",
+    maxLevel: 100,
+    emoji: "🗿",
   },
 };
 
@@ -842,7 +941,7 @@ export const PET_ITEMS = {
   },
   PET_ITEM_QUICK_CLAW: {
     name: "Quick Claw",
-    tier: "RARE",
+    tier: "EPIC",
     description: `§7Every 2 pet level you gain §6+1 ${SYMBOLS.mining_speed} Mining Speed §7and §6+1 §6${SYMBOLS.mining_fortune} Mining Fortune§7.`,
     statsPerLevel: {
       mining_speed: 0.5,
@@ -862,5 +961,43 @@ export const PET_ITEMS = {
     tier: "EPIC",
     description: `§7Grants §6+4 ${SYMBOLS.farming_fortune} Farming Fortune§7 for each Garden Level unlocked.`,
     // TODO: Add statsPerLevel once Garden data comes to the API
+  },
+  DEAD_CAT_FOOD: {
+    name: "Dead Cat Food",
+    tier: "RARE",
+    description: `§7Grants §a+30 ${SYMBOLS.rift_time} Rift Time §7and §b5 ${SYMBOLS.mana_regen} Mana Regen§7.`,
+    stats: {
+      rift_time: 30,
+      mana_regen: 5,
+    },
+  },
+  FOUR_EYED_FISH: {
+    name: "Four-Eyed Fish",
+    tier: "EPIC",
+    description: `§7Gain §6+2,000 Coins §7when digging up any §eGriffin Burrow§7.\n§7Grants §b+10 ${SYMBOLS.magic_find} Magic Find §7and §a+55 ${SYMBOLS.defense} Defense§7.`,
+    stats: {
+      magic_find: 10,
+      defense: 55,
+    },
+  },
+  PET_ITEM_BINGO_BOOSTER: {
+    name: "Bingo Booster",
+    tier: "EPIC",
+    description: "§7Double the efficiency of the §6Lucky Looting §7perk of your Bingo pet.",
+  },
+  BEJEWELED_COLLAR: {
+    name: "Bejeweled Collar",
+    tier: "RARE",
+    description: `§7Grants §6+25 ${SYMBOLS.mining_speed} Mining Speed §7and §6+10 ${SYMBOLS.mining_fortune} Mining Fortune§7.`,
+    stats: {
+      mining_speed: 25,
+      mining_fortune: 10,
+    },
+  },
+  UNCOMMON_PARTY_HAT: {
+    name: "Uncommon Party Hat",
+    tier: "UNCOMMON",
+    description:
+      "§7Adds particles matching your §c+ §7color to your pet and yourself, defaulting to red. §8Editable in Hypixel lobbies.",
   },
 };

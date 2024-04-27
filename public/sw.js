@@ -16,7 +16,7 @@ self.addEventListener("install", (event) => {
         }
       });
       await Promise.all(deletions);
-    })
+    }),
   );
 });
 
@@ -31,6 +31,6 @@ self.addEventListener("fetch", (event) => {
         }
         return response;
       });
-    })
+    }),
   );
 });

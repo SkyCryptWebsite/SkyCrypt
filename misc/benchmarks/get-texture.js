@@ -36,7 +36,8 @@ const suite = new Benchmark.Suite("custom-resources: getTexture", {
 
     const itemCompleteData = {
       benchmark_hz: event.target.hz,
-      hz_per_texture: event.target.hz / textureData.debug.processed_textures,
+      hz_per_texture:
+        textureData.debug.processed_textures !== 0 ? event.target.hz / textureData.debug.processed_textures : 0,
       processed_textures: textureData.debug.processed_textures,
     };
 
@@ -45,7 +46,7 @@ const suite = new Benchmark.Suite("custom-resources: getTexture", {
     console.log(
       `Hertz per texture: %s hz (Processed textures: %s) \r\n`,
       itemCompleteData.hz_per_texture.toFixed(2),
-      itemCompleteData.processed_textures
+      itemCompleteData.processed_textures,
     );
 
     completeData[itemId] = itemCompleteData;
@@ -64,7 +65,7 @@ const suite = new Benchmark.Suite("custom-resources: getTexture", {
       (
         Object.values(completeData).reduce((sum, { hz_per_texture }) => sum + hz_per_texture, 0) /
         Object.keys(completeData).length
-      ).toFixed(2)
+      ).toFixed(2),
     );
 
     process.exit();
@@ -92,7 +93,7 @@ for (const itemId of testItemIds) {
     async () => {
       await customResources.getTexture(testItems[itemId]);
     },
-    { async: true }
+    { async: true },
   );
 }
 

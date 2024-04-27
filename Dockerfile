@@ -6,6 +6,7 @@ RUN mkdir -p /skycrypt
 WORKDIR '/skycrypt'
 COPY . /skycrypt
 
+ENV COREPACK_ENABLE_STRICT=0
 RUN npm install -g pnpm
 RUN pnpm i
 

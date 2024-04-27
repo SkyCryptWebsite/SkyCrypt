@@ -1,0 +1,252 @@
+<%
+
+function formatDungeonStat(stat, type) {
+  switch (type) {
+    case "timestamp":
+      return moment(stat).fromNow();
+    case "elapsed_time":
+      return moment.duration(stat, "milliseconds").format("m:ss.SSS");
+    case "dungeon_class":
+      return helper.titleCase(stat);
+    default:
+      return helper.formatNumber(stat);
+  }
+}
+
+%>
+
+<div class="stat-container stat-dungeons">
+  <a class="stat-anchor" id="Dungeons"></a>
+  <h2 class="stat-header">Dungeons</h2>
+  <div class="stat-content">
+    <% if (!calculated.dungeons.catacombs?.visited) { %>
+      <p class="stat-raw-values">
+        <%= calculated.display_name %> hasn't entered a dungeon yet.
+      </p>
+    <% } else { %>
+      <div class="skill-bars">
+        <skill-component skill="catacombs" type="dungeon" icon="<%= skillItems.catacombs %>"></skill-component>
+
+        <skill-component skill="healer" type="dungeon_class" icon="<%= skillItems.healer %>"></skill-component>
+        <skill-component skill="mage" type="dungeon_class" icon="<%= skillItems.mage %>"></skill-component>
+        <skill-component skill="berserk" type="dungeon_class" icon="<%= skillItems.berserk %>"></skill-component>
+        <skill-component skill="archer" type="dungeon_class" icon="<%= skillItems.archer %>"></skill-component>
+        <skill-component skill="tank" type="dungeon_class" icon="<%= skillItems.tank %>"></skill-component>
+      </div>
+
+      <p class="stat-raw-values" style="margin: 20px 0;">
+        <!-- Selected Class-->
+        <span class="stat-name">Selected Class: </span>
+        <span class="stat-value"><%= helper.titleCase(calculated.dungeons.classes.selected_class) %></span>
+        <br>
+
+        <!-- Class XP-->
+        <% max = calculated.dungeons.classes.maxed ? "golden-text" : "" %>
+        <span data-tippy-content="
+          <span class='stat-name'>Total Class XP: </span><span class='stat-value'><%= Math.round(calculated.dungeons.classes.experience).toLocaleString() %></span>
+          <div class='tippy-explanation'>Total Class XP gained in Catacombs.</div>
+          <span class='stat-name'>Average Level: </span><span class='stat-value'><%= calculated.dungeons.classes.average_level_with_progress.toFixed(2) %></span>
+          <div class='tippy-explanation'>Average class level, includes progress to next level.</div>
+
+          <span class='stat-name'>Average Class Level without progress: </span><span class='stat-value'><%= calculated.dungeons.classes.average_level.toFixed(2) %></span>
+          <div class='tippy-explanation'>Average class level without including partial level progress.</div>">
+          <span class="stat-name <%= max %>">Class Average: </span>
+          <span class="stat-value <%= max %>"><%= calculated.dungeons.classes.average_level.toFixed(2) %></span>
+        </span>
+        <br>
+
+        <!-- Highest Floor Beaten (Normal) -->
+        <% max = calculated.dungeons.catacombs.highest_floor === "floor_7" ? "golden-text" : "" %>
+        <span class="stat-name <%= max %>">Highest Floor Beaten (normal): </span>
+        <span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.catacombs.highest_floor.replace("_", " ")) %></span>
+        <br>
+
+        <!-- Highest Floor Beaten (Master) -->
+        <% if (calculated.dungeons.master_catacombs?.highest_floor) { %>
+          <% max = calculated.dungeons.master_catacombs.highest_floor === "floor_7" ? "golden-text" : "" %>
+          <span class="stat-name <%= max %>">Highest Floor Beaten (master): </span>
+          <span class="stat-value <%= max %>"><%= helper.titleCase(calculated.dungeons.master_catacombs.highest_floor.replace("_", " ")) %></span>
+          <br>
+        <% } %>
+
+        <!--
+          <% // max = calculated.dungeons.journals.pages_collected === calculated.dungeons.journals.total_pages ? "golden-text" : "" %>
+          <span class="stat-name <%= // max %>">Journals Completed: </span>
+          <span class="stat-value <%= // max %>"><%= // calculated.dungeons.journals.journals_completed %></span>
+          <span class="grey-text"> (<%= // calculated.dungeons.journals.pages_collected %>/<%= // calculated.dungeons.journals.total_pages %>)</span>
+          <br>
+        -->
+
+        <!-- Secrets Found -->
+        <% const { floor_completions , secrets_found } = calculated.dungeons;
+        const secretsPerCompletion = (floor_completions && (secrets_found / floor_completions)).toFixed(2); %>
+        <span class="stat-name">Secrets Found: </span>
+        <span class="stat-value"><%= secrets_found.toLocaleString() %></span>
+        <span class="grey-text"> (<%= secretsPerCompletion %> S/R)</span>
+        <br>
+
+        <!-- Blood Mob Kills -->
+        <% if (calculated.bestiary) { %>
+          <% const bloodMobKills = calculated.bestiary.categories["catacombs"].mobs.find((mob) => mob.name === "Undead").kills %>
+
+          <span class="stat-name">Blood Mob Kills: </span>
+          <span class="stat-value"><%= bloodMobKills.toLocaleString() %></span>
+        <% } %>
+      </p>
+
+      <!-- Catacombs -->
+      <p class="stat-sub-header">Catacombs</p>
+      <div class="floor-containers narrow-info-container-wrapper">
+        <% for (let [id, floor] of Object.entries(calculated.dungeons.catacombs.floors)) { %>
+          <div class="narrow-info-container">
+            <div class="narrow-info-header">
+              <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
+              <span class="category-name"><%= floor.name.replace("_", " ") %></span>
+            </div>
+
+            <span>
+              <button class="stat-sub-header extender" aria-controls="floor-<%= id %>" aria-expanded="false">Floor Stats</button>
+              <div class="pieces extendable" id="floor-<%= id %>">
+                <% for (let [stat, value] of Object.entries(floor.stats)) { %>
+                  <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                  <span class="stat-value">
+                    <%= stat.startsWith("fastest_time") ? moment.duration(value, "milliseconds").format("m:ss.SSS") : helper.formatNumber(value) %>
+                   </span>
+                   <br>
+                <% } %>
+
+                <!-- The most Damage dealt on the floor -->
+                <% if (floor.most_damage) { %>
+                  <span class="stat-name">Most Damage: </span>
+                  <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
+                  <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
+                <% } %>
+              </div>
+
+              <!-- The best runs -->
+              <% if (floor.best_runs) { %>
+                <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
+                <div class="pieces extendable" id="runs-<%= id %>">
+                  <span class="stat-name">Grade:</span>
+                  <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
+                  <br>
+
+                  <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
+                    if (stat == "teammates") {
+                      continue;
+                    } %>
+
+                    <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                    <span class="stat-value" <%- stat == "timestamp" ? `data-tippy-content='<local-time timestamp="${value}"></local-time>'` : ""%>>
+                      <%= formatDungeonStat(value, stat) %>
+                    </span>
+                    <br>
+                  <% } %>
+                </div>
+              <% } %>
+            </span>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Master Catacombs -->
+      <% if (calculated.dungeons.master_catacombs !== undefined) { %>
+        <p class="stat-sub-header">Master Catacombs</p>
+
+        <% if (!calculated.dungeons.master_catacombs?.visited) { %>
+          <p class="stat-raw-values"><%= calculated.display_name %> hasn't completed any Master Catacombs floor yet.</p>
+        <% } else { %>
+          <div class="floor-containers narrow-info-container-wrapper">
+            <% for (let [id, floor] of Object.entries(calculated.dungeons.master_catacombs.floors)) { %>
+              <div class="narrow-info-container">
+                <div class="narrow-info-header">
+                  <div class="floor-icon" style="background-image: url(/head/<%= floor.icon_texture %>)"></div>
+                  <span><%= floor.name.replace("_", " ") %></span>
+                </div>
+
+                <span>
+                  <button class="stat-sub-header extender" aria-controls="floor-<%= id %>" aria-expanded="false">Floor Stats</button>
+                  <div class="pieces extendable" id="floor-<%= id %>">
+                    <% for (let [stat, value] of Object.entries(floor.stats)) { %>
+                      <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                      <span class="stat-value">
+                        <%= stat.startsWith("fastest_time") ? moment.duration(value, "milliseconds").format("m:ss.SSS") : helper.formatNumber(value) %>
+                      </span>
+                      <br>
+                    <% } %>
+
+                    <!-- The most Damage dealt on the floor -->
+                    <% if (floor.most_damage) { %>
+                      <span class="stat-name">Most Damage: </span>
+                      <span class="stat-value"><%= helper.formatNumber(floor.most_damage.value) %></span>
+                      <span class="stat-name">(<%= helper.titleCase(floor.most_damage.class) %>)</span>
+                    <% } %>
+                  </div>
+
+                  <!-- The best runs -->
+                  <% if (floor.best_runs) { %>
+                    <button class="stat-sub-header extender" aria-controls="runs-<%= id %>" aria-expanded="false">Best Run</button>
+                    <div class="pieces extendable" id="runs-<%= id %>">
+                      <span class="stat-name">Grade:</span>
+                      <span class="stat-value"><%= helper.calcDungeonGrade(floor.best_runs[floor.best_runs.length - 1]) %></span>
+                      <br>
+
+                      <% for (let [stat, value] of Object.entries(floor.best_runs[floor.best_runs.length - 1])) {
+                        if (stat == "teammates") {
+                          continue;
+                        } %>
+
+                        <span class="stat-name"><%= helper.capitalizeFirstLetter(stat.split("_").join(" ")) %>: </span>
+                        <span class="stat-value" <%- stat == "timestamp" ? `data-tippy-content='<local-time timestamp="${value}"></local-time>'` : ""%>>
+                          <%= formatDungeonStat(value, stat) %>
+                        </span>
+                        <br>
+                      <% } %>
+                    </div>
+                  <% } %>
+                </span>
+              </div>
+            <% } %>
+          </div>
+        <% } %>
+      <% } %>
+
+
+      <!-- Dungeon Collections -->
+      <!--
+        <% if (calculated.dungeons.unlocked_collections) { %>
+        <p class="stat-sub-header">Boss Collections</p>
+        <div class="collections">
+          <% for (let boss in calculated.dungeons.boss_collections) {
+            let collection = calculated.dungeons.boss_collections[boss];
+            let claimedTooltip = "";
+
+            if (collection.claimed.length > 0) {
+              claimedTooltip += '<span class="stat-name">Claimed items:</span>';
+              for (let item in collection.claimed) {
+                claimedTooltip += `<br><span class="stat-value">- ${collection.claimed[item]}</span>`;
+              }
+              claimedTooltip += '<br>';
+            }
+
+            if (collection.unclaimed > 0) {
+              claimedTooltip += `<span class="stat-name">Unclaimed items: </span><span class="stat-value">${collection.unclaimed}</span>`;
+            } %>
+
+            <div class="chip" <% if (claimedTooltip != "") { %>data-tippy-content="<%= claimedTooltip %>" <% } %>>
+              <div class="chip-icon-wrapper">
+                <div style="background-image:url('/head/<%= collection.texture %>')" class="item-icon custom-icon"></div>
+              </div>
+
+              <div class="chip-text">
+                <div class="collection-name <%= collection.maxed ? 'max-stat' : '' %>"><span class="stat-name"><%= collection.name %> </span><% if (collection.tier > 0) { %> <span class="stat-value"><%= collection.tier %></span> <% } %></div>
+                <div class="collection-amount"><span class="stat-name">Bosses killed: </span><span class="stat-value"><%= collection.killed.toLocaleString() %></span></div>
+              </div>
+            </div>
+         <% } %>
+        </div>
+      <% } %>
+      -->
+    <% } %>
+  </div>
+</div>

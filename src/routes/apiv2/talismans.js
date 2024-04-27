@@ -4,6 +4,7 @@ import express from "express";
 
 import { db } from "../../mongo.js";
 import { handleError } from "../apiv2.js";
+import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -24,12 +25,13 @@ router.get("/:player/:profile", async (req, res, next) => {
         continue;
       }
 
-      const items = await lib.getItems(singleProfile.members[profile.uuid], false, "", req.options);
+      const items = await getItems(singleProfile.members[profile.uuid], null, false, null, req.options);
       const accessories = items.accessories;
 
       output = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
+        selected: singleProfile.selected,
         accessories,
       };
     }
@@ -39,6 +41,7 @@ router.get("/:player/:profile", async (req, res, next) => {
       return;
     }
 
+    helper.sendMetric("endpoint_apiv2_talismans_profile_success");
     res.json(output);
   } catch (e) {
     next(e);
@@ -54,16 +57,18 @@ router.get("/:player", async (req, res, next) => {
     for (const singleProfile of allProfiles) {
       const userProfile = singleProfile.members[profile.uuid];
 
-      const items = await lib.getItems(userProfile, false, "", req.options);
+      const items = await getItems(userProfile, null, false, undefined, req.options);
       const accessories = items.accessories;
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
+        selected: singleProfile.selected,
         accessories,
       };
     }
 
+    helper.sendMetric("endpoint_apiv2_talismans_profile_success");
     res.json(output);
   } catch (e) {
     next(e);

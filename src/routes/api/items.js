@@ -4,6 +4,7 @@ import express from "express";
 
 import { tableify } from "../api.js";
 import { db } from "../../mongo.js";
+import { getItems } from "../../stats.js";
 
 const router = express.Router();
 
@@ -17,23 +18,26 @@ router.use(async (req, res, next) => {
     const { profile, uuid } = await lib.getProfile(db, req.player, req.profile, req.options);
     const userProfile = profile.members[uuid];
 
-    const items = await lib.getItems(userProfile, false, undefined, req.options);
+    const items = await getItems(userProfile, null, false, undefined, req.options);
 
-    const allItems = items.inventory.concat(items.enderchest);
-
-    for (const item of allItems) {
-      if (Array.isArray(item.containsItems)) {
-        allItems.push(...item.containsItems);
-      }
-    }
-
-    res.send(
-      tableify(
-        allItems
-          .filter((a) => helper.getId(a).length > 0)
-          .map((a) => [helper.getId(a), a.Count, a.display_name, a.rarity, a.type])
+    const allItems = items.allItems
+      .concat(
+        items.allItems
+          .filter((a) => a.containsItems)
+          .map((a) => a.containsItems)
+          .flat(),
       )
-    );
+      .filter((a) => a && helper.getId(a))
+      .map((a) => ({
+        id: helper.getId(a),
+        Count: a.Count,
+        display_name: a.display_name,
+        rarity: a.rarity,
+        type: a.type,
+        location: a.extra ? a.extra.source.toLowerCase() : undefined,
+      }));
+
+    res.send(tableify(allItems));
   } catch (e) {
     next(e);
   }

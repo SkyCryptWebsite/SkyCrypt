@@ -3,6 +3,7 @@ await import("./scripts/init-collections.js");
 await import("./scripts/init-custom-resources.js");
 
 await Promise.all([
+  import("./scripts/update-collections.js"),
   import("./scripts/cap-leaderboards.js"),
   import("./scripts/clear-favorite-cache.js"),
   import("./scripts/update-bazaar.js"),

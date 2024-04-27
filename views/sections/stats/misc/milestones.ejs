@@ -1,0 +1,26 @@
+<% if ('pet_milestones' in calculated.misc) { %>
+  <div class="category-header">
+    <div class="category-icon">
+      <div class="item-icon custom-icon" style="background-image: url(/head/93c8aa3fde295fa9f9c27f734bdbab11d33a2e43e855accd7465352377413b)"></div>
+    </div>
+    
+    <span class="category-name">Pet milestones</span>
+  </div>
+
+  <p class="stat-raw-values">
+    <% for (const [key, data] of Object.entries(calculated.misc.pet_milestones)) {
+      let tooltip = `<span class="stat-name">Pet: </span><span class="stat-value piece-${data.rarity}-fg">${ helper.capitalizeFirstLetter(data.rarity) }</span><br><span class="stat-name">Progress: </span>`;
+      if (data.progress === "100.00") {
+        tooltip += `<span class="stat-value golden-text">Maxed!</span>`;
+      } else {
+        tooltip += `<span class="stat-value percent">${data.progress}</span>`;
+      } %>
+
+      <span data-tippy-content='<%= tooltip %>'>
+        <span class="stat-name"><%= helper.titleCase(key.replaceAll("_", " ")) %>: </span>
+        <span class="stat-value"><%= data.amount.toLocaleString() %></span>
+      </span>
+      <br>
+    <% } %>
+  </p>
+<% } %>

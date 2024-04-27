@@ -14,14 +14,14 @@ router.use((req, res, next) => {
 router.get("/:player", async (req, res, next) => {
   try {
     const { profile, allProfiles } = await lib.getProfile(db, req.params.player, null, req.options);
+    const bingoProfile = await lib.getBingoProfile(db, req.params.player, req.options);
 
     const output = { profiles: {} };
 
     for (const singleProfile of allProfiles) {
       const userProfile = singleProfile.members[profile.uuid];
 
-      const items = await lib.getItems(userProfile, false, "", req.options);
-      const data = await lib.getStats(db, singleProfile, allProfiles, items, req.options);
+      const data = await lib.getStats(db, singleProfile, bingoProfile, allProfiles, [], req.options);
 
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
@@ -29,11 +29,11 @@ router.get("/:player", async (req, res, next) => {
         game_mode: singleProfile.game_mode,
         current: singleProfile.selected,
         raw: userProfile,
-        items,
         data,
       };
     }
 
+    helper.sendMetric("endpoint_apiv2_profile_success");
     res.json(output);
   } catch (e) {
     next(e);
