@@ -1,172 +1,203 @@
 # This CI Workflow was deployed and configured by WarpWing and Nate.
-name: CI/CD
+name: "CI/CD"
 
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+on: [push, pull_request, workflow_dispatch]
 
 env:
-  NODE_VERSION: "16.x"
+  NODE_VERSION: "16"
+  CONTAINER_REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  es-lint:
+  pnpm:
+    name: install dependencies (pnpm)
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        uses: actions/checkout@v3
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.3
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: Install node dependencies
         run: pnpm i
 
-      - name: es-lint
+  es-lint:
+    name: check linting (es-lint)
+    needs: [pnpm]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: Install node dependencies
+        run: pnpm i
+
+      - name: Check ESlint
         run: pnpm lint
 
   ejs-lint:
+    name: check linting (ejs-lint)
+    needs: [pnpm]
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        uses: actions/checkout@v3
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.3
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: Install node dependencies
         run: pnpm i
 
-      - name: ejs-lint
+      - name: Check ejs-lint
         run: pnpm lint:ejs
 
   prettier:
+    name: check format (prettier)
+    needs: [pnpm]
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        uses: actions/checkout@v3
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.3
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: Install node dependencies
         run: pnpm i
 
-      - name: prettier
+      - name: Check Prettier
         run: pnpm prettier
 
-  check-ts:
-    name: check typescript
+  typescript:
+    name: test compile (typescript)
+    needs: [es-lint, ejs-lint, prettier]
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        uses: actions/checkout@v3
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.3
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: Install node dependencies
         run: pnpm i
 
-      - name: tsc
+      - name: Compile TypeScript
         run: npx tsc -p public/resources/ts --noEmit
 
   rollup:
-    name: rollup
+    name: test compile (rollup)
+    needs: [es-lint, ejs-lint, prettier]
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        uses: actions/checkout@v3
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.3
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: Install node dependencies
         run: pnpm i
 
-      - name: rollup
+      - name: Compile Rollup
         run: pnpm rollup
 
-  build-scss:
-    name: build scss
+  scss:
+    name: test compile (scss)
+    needs: [es-lint, ejs-lint, prettier]
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+        uses: actions/checkout@v3
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.3
+        uses: pnpm/action-setup@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: Install node dependencies
         run: pnpm i
 
-      - name: build scss
+      - name: Build SCSS
         run: pnpm scss
 
-  deploy-production:
-    name: deploy production
+  package-container:
+    name: package container
     if: |
-      github.ref == 'refs/heads/production'
+      (github.ref == 'refs/heads/production' || github.ref == 'refs/heads/development')
       && github.repository_owner == 'SkyCryptWebsite'
       && github.event_name != 'pull_request'
-    needs: [ejs-lint, check-ts, rollup, build-scss]
+    needs: [typescript, rollup, scss]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: SSH and deploy-production
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          port: ${{ secrets.VPS_PORT }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_KEY }}
-          script_stop: true
-          script: ~/deploy-production.sh
+      - name: Git checkout
+        uses: actions/checkout@v3
 
-  deploy-development:
-    name: deploy development
-    if: |
-      github.ref == 'refs/heads/development'
-      && github.repository_owner == 'SkyCryptWebsite'
-      && github.event_name != 'pull_request'
-    needs: [ejs-lint, check-ts, rollup, build-scss]
-    runs-on: ubuntu-latest
-    steps:
-      - name: SSH and deploy-development
-        uses: appleboy/ssh-action@master
+      - name: Registry login
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          host: ${{ secrets.VPS_HOST }}
-          port: ${{ secrets.VPS_PORT }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_KEY }}
-          script_stop: true
-          script: ~/deploy-development.sh
+          registry: ${{ env.CONTAINER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
