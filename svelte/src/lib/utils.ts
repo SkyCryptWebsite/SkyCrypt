@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
+import { format } from "numerable";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -50,4 +51,29 @@ export const flyAndScale = (node: Element, params: FlyAndScaleParams = { y: -8, 
     },
     easing: cubicOut
   };
+};
+
+export const formatNumber = (num: number | string): string => {
+  // if the number is a string, parse it to a number
+  if (typeof num === "string") {
+    num = parseFloat(num);
+  }
+  // get the second digit
+  const secondDigit = num.toString().charAt(1);
+  // get the third digit
+  const thirdDigit = num.toString().charAt(2);
+  let formatPattern: string;
+  if (secondDigit === "0" && thirdDigit === "0") {
+    formatPattern = "0a";
+  } else if (secondDigit !== "0" && thirdDigit === "0") {
+    formatPattern = "0.0a";
+  } else {
+    formatPattern = "0.00a";
+  }
+  // if number is in trillions, billions, millions, thousands, format it to 1 decimal place if the decimal is 0, otherwise format it to 0 decimal places
+  if (num >= 1000000) {
+    return format(num, formatPattern);
+  } else {
+    return format(num, "0a");
+  }
 };
