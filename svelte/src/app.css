@@ -107,11 +107,7 @@
     --§f: #ffffff;
   }
 
-  .light,
-  .light .nice-colors-auto,
-  .nice-colors-dark,
-  .piece,
-  *::-webkit-scrollbar-thumb {
+  .nice-colors-dark {
     /* these colors look nice and have significant contrast with white */
     --§0: #000000;
     --§1: #0b277a;
@@ -150,8 +146,7 @@
     --§f: #fcf0f5;
   }
 
-  :not(.light),
-  :not(.light) .nice-colors-auto,
+  .nice-colors-auto,
   .nice-colors-light {
     /* these colors look nice and have significant contrast with black */
     --§0: #6e6e6e;
@@ -170,5 +165,15 @@
     --§d: #fd64de;
     --§e: #f2f267;
     --§f: #ffffff;
+  }
+}
+
+@layer utilities {
+  .shine {
+    @apply overflow-hidden;
+  }
+
+  .shine::before {
+    @apply absolute inset-0 z-[8] -translate-y-full transform animate-shine bg-gradient-to-t from-[rgba(255,255,255,0)] via-[rgba(255,255,255,0.5)] to-[rgba(128,186,232,0)] content-[''];
   }
 }
