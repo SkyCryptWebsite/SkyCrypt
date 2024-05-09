@@ -33,7 +33,7 @@ router.get("/:player/:profile", async (req, res, next) => {
       output = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
-        selected: profile.selected,
+        selected: singleProfile.selected,
         dungeons: dungeonData,
       };
     }
@@ -58,7 +58,7 @@ router.get("/:player", async (req, res, next) => {
       output.profiles[singleProfile.profile_id] = {
         profile_id: singleProfile.profile_id,
         cute_name: singleProfile.cute_name,
-        selected: profile.selected,
+        selected: singleProfile.selected,
         dungeons: dungeonData,
       };
     }
