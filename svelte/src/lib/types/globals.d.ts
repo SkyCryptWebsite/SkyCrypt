@@ -83,40 +83,7 @@ declare const items: {
   museum: (ItemSlot | Item | Backpack)[];
 };
 
-type StatName =
-  | "health"
-  | "defense"
-  | "strength"
-  | "speed"
-  | "crit_chance"
-  | "crit_damage"
-  | "intelligence"
-  | "bonus_attack_speed"
-  | "sea_creature_chance"
-  | "magic_find"
-  | "pet_luck"
-  | "true_defense"
-  | "ferocity"
-  | "ability_damage"
-  | "mining_speed"
-  | "mining_fortune"
-  | "farming_fortune"
-  | "foraging_fortune"
-  | "pristine"
-  | "fishing_speed"
-  | "health_regen"
-  | "vitality"
-  | "mending"
-  | "combat_wisdom"
-  | "mining_wisdom"
-  | "farming_wisdom"
-  | "foraging_wisdom"
-  | "fishing_wisdom"
-  | "enchanting_wisdom"
-  | "alchemy_wisdom"
-  | "carpentry_wisdom"
-  | "runecrafting_wisdom"
-  | "social_wisdom";
+type StatName = "health" | "defense" | "strength" | "speed" | "crit_chance" | "crit_damage" | "intelligence" | "bonus_attack_speed" | "sea_creature_chance" | "magic_find" | "pet_luck" | "true_defense" | "ferocity" | "ability_damage" | "mining_speed" | "mining_fortune" | "farming_fortune" | "foraging_fortune" | "pristine" | "fishing_speed" | "health_regen" | "vitality" | "mending" | "combat_wisdom" | "mining_wisdom" | "farming_wisdom" | "foraging_wisdom" | "fishing_wisdom" | "enchanting_wisdom" | "alchemy_wisdom" | "carpentry_wisdom" | "runecrafting_wisdom" | "social_wisdom" | "effective_health" | "damage" | "damage_increase";
 
 interface DisplayItem {
   display_name: string;
@@ -760,30 +727,7 @@ type ItemStats = {
   [key in StatName]?: number;
 };
 
-type BonusType =
-  | "skill_farming"
-  | "skill_mining"
-  | "skill_combat"
-  | "skill_foraging"
-  | "skill_fishing"
-  | "skill_enchanting"
-  | "skill_alchemy"
-  | "skill_taming"
-  | "skill_dungeoneering"
-  | "skill_social"
-  | "skill_carpentry"
-  | "skill_runecrafting"
-  | "slayer_zombie"
-  | "slayer_spider"
-  | "slayer_wolf"
-  | "slayer_enderman"
-  | "slayer_blaze"
-  | "HOTM_perk_mining_speed"
-  | "HOTM_perk_mining_speed_2"
-  | "HOTM_perk_mining_fortune"
-  | "HOTM_perk_mining_fortune_2"
-  | "HOTM_perk_mining_madness"
-  | "HOTM_perk_mining_experience";
+type BonusType = "skill_farming" | "skill_mining" | "skill_combat" | "skill_foraging" | "skill_fishing" | "skill_enchanting" | "skill_alchemy" | "skill_taming" | "skill_dungeoneering" | "skill_social" | "skill_carpentry" | "skill_runecrafting" | "slayer_zombie" | "slayer_spider" | "slayer_wolf" | "slayer_enderman" | "slayer_blaze" | "HOTM_perk_mining_speed" | "HOTM_perk_mining_speed_2" | "HOTM_perk_mining_fortune" | "HOTM_perk_mining_fortune_2" | "HOTM_perk_mining_madness" | "HOTM_perk_mining_experience";
 
 type StatsBonus = {
   [key in BonusType]: StatBonusType;
@@ -819,54 +763,9 @@ interface BestiaryMob {
   maxTier: number;
 }
 
-type HarpQuestSongs =
-  | "song_hymn_joy_best_completion"
-  | "song_frere_jacques_best_completion"
-  | "song_amazing_grace_best_completion"
-  | "song_brahms_best_completion"
-  | "song_happy_birthday_best_completion"
-  | "song_greensleeves_best_completion"
-  | "song_jeopardy_best_completion"
-  | "song_minuet_best_completion"
-  | "song_joy_world_best_completion"
-  | "song_pure_imagination_best_completion"
-  | "song_vie_en_rose_best_completion"
-  | "song_fire_and_flames_best_completion"
-  | "song_pachelbel_best_completion";
+type HarpQuestSongs = "song_hymn_joy_best_completion" | "song_frere_jacques_best_completion" | "song_amazing_grace_best_completion" | "song_brahms_best_completion" | "song_happy_birthday_best_completion" | "song_greensleeves_best_completion" | "song_jeopardy_best_completion" | "song_minuet_best_completion" | "song_joy_world_best_completion" | "song_pure_imagination_best_completion" | "song_vie_en_rose_best_completion" | "song_fire_and_flames_best_completion" | "song_pachelbel_best_completion";
 
-type PotionEffectIDs =
-  | "true_defense"
-  | "strength"
-  | "regeneration"
-  | "enchanting_xp_boost"
-  | "stun"
-  | "experience"
-  | "rabbit"
-  | "magic_find"
-  | "water_breathing"
-  | "combat_xp_boost"
-  | "fire_resistance"
-  | "jump_boost"
-  | "resistance"
-  | "fishing_xp_boost"
-  | "agility"
-  | "archery"
-  | "critical"
-  | "speed"
-  | "farming_xp_boost"
-  | "adrenaline"
-  | "spelunker"
-  | "dodge"
-  | "spirit"
-  | "pet_luck"
-  | "mining_xp_boost"
-  | "haste"
-  | "burning"
-  | "mana"
-  | "foraging_xp_boost"
-  | "alchemy_xp_boost"
-  | "jerry_candy"
-  | "night_vision";
+type PotionEffectIDs = "true_defense" | "strength" | "regeneration" | "enchanting_xp_boost" | "stun" | "experience" | "rabbit" | "magic_find" | "water_breathing" | "combat_xp_boost" | "fire_resistance" | "jump_boost" | "resistance" | "fishing_xp_boost" | "agility" | "archery" | "critical" | "speed" | "farming_xp_boost" | "adrenaline" | "spelunker" | "dodge" | "spirit" | "pet_luck" | "mining_xp_boost" | "haste" | "burning" | "mana" | "foraging_xp_boost" | "alchemy_xp_boost" | "jerry_candy" | "night_vision";
 
 type Guild = GuildResponse | null;
 
@@ -887,54 +786,4 @@ interface GuildResponse {
 }
 
 // export everything
-export {
-  page,
-  extra,
-  Pack,
-  Theme,
-  ProcessedTheme,
-  applyProcessedTheme,
-  items,
-  StatName,
-  DisplayItem,
-  ItemSlot,
-  Item,
-  ItemTag,
-  ItemTagExtraAttributes,
-  ItemTagSkullOwner,
-  ItemTagCustomPotionEffects,
-  ItemTagEnch,
-  ItemTagDisplay,
-  Backpack,
-  Level,
-  constants,
-  calculated,
-  Profile,
-  Navigator,
-  NavigatorUAData,
-  NavigatorUABrandVersion,
-  UADataValues,
-  PlayerStats,
-  ItemStats,
-  BonusType,
-  StatsBonus,
-  ColorCode,
-  RarityColors,
-  BestiaryCategory,
-  BestiaryMob,
-  HarpQuestSongs,
-  PotionEffectIDs,
-  Guild,
-  GuildResponse,
-  SkyCryptRelativeTime,
-  SkyCryptPlayer,
-  PetBase,
-  Pet,
-  SlayerName,
-  redocInit,
-  StatBonusType,
-  ColorCode,
-  Profile,
-  calculated,
-  
-}
+export { page, extra, Pack, Theme, ProcessedTheme, applyProcessedTheme, items, StatName, DisplayItem, ItemSlot, Item, ItemTag, ItemTagExtraAttributes, ItemTagSkullOwner, ItemTagCustomPotionEffects, ItemTagEnch, ItemTagDisplay, Backpack, Level, constants, calculated, Profile, Navigator, NavigatorUAData, NavigatorUABrandVersion, UADataValues, PlayerStats, ItemStats, BonusType, StatsBonus, ColorCode, RarityColors, BestiaryCategory, BestiaryMob, HarpQuestSongs, PotionEffectIDs, Guild, GuildResponse, SkyCryptRelativeTime, SkyCryptPlayer, PetBase, Pet, SlayerName, redocInit, StatBonusType, ColorCode, Profile, calculated };
