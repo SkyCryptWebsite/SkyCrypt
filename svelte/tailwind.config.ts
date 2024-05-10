@@ -56,6 +56,9 @@ export default {
           "0%": { transform: "translateY(120%)" },
           "33%, 100%": { transform: "translateY(-120%)" }
         }
+      },
+      fontFamily: {
+        icomoon: ["icomoon"]
       }
     }
   },

@@ -166,6 +166,14 @@
     --§e: #f2f267;
     --§f: #ffffff;
   }
+
+  @font-face {
+    font-family: "icomoon";
+    src: url("/fonts/icomoon.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
 }
 
 @layer utilities {
