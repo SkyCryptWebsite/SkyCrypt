@@ -18,6 +18,7 @@
     "autoprefixer": "^10.4.16",
     "bits-ui": "^0.21.7",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "lucide-svelte": "^0.378.0",
     "numerable": "^0.3.15",
     "postcss": "^8.4.33",
