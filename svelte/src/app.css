@@ -169,7 +169,11 @@
 
   @font-face {
     font-family: "icomoon";
-    src: url("/fonts/icomoon.woff") format("woff");
+    src:
+      url("/fonts/icomoon.woff") format("woff"),
+      url("/fonts/icomoon.ttf") format("truetype"),
+      url("/fonts/icomoon.svg") format("svg"),
+      url("/fonts/icomoon.eot") format("embedded-opentype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
