@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
+import { fontFamily } from "tailwindcss/defaultTheme";
+
 export default {
   darkMode: ["class"],
   content: ["./src/**/*.{html,js,svelte,ts}"],
@@ -58,7 +60,7 @@ export default {
         }
       },
       fontFamily: {
-        icomoon: ["icomoon"]
+        icomoon: ["icomoon", ...fontFamily.sans]
       }
     }
   },
