@@ -785,5 +785,20 @@ interface GuildResponse {
   tag?: string;
 }
 
+type FullProfile = Profile & {
+  profile_id: string;
+  cute_name: string;
+  game_mode: string;
+  current: boolean;
+  raw: any;
+  data: typeof calculated;
+};
+
+type Profiles = {
+  profiles: {
+    [key: string]: FullProfile;
+  };
+};
+
 // export everything
-export { page, extra, Pack, Theme, ProcessedTheme, applyProcessedTheme, items, StatName, DisplayItem, ItemSlot, Item, ItemTag, ItemTagExtraAttributes, ItemTagSkullOwner, ItemTagCustomPotionEffects, ItemTagEnch, ItemTagDisplay, Backpack, Level, constants, calculated, Profile, Navigator, NavigatorUAData, NavigatorUABrandVersion, UADataValues, PlayerStats, ItemStats, BonusType, StatsBonus, ColorCode, RarityColors, BestiaryCategory, BestiaryMob, HarpQuestSongs, PotionEffectIDs, Guild, GuildResponse, SkyCryptRelativeTime, SkyCryptPlayer, PetBase, Pet, SlayerName, redocInit, StatBonusType, ColorCode, Profile, calculated };
+export { page, extra, Pack, Theme, ProcessedTheme, applyProcessedTheme, items, StatName, DisplayItem, ItemSlot, Item, ItemTag, ItemTagExtraAttributes, ItemTagSkullOwner, ItemTagCustomPotionEffects, ItemTagEnch, ItemTagDisplay, Backpack, Level, constants, Navigator, NavigatorUAData, NavigatorUABrandVersion, UADataValues, PlayerStats, ItemStats, BonusType, StatsBonus, ColorCode, RarityColors, BestiaryCategory, BestiaryMob, HarpQuestSongs, PotionEffectIDs, Guild, GuildResponse, SkyCryptRelativeTime, SkyCryptPlayer, PetBase, Pet, SlayerName, redocInit, StatBonusType, Profile, calculated, FullProfile, Profiles };
