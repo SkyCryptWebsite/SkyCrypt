@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { StatName } from "$lib/types/globals";
   import { cn, flyAndScale } from "$lib/utils";
-  import { format } from "numerable";
   import { Tooltip } from "bits-ui";
+  import { format } from "numerable";
+
   export let stat: string;
   export let statData: number;
 
