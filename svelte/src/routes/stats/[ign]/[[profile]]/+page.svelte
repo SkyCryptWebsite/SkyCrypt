@@ -6,20 +6,21 @@
   import type { PageData } from "./$types";
   import ExternalLink from "lucide-svelte/icons/external-link";
   import ChevronRight from "lucide-svelte/icons/chevron-right";
+  import Stat from "$lib/components/Stat.svelte";
 
   export let data: PageData;
 
-  // (async () => {
-  //   console.log((await data.user)?.profile);
-  // })();
+  (async () => {
+    console.log((await data.user)?.profile);
+  })();
 </script>
 
 {#await data.user then user}
   {#if user}
     {@const profile = user.profile}
     {#if profile}
-      <main class=" mx-auto p-8">
-        <div class="mb-5 mt-12 flex flex-wrap items-center gap-x-2 gap-y-3 text-4xl">
+      <main class="mx-auto space-y-5 p-8">
+        <div class="mt-12 flex flex-wrap items-center gap-x-2 gap-y-3 text-4xl">
           Stats for
           <div class="inline-flex items-center gap-2 rounded-full bg-[#7f7f7f33] px-4 py-2 align-middle text-3xl font-semibold">
             <div class="nice-colors-dark light dark relative flex items-center justify-center overflow-hidden rounded-full bg-minecraft-b px-2 py-1 text-xl">
@@ -46,7 +47,7 @@
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </div>
-        <div class="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
           <Button.Root class="rounded-full bg-icon/90 p-1 transition-opacity duration-150 hover:bg-icon">
             <Star class="size-5" />
           </Button.Root>
@@ -70,6 +71,12 @@
               <Skillbar skill={skillName} {skillData} />
             {/each}
           </div>
+        </div>
+
+        <div class="stats flex max-h-44 flex-col sm:flex-wrap">
+          {#each Object.entries(profile.data.stats) as [statName, statData]}
+            <Stat stat={statName} {statData} />
+          {/each}
         </div>
       </main>
     {/if}
