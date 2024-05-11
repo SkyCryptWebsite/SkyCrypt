@@ -83,6 +83,8 @@ declare const items: {
   museum: (ItemSlot | Item | Backpack)[];
 };
 
+type Rarity = "common" | "uncommon" | "rare" | "epic" | "legendary" | "mythic" | "divine" | "supreme" | "special" | "very_special" | "admin";
+
 type StatName = "health" | "defense" | "strength" | "speed" | "crit_chance" | "crit_damage" | "intelligence" | "bonus_attack_speed" | "sea_creature_chance" | "magic_find" | "pet_luck" | "true_defense" | "ferocity" | "ability_damage" | "mining_speed" | "mining_fortune" | "farming_fortune" | "foraging_fortune" | "pristine" | "fishing_speed" | "health_regen" | "vitality" | "mending" | "combat_wisdom" | "mining_wisdom" | "farming_wisdom" | "foraging_wisdom" | "fishing_wisdom" | "enchanting_wisdom" | "alchemy_wisdom" | "carpentry_wisdom" | "runecrafting_wisdom" | "social_wisdom" | "effective_health" | "damage" | "damage_increase";
 
 interface DisplayItem {
@@ -740,6 +742,7 @@ interface StatBonusType {
 }
 
 type ColorCode = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "a" | "b" | "c" | "d" | "e" | "f";
+type FormatCode = "k" | "l" | "m" | "n" | "o";
 
 interface RarityColors {
   [key: string]: ColorCode;
@@ -801,4 +804,4 @@ type Profiles = {
 };
 
 // export everything
-export { page, extra, Pack, Theme, ProcessedTheme, applyProcessedTheme, items, StatName, DisplayItem, ItemSlot, Item, ItemTag, ItemTagExtraAttributes, ItemTagSkullOwner, ItemTagCustomPotionEffects, ItemTagEnch, ItemTagDisplay, Backpack, Level, constants, Navigator, NavigatorUAData, NavigatorUABrandVersion, UADataValues, PlayerStats, ItemStats, BonusType, StatsBonus, ColorCode, RarityColors, BestiaryCategory, BestiaryMob, HarpQuestSongs, PotionEffectIDs, Guild, GuildResponse, SkyCryptRelativeTime, SkyCryptPlayer, PetBase, Pet, SlayerName, redocInit, StatBonusType, Profile, calculated, FullProfile, Profiles };
+export { Backpack, BestiaryCategory, BestiaryMob, BonusType, ColorCode, DisplayItem, FormatCode, FullProfile, Guild, GuildResponse, HarpQuestSongs, Item, ItemSlot, ItemStats, ItemTag, ItemTagCustomPotionEffects, ItemTagDisplay, ItemTagEnch, ItemTagExtraAttributes, ItemTagSkullOwner, Level, Navigator, NavigatorUABrandVersion, NavigatorUAData, Pack, Pet, PetBase, PlayerStats, PotionEffectIDs, ProcessedTheme, Profile, Profiles, Rarity, RarityColors, SkyCryptPlayer, SkyCryptRelativeTime, SlayerName, StatBonusType, StatName, StatsBonus, Theme, UADataValues, applyProcessedTheme, calculated, constants, extra, items, page, redocInit };
