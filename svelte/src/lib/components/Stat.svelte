@@ -197,7 +197,7 @@
 <div>
   <Tooltip.Root group="stats" openDelay={0} closeDelay={0}>
     <Tooltip.Trigger class={cn(`my-0 flex items-center gap-1 text-sm font-bold ${statIcons[stat].color}`, className)}>
-      <div class="font-icomoon inline-block text-base">{statIcons[stat].icon}</div>
+      <div class="inline-block font-icomoon text-base">{statIcons[stat].icon}</div>
       <span class="capitalize">{stat.replace(/_/g, " ")}</span>
       <span class="text-text">
         {format(statData)}{#if statIcons[stat].percent}%{/if}

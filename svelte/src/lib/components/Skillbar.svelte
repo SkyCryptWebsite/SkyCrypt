@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { formatNumber } from "$lib/tools";
   import type { Level } from "$lib/types/globals";
-  import { cn, flyAndScale, formatNumber } from "$lib/utils";
+  import { cn, flyAndScale } from "$lib/utils";
   import { Avatar, Progress, Tooltip } from "bits-ui";
   import BarChartHorizontal from "lucide-svelte/icons/bar-chart-horizontal";
   import { format } from "numerable";
@@ -32,7 +33,7 @@
       <Tooltip.Arrow />
       <div class="text-lg font-semibold text-text">
         <span class="text-text/80">Rank:</span>
-        #{skillData.rank}
+        {`#${skillData.rank}`}
       </div>
     </Tooltip.Content>
   </Tooltip.Root>

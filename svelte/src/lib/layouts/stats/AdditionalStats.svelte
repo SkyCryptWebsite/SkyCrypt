@@ -1,7 +1,7 @@
 <script lang="ts">
   import AdditionStat from "$lib/components/AdditionStat.svelte";
+  import { formatNumber } from "$lib/tools";
   import type { FullProfile } from "$lib/types/globals";
-  import { formatNumber } from "$lib/utils";
   import { format as dateFormat, formatDistanceToNowStrict } from "date-fns";
   import { format as numberFormat } from "numerable";
   import { getContext } from "svelte";

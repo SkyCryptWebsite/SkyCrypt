@@ -1,5 +1,6 @@
 import type { Profiles } from "$lib/types/globals";
 import type { PageServerLoad } from "./$types";
+
 const baseAPI = "https://sky.shiiyu.moe/api/v2/";
 
 export const load = (async ({ params, fetch }) => {

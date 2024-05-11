@@ -1,6 +1,7 @@
 <script lang="ts">
   import { cn, flyAndScale } from "$lib/utils";
   import { Tooltip } from "bits-ui";
+
   export let text: string;
   export let data: string;
   export let asterisk: boolean = false;

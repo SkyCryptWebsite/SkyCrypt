@@ -14,7 +14,7 @@ const config = {
     adapter: adapter(),
     csrf: {
       checkOrigin: true
-    },
+    }
   }
 };
 
