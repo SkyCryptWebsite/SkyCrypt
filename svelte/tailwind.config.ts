@@ -59,10 +59,18 @@ export default {
         }
       },
       fontFamily: {
-        icomoon: ["icomoon", ...fontFamily.sans]
+        icomoon: ["Montserrat", "icomoon", ...fontFamily.sans],
+        sans: ["Montserrat", ...fontFamily.sans]
       }
     }
   },
+
+  safelist: [
+    {
+      // safelist bg/text minecraft colors as they are dynamic
+      pattern: /^(bg|text)-minecraft-[0-9a-f]$/
+    }
+  ],
 
   plugins: [
     plugin(function ({ matchUtilities, theme }) {
