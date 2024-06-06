@@ -5,6 +5,7 @@
     "digitalbrainstem.javascript-ejs-support",
     "bierner.comment-tagged-templates",
     "runem.lit-plugin",
-    "j69.ejs-beautify"
+    "j69.ejs-beautify",
+    "EditorConfig.EditorConfig"
   ]
 }
