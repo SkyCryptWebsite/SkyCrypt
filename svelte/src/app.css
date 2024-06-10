@@ -1,0 +1,258 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@tailwind utilities;
+@tailwind components;
+@tailwind base;
+
+/* For preview to work you need to have the naumovs.color-highlight extension installed */
+
+@layer base {
+  :root,
+  .dark {
+    /* Icon Green (used for Skill Icons, Underlines etc.) */
+    --icon: 142 90% 42%;
+    /* Preview: hsl(142, 90%, 42%) */
+
+    /* Link Green (used for Links, Unclaimed Slayers, Crafted Minions etc.) */
+    --link: 139 91% 48%;
+    /* Preview: hsl(139, 91%, 48%) */
+
+    /* Hover Green (used only for link hovers) */
+    --hover: 147 93% 49%;
+    /* Preview:  hsl(147, 93%, 49%) */
+
+    /* Skill Bar Green (used for Skill Progress Bars) */
+    --skillbar: 146 88% 35%;
+    /* Preview: hsl(146, 88%, 35%) */
+
+    /* Maxed Bar Gold (used for Maxed Progress Bars) */
+    --maxedbar: 40 84% 44%;
+    /* Preview: hsl(40, 84%, 44%) */
+
+    /* Maxed Gold (used for Maxed things etc.) */
+    --maxed: 40 88% 46%;
+    /* Preview: hsl(40, 88%, 46%) */
+
+    /* Golden Text (used for Golden Text) */
+    --gold: 39 98% 61%;
+    /* Preview: hsl(39, 98%, 61%) */
+
+    /* Most of the text */
+    --text: 0 0% 100%;
+    /* Preview: hsl(0, 0%, 100%) */
+
+    /* background to make text more visible */
+    --background: 0 0% 0%;
+    /* Preview: hsl(0, 0%, 0%) */
+
+    /* background of the header */
+    --header: 0 0% 16%;
+    /* Preview: hsl(0, 0%, 16%) */
+
+    /* used for info box and theme/pack selector */
+    --grey_background: 0 0% 12%;
+    /* Preview: hsl(0, 0%, 12%) */
+
+    /* used for item lore */
+    --lore_background: #0f0f0fe6;
+
+    /* used when --bg can't be used */
+    --bg: #121212;
+
+    /* Header Logo */
+    --logo: url(/img/logo_square.svg);
+
+    /* Normal Background */
+    --bg: url(/img/bg.webp);
+
+    color-scheme: dark;
+  }
+
+  .light {
+    --text: 0 0% 0%;
+    /* Preview: hsl(0, 0%, 0%) */
+
+    --background: 0 0% 100%;
+    /* Preview: hsl(0, 0%, 100%) */
+
+    --header: 0 0% 86%;
+    /* Preview: hsl(0, 0%, 86%) */
+
+    --grey_background: 0 0% 89%;
+    /* Preview: hsl(0, 0%, 89%) */
+
+    --lore_background: #ffffffee;
+
+    --bg: 0 0% 100%;
+    /* Preview: hsl(0, 0%, 100%) */
+
+    color-scheme: light;
+  }
+
+  .true-colors {
+    /* Minecraft color codes */
+    --§0: #000000;
+    --§1: #0000aa;
+    --§2: #00aa00;
+    --§3: #00aaaa;
+    --§4: #aa0000;
+    --§5: #aa00aa;
+    --§6: #ffaa00;
+    --§7: #aaaaaa;
+    --§8: #555555;
+    --§9: #5555ff;
+    --§a: #55ff55;
+    --§b: #55ffff;
+    --§c: #ff5555;
+    --§d: #ff55ff;
+    --§e: #ffff55;
+    --§f: #ffffff;
+  }
+
+  .nice-colors-dark {
+    /* these colors look nice and have significant contrast with white */
+    --§0: #000000;
+    --§1: #0b277a;
+    --§2: #00aa00;
+    --§3: #038d8d;
+    --§4: #920909;
+    --§5: #a305a3;
+    --§6: #d88f07;
+    --§7: #636363;
+    --§8: #2f2f2f;
+    --§9: #4444f3;
+    --§a: #40bb40;
+    --§b: #33aec3;
+    --§c: #c43c3c;
+    --§d: #e668c6;
+    --§e: #efc721;
+    --§f: #929292;
+  }
+
+  .april-fools-2024 {
+    --§0: #ff1493;
+    --§1: #ff4500;
+    --§2: #ff00b3;
+    --§3: #ff2f7f;
+    --§4: #4c0b1d;
+    --§5: #e87da7;
+    --§6: #d95c8f;
+    --§7: #fd3995;
+    --§8: #c556b3;
+    --§9: #f5b0c7;
+    --§a: #f9d5e1;
+    --§b: #8f1f47;
+    --§c: #4c0b1d;
+    --§d: #b93e6d;
+    --§e: #ff69b4;
+    --§f: #fcf0f5;
+  }
+
+  .nice-colors-auto,
+  .nice-colors-light {
+    /* these colors look nice and have significant contrast with black */
+    --§0: #6e6e6e;
+    --§1: #3333ff;
+    --§2: #00b300;
+    --§3: #0cb9ac;
+    --§4: #b61e1e;
+    --§5: #eb17eb;
+    --§6: #ffaa00;
+    --§7: #b8b8b8;
+    --§8: #999999;
+    --§9: #7486f0;
+    --§a: #5bda5b;
+    --§b: #58d6ed;
+    --§c: #fb5858;
+    --§d: #fd64de;
+    --§e: #f2f267;
+    --§f: #ffffff;
+  }
+
+  @font-face {
+    font-family: "icomoon";
+    src: url("/fonts/icomoon/icomoon.eot");
+    src:
+      url("/fonts/icomoon/icomoon.eot#iefix") format("embedded-opentype"),
+      url("/fonts/icomoon/icomoon.ttf") format("truetype"),
+      url("/fonts/icomoon/icomoon.woff") format("woff"),
+      url("/fonts/icomoon/icomoon.svg#icomoon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+    unicode-range:
+      // ✪ dungeon-star
+      U+272A,
+      // ⍟ dungeon-master-star (no longer used)
+      U+235F,
+      // ⚔ attack-speed
+      U+2694,
+      // ☣ critical-chance
+      U+2623,
+      // ☠ critical-damage
+      U+2620,
+      // ❈ defense
+      U+2748,
+      // ☘ fortune
+      U+2618,
+      // ⫽ ferocity
+      U+2AFD,
+      // ❤ health
+      U+2764,
+      // ✎ intelligence
+      U+270E,
+      // ✯ magic-find
+      U+272F,
+      // ⸕ mining-speed
+      U+2E15,
+      // ♣ pet-luck
+      U+2663,
+      // ✧ pristine
+      U+2727,
+      // α sea-creature-chance
+      U+03B1,
+      // ✦ speed
+      U+2726,
+      // ❁ strength
+      U+2741,
+      // ๑ ability-damage
+      U+0E51,
+      // ➊ 1-dungeon-star
+      U+278A,
+      // ➋ 2-dungeon-star
+      U+278B,
+      // ➌ 3-dungeon-star
+      U+278C,
+      // ➍ 4-dungeon-star
+      U+278D,
+      // ➎ 5-dungeon-star
+      U+278E,
+      // ❂ true-defense,
+      U+2742,
+      // ⸎ soulflow
+      U+2E0E,
+      // ᠅ powder,
+      U+1805,
+      // ✿ dye,
+      U+273F,
+      // ⚚ dungeon-upgrade,
+      U+269A;
+  }
+}
+
+@layer utilities {
+  .shine {
+    @apply overflow-hidden;
+  }
+
+  .shine::before {
+    @apply absolute inset-0 z-[8] -translate-y-full transform animate-shine bg-gradient-to-t from-[rgba(255,255,255,0)] via-[rgba(255,255,255,0.5)] to-[rgba(128,186,232,0)] content-[''];
+  }
+
+  .enchanted {
+    filter: url(#enchanted-glint);
+  }
+  .enchanted-item {
+    filter: url(#enchanted-glint) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.4));
+  }
+}
