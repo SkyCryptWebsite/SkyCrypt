@@ -4,6 +4,7 @@
   import Skills from "$lib/layouts/stats/Skills.svelte";
   import Stats from "$lib/layouts/stats/Stats.svelte";
   import Armor from "$lib/sections/stats/Armor.svelte";
+  import Weapons from "$lib/sections/stats/Weapons.svelte";
   import type { FullProfile } from "$lib/types/globals";
   import { setContext } from "svelte";
 
@@ -20,6 +21,7 @@
   <Stats />
   <AdditionalStats />
   <Armor />
+  <Weapons />
 </main>
 
 <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" style="position: fixed;">
