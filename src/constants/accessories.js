@@ -85,7 +85,7 @@ const accessoryUpgrades = [
     "SMOOTH_CHOCOLATE_BAR", 
     "RICH_CHOCOLATE_CHUNK", 
     "GANACHE_CHOCOLATE_SLAB", 
-    "PRESTIGE_CHOCOLATE_REALM"
+    "PRESTIGE_CHOCOLATE_REALM",
   ],
 ];
 
