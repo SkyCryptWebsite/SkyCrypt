@@ -19,7 +19,7 @@ async function updateCollections() {
             return {
               id,
               name: collection.items[id].name,
-              texture: `/item/${id}`,
+              texture: `/item/${displayID(id)}`,
               maxTier: collection.items[id].maxTiers,
               tiers: collection.items[id].tiers,
             };
@@ -36,6 +36,24 @@ async function updateCollections() {
   }
 
   setTimeout(updateCollections, 1000 * 60 * 60 * 12);
+}
+
+function displayID(input) {
+  const replacements = {
+    "GLACITE": "PACKED_ICE", 
+    "SULPHUR_ORE": "GLOWSTONE_DUST",
+    "HARD_STONE": "STONE",
+    "MITHRIL_ORE": "PRISMARINE_CRYSTALS",
+    "WILTED_BERBERIS": "DEAD_BUSH",
+    "HALF_EATEN_CARROT": "CARROT_ITEM",
+    "CADUCOUS_STEM": "DOUBLE_PLANT:4",
+    "HEMOVIBE": "REDSTONE_ORE",
+  };
+
+  if (replacements[input]) {
+    return replacements[input];
+  }
+  return input;
 }
 
 updateCollections();
