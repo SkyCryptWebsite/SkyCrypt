@@ -741,15 +741,15 @@ export const BESTIARY = {
         cap: 1000,
         texture: "/head/d2a0057edd8e8480f0ea2a78c1ad88e401c4844f4458aeb4e33ac93a58b8c11a",
         mobs: ["glacite_mage_155"],
-        bracket: 4
+        bracket: 4,
       },
       {
         name: "Glacite Mutt",
         cap: 1000,
         texture: "/head/d2a0057edd8e8480f0ea2a78c1ad88e401c4844f4458aeb4e33ac93a58b8c11a",
         mobs: ["glacite_mutt_180"],
-        bracket: 4
-      }
+        bracket: 4,
+      },
     ],
   },
   crystal_hollows: {
