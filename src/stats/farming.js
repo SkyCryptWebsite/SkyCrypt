@@ -23,6 +23,8 @@ export function getFarming(userProfile) {
       bronze: 0,
       silver: 0,
       gold: 0,
+      platinum: 0,
+      diamond: 0,
     };
 
     // Your current perks
@@ -32,7 +34,13 @@ export function getFarming(userProfile) {
     };
 
     // Your amount of unique golds
-    farming.unique_golds = userProfile.jacobs_contest.unique_golds2?.length || 0;
+    farming.unique_golds = userProfile.jacobs_contest?.unique_brackets?.gold?.length || 0;
+
+    // unique platinums
+    farming.unique_platinums = userProfile.jacobs_contest?.unique_brackets?.platinum?.length || 0;
+
+    // unique diamonds
+    farming.unique_diamonds = userProfile.jacobs_contest?.unique_brackets?.diamond?.length || 0;
 
     // Things about individual crops
     farming.crops = {};
@@ -42,10 +50,12 @@ export function getFarming(userProfile) {
 
       Object.assign(farming.crops[crop], {
         attended: false,
-        unique_gold: userProfile.jacobs_contest.unique_golds2?.includes(crop) || false,
+        highest_tier: "none",
         contests: 0,
         personal_best: 0,
         badges: {
+          diamond: 0,
+          platinum: 0,
           gold: 0,
           silver: 0,
           bronze: 0,
@@ -92,19 +102,17 @@ export function getFarming(userProfile) {
         const participants = data.claimed_participants;
 
         // Use the claimed medal if it exists and is valid
-        // This accounts for the farming mayor increased brackets perk
-        // Note: The medal brackets are the percentage + 1 extra person
-        if (
-          contest.claimed_medal === "bronze" ||
-          contest.claimed_medal === "silver" ||
-          contest.claimed_medal === "gold"
-        ) {
+        if (contest.claimed_medal) {
           contest.medal = contest.claimed_medal;
-        } else if (placing.position <= participants * 0.05 + 1) {
+        } else if (placing.position <= Math.floor(participants * 0.02)) {
+          contest.medal = "diamond";
+        } else if (placing.position <= Math.floor(participants * 0.05)) {
+          contest.medal = "platinum";
+        } else if (placing.position <= Math.floor(participants * 0.1)) {
           contest.medal = "gold";
-        } else if (placing.position <= participants * 0.25 + 1) {
+        } else if (placing.position <= Math.floor(participants * 0.3)) {
           contest.medal = "silver";
-        } else if (placing.position <= participants * 0.6 + 1) {
+        } else if (placing.position <= Math.floor(participants * 0.6)) {
           contest.medal = "bronze";
         }
 
@@ -119,6 +127,14 @@ export function getFarming(userProfile) {
 
       contests.attended_contests++;
       contests.all_contests.push(contest);
+    }
+
+    for (const crop in farming.crops) {
+      for (const badge of Object.keys(farming.crops[crop].badges)) {
+        if (farming.crops[crop].badges[badge] < 1) continue;
+        farming.crops[crop].highest_tier = badge;
+        break;
+      }
     }
 
     farming.contests = contests;
