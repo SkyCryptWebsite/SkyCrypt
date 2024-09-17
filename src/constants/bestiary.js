@@ -430,7 +430,7 @@ export const BESTIARY = {
         name: "Zealot",
         cap: 25000,
         texture: "/item/ENDER_CHEST",
-        mobs: ["zealot_bruiser_100", "zealot_enderman_55"],
+        mobs: ["zealot_bruiser_100", "zealot_enderman_55", "island_zealot_enderman_15"],
         bracket: 4,
       },
     ],
