@@ -124,7 +124,7 @@ const hypixelUUID = "f7c77d999f154a66a87dc4a51ef30d19";
 async function updateCacheOnly() {
   try {
     const response = await fetch(
-      `https://api.hypixel.net/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`,
+      `https://api.hypixel.net/v2/skyblock/profiles?uuid=${hypixelUUID}&key=${credentials.hypixel_api_key}`,
     );
     forceCacheOnly = false;
     // 429 = key throttle
