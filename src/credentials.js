@@ -23,8 +23,8 @@ const defaultCredentials = {
     profiles: 60 * 5, // 5 minutes
     bingoProfile: 60 * 5, // 5 minutes
     museum: 60 * 30, // 30 minutes
-    guild: 60 * 60 * 24 // 24 hours
-  }
+    guild: 60 * 60 * 24, // 24 hours
+  },
 };
 
 /**

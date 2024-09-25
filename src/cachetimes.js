@@ -1,4 +1,4 @@
-import credentials from './credentials.js';
+import credentials from "./credentials.js";
 
 /**
  * Check if a resource is expired based on the cache time

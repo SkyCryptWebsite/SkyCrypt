@@ -277,9 +277,7 @@ export async function getProfile(
 
   const lastCachedSave = profileObject.last_update;
 
-  if (
-    !options.cacheOnly && (cacheTimes.isProfileCacheExpired(lastCachedSave) || lastCachedSave === 0)
-  ) {
+  if (!options.cacheOnly && (cacheTimes.isProfileCacheExpired(lastCachedSave) || lastCachedSave === 0)) {
     try {
       profileObject.last_update = Date.now();
       response = await retry(
@@ -501,9 +499,7 @@ export async function getBingoProfile(
   };
 
   const lastCachedSave = profileData.last_save ?? 0;
-  if (
-    !options.cacheOnly && (cacheTimes.isBingoProfileCacheExpired(lastCachedSave) || lastCachedSave === 0)
-  ) {
+  if (!options.cacheOnly && (cacheTimes.isBingoProfileCacheExpired(lastCachedSave) || lastCachedSave === 0)) {
     try {
       const response = await retry(
         async () => {
