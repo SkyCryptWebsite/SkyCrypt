@@ -56,6 +56,15 @@ for (const key in defaultCredentials) {
     CREDENTIALS[key] = defaultCredentials[key];
     hasBeenModified = true;
   }
+
+  if (typeof defaultCredentials[key] === "object") {
+    for (const subKey in defaultCredentials[key]) {
+      if (CREDENTIALS[key][subKey] == undefined) {
+        CREDENTIALS[key][subKey] = defaultCredentials[key][subKey];
+        hasBeenModified = true;
+      }
+    }
+  }
 }
 
 if (hasBeenModified) {
