@@ -50,10 +50,6 @@ export async function updateLeaderboardData(
 
     const values = {};
     for (const profile of allProfiles) {
-      if (profile.cute_name !== "Blueberry") {
-        continue;
-      }
-
       const museum = await lib.getMuseum(db, profile, options);
       for (const member in museum) {
         profile.members[member].museum = museum[member];
