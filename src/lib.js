@@ -4,6 +4,7 @@ import axios from "axios";
 
 import * as constants from "./constants.js";
 import credentials from "./credentials.js";
+import * as cacheTimes from "./cachetimes.js";
 import * as helper from "./helper.js";
 import * as stats from "./stats.js";
 import { SkyCryptError } from "./constants/error.js";
@@ -255,8 +256,6 @@ export async function getProfile(
 
   let profileObject = await db.collection("profileStore").findOne({ uuid: sanitize(paramPlayer) });
 
-  let lastCachedSave = 0;
-
   if (profileObject) {
     const profileData = db
       .collection("profileCache")
@@ -276,12 +275,10 @@ export async function getProfile(
 
   let response = null;
 
-  lastCachedSave = Math.max(profileObject.last_update, Date.now() || 0);
+  const lastCachedSave = profileObject.last_update;
 
   if (
-    !options.cacheOnly &&
-    ((Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000) ||
-      Date.now() - profileObject.last_update >= 300 * 1000)
+    !options.cacheOnly && (cacheTimes.isProfileCacheExpired(lastCachedSave) || lastCachedSave === 0)
   ) {
     try {
       profileObject.last_update = Date.now();
@@ -505,10 +502,7 @@ export async function getBingoProfile(
 
   const lastCachedSave = profileData.last_save ?? 0;
   if (
-    (!options.cacheOnly &&
-      ((Date.now() - lastCachedSave > 190 * 1000 && Date.now() - lastCachedSave < 300 * 1000) ||
-        Date.now() - profileData.last_save >= 300 * 1000)) ||
-    lastCachedSave === 0
+    !options.cacheOnly && (cacheTimes.isBingoProfileCacheExpired(lastCachedSave) || lastCachedSave === 0)
   ) {
     try {
       const response = await retry(
@@ -565,7 +559,7 @@ export async function getMuseum(
   }
 
   let museumData = await db.collection("museumCache").findOne({ profile_id: profileID });
-  if (!options.cacheOnly && (museumData == undefined || museumData.last_save < Date.now() - 1000 * 60 * 30)) {
+  if (!options.cacheOnly && (museumData == undefined || cacheTimes.isMuseumCacheExpired(museumData.last_save))) {
     try {
       const params = {
         key: credentials.hypixel_api_key,
@@ -616,7 +610,7 @@ export async function getGuild(
   const timeStarted = Date.now();
 
   let output = await db.collection("guildCache").findOne({ uuid: paramPlayer });
-  if (!options.cacheOnly && (!output || output.last_updated < Date.now() - 1000 * 60 * 60 * 24)) {
+  if (!options.cacheOnly && (!output || cacheTimes.isGuildCacheExpired(output.last_updated))) {
     try {
       const params = {
         key: credentials.hypixel_api_key,
