@@ -16,7 +16,7 @@ export function isCacheExpired(unixMs, cacheTime) {
  * @returns {boolean} Whether the cache is expired
  */
 export function isProfileCacheExpired(unixMs) {
-  return isCacheExpired(unixMs, credentials.cache.profiles);
+  return isCacheExpired(unixMs, credentials.cacheSeconds.profiles);
 }
 
 /**
@@ -25,7 +25,7 @@ export function isProfileCacheExpired(unixMs) {
  * @returns {boolean} Whether the cache is expired
  */
 export function isMuseumCacheExpired(unixMs) {
-  return isCacheExpired(unixMs, credentials.cache.museum);
+  return isCacheExpired(unixMs, credentials.cacheSeconds.museum);
 }
 
 /**
@@ -34,7 +34,7 @@ export function isMuseumCacheExpired(unixMs) {
  * @returns {boolean} Whether the cache is expired
  */
 export function isGuildCacheExpired(unixMs) {
-  return isCacheExpired(unixMs, credentials.cache.guild);
+  return isCacheExpired(unixMs, credentials.cacheSeconds.guild);
 }
 
 /**
@@ -43,5 +43,5 @@ export function isGuildCacheExpired(unixMs) {
  * @returns {boolean} Whether the cache is expired
  */
 export function isBingoProfileCacheExpired(unixMs) {
-  return isCacheExpired(unixMs, credentials.cache.bingoProfiles);
+  return isCacheExpired(unixMs, credentials.cacheSeconds.bingoProfiles);
 }
