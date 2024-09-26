@@ -19,6 +19,12 @@ const defaultCredentials = {
   get session_secret() {
     return randomBytes(32).toString("hex");
   },
+  cacheSeconds: {
+    profiles: 60 * 5, // 5 minutes
+    bingoProfile: 60 * 5, // 5 minutes
+    museum: 60 * 30, // 30 minutes
+    guild: 60 * 60 * 24, // 24 hours
+  },
 };
 
 /**
@@ -50,6 +56,15 @@ for (const key in defaultCredentials) {
     CREDENTIALS[key] = defaultCredentials[key];
     hasBeenModified = true;
   }
+
+  if (typeof defaultCredentials[key] === "object") {
+    for (const subKey in defaultCredentials[key]) {
+      if (CREDENTIALS[key][subKey] == undefined) {
+        CREDENTIALS[key][subKey] = defaultCredentials[key][subKey];
+        hasBeenModified = true;
+      }
+    }
+  }
 }
 
 if (hasBeenModified) {
@@ -70,6 +85,22 @@ if (process.env.REDIS_CONNECTION_STRING) {
 
 if (process.env.DISCORD_WEBHOOK) {
   CREDENTIALS.discord_webhook = process.env.DISCORD_WEBHOOK;
+}
+
+if (process.env.CACHE_PROFILES && isFinite(parseInt(process.env.CACHE_PROFILES))) {
+  CREDENTIALS.cacheSeconds.profiles = parseInt(process.env.CACHE_PROFILES);
+}
+
+if (process.env.CACHE_MUSEUM && isFinite(parseInt(process.env.CACHE_MUSEUM))) {
+  CREDENTIALS.cacheSeconds.museum = parseInt(process.env.CACHE_MUSEUM);
+}
+
+if (process.env.CACHE_GUILD && isFinite(parseInt(process.env.CACHE_GUILD))) {
+  CREDENTIALS.cacheSeconds.guild = parseInt(process.env.CACHE_GUILD);
+}
+
+if (process.env.CACHE_BINGO_PROFILE && isFinite(parseInt(process.env.CACHE_BINGO_PROFILE))) {
+  CREDENTIALS.cacheSeconds.bingoProfile = parseInt(process.env.CACHE_BINGO_PROFILE);
 }
 
 export default CREDENTIALS;
