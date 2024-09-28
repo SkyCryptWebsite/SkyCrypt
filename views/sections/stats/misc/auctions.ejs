@@ -4,13 +4,13 @@
     <div class="category-icon">
       <div class="item-icon icon-266_0"></div>
     </div>
-    
+
     <span class="category-name">Auctions sold</span>
   </div>
 
   <p class="stat-raw-values">
     <!-- Fees Paid -->
-    <% if (calculated.misc.auctions.fees !== undefined) { %> 
+    <% if (calculated.misc.auctions.fees !== undefined) { %>
       <span class="stat-name">Fees: </span>
       <span class="stat-value"><%= calculated.misc.auctions.fees.toLocaleString() %></span>
       <br>
@@ -38,7 +38,7 @@
           <br>
         `;
       }
-    
+
       const itemsSold = Object.values(calculated.misc.auctions.total_sold).reduce((a, b) => a + b, 0); %>
 
       <span data-tippy-content='<%= tooltip %>'>
@@ -54,7 +54,7 @@
     <div class="category-icon">
       <div class="item-icon icon-264_0"></div>
     </div>
-    
+
     <span class="stat-sub-header">Auctions bought</span>
   </div>
 
@@ -67,7 +67,7 @@
     <% } %>
 
     <!-- Highest Bid -->
-    <% if (calculated.misc.auctions.highest_bid !== undefined) { %> 
+    <% if (calculated.misc.auctions.highest_bid !== undefined) { %>
       <span class="stat-name">Highest Bid: </span>
       <span class="stat-value"><%= calculated.misc.auctions.highest_bid.toLocaleString() %></span>
       <br>
@@ -94,7 +94,7 @@
         if (rarity === "total") {
           continue;
         }
-        
+
         tooltip += `
           <span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span>
           <span class="stat-value">${amount.toLocaleString()}</span>

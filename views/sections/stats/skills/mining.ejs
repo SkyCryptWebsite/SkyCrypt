@@ -1,4 +1,4 @@
-<% 
+<%
 
 function formatNucleusCrystal(crystal, state) {
   if (!state) {
@@ -112,7 +112,7 @@ function itemIcon(item, classes) { %>
       <br>
 
       <!-- Crystal Nucleus -->
-      <% const delivered_parts = mining.core.crystal_nucleus?.precursor?.parts_delivered || [];  
+      <% const delivered_parts = mining.core.crystal_nucleus?.precursor?.parts_delivered || [];
 
       const precursor_parts = {};
       for (const [partId, partName] of Object.entries(constants.PRECURSOR_PARTS)) {

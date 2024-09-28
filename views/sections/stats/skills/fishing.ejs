@@ -1,8 +1,8 @@
-<% 
+<%
 
 const trophyFishOrder = ["bronze", "silver", "gold", "diamond"];
 
-const seaCreatures = [ 
+const seaCreatures = [
   "pond_squid",
   "plhlegblast",
   "sea_walker",
@@ -49,7 +49,7 @@ const seaCreatures = [
   "yeti",
   "grim_reaper",
   "thunder",
-  "lord_jawbus", 
+  "lord_jawbus",
   "agarimoo"
 ];
 
@@ -100,7 +100,7 @@ function itemIcon(item, classes) { %>
       <span class="stat-name">Large treasures fished: </span>
       <span class="stat-value"><%= calculated.fishing.treasure_large.toLocaleString() %></span>
       <br>
-    
+
       <!-- Sea Creatures Killed -->
       <span class="stat-name">Sea Creatures killed: </span>
       <span class="stat-value"><%= totalSeaCreatureKills.toLocaleString() %></span>
@@ -118,7 +118,7 @@ function itemIcon(item, classes) { %>
       <% } %>
 
       <!-- Trophy Fish fished -->
-      <% if (calculated.fishing.trophy_fish !== undefined) { %> 
+      <% if (calculated.fishing.trophy_fish !== undefined) { %>
         <span class="stat-name">Trophy Fish fished: </span>
         <span class="stat-value"><%= calculated.fishing.trophy_fish.toLocaleString() %></span>
         <br>
@@ -177,7 +177,7 @@ function itemIcon(item, classes) { %>
     </div>
   <% } %>
 
-                
+
   <% if (calculated?.crimson_isle?.trophy_fish !== undefined && calculated?.crimson_isle?.trophy_fish?.total_caught > 0) { %>
     <button class="stat-sub-header extender" aria-controls="fishing-trophyfish" aria-expanded="false">Trophy Fish</button>
     <div class="trophyfish extendable" id="fishing-trophyfish">

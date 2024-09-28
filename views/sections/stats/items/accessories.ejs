@@ -1,4 +1,4 @@
-<% 
+<%
 
 function formatEnrichment(string) {
   let enrichment = string.split('_').join(' ').trim()
@@ -30,7 +30,7 @@ function getEnrichments(accessories) {
   if (filteredAccessories.length === 0) {
     return;
   }
-  
+
   const enrichmentCounts = {};
   filteredAccessories.map((accessory) => {
     if (constants.SPECIAL_ACCESSORIES[helper.getId(accessory)]?.allowsEnrichment === false) return;
@@ -45,11 +45,11 @@ function getEnrichments(accessories) {
       <span class="stat-value color-<%= stat.replaceAll("_", "-") %>">
         <%= amount %>× <%= formatEnrichment(enrichment) %>
       </span>
-      
+
       <% if (enrichment !== Object.keys(enrichmentCounts).pop()) { %>
         <span class="bonus-divider" role="separator"> // </span>
-    <% } 
-  } 
+    <% }
+  }
 }
 
 function itemIcon(item, classes) { %>
@@ -110,7 +110,7 @@ function itemIcon(item, classes) { %>
           <% if (calculated.accessories.magical_power.abiphone) { %>
             <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Abicase</span> = <span style='color: var(--§6);' class='grey-text'>+<%= calculated.accessories.magical_power.abiphone %> MP</span><br>
           <% } %>
-          
+
           <% if (calculated.accessories.magical_power.rift_prism) { %>
             <span style='color: var(--§<%= constants.RARITY_COLORS["rare"] %>);' class='grey-text'>Rift Prism:</span> = <span style='color: var(--§6);' class='grey-text'>+<%= calculated.accessories.magical_power.rift_prism %> MP</span><br>
           <% } %>
@@ -127,7 +127,7 @@ function itemIcon(item, classes) { %>
         </span>
         <br>
       </p>
-      
+
       <!-- Active Accessories -->
       <% if (items.accessories.accessories.find(a => !a.isInactive) != undefined) { %>
         <div class="accessory-list">
@@ -168,7 +168,7 @@ function itemIcon(item, classes) { %>
 
       <!-- Missing Accessories and Missing Accessory Upgrades -->
       <% if (calculated.accessories.missing.length > 0 || calculated.accessories.upgrades.length > 0) {
-        if (inactiveAccessories.length > 0) { %> 
+        if (inactiveAccessories.length > 0) { %>
           <br>
         <% } %>
 
@@ -177,7 +177,7 @@ function itemIcon(item, classes) { %>
           <!-- Missing Accessories -->
           <% if (calculated.accessories.missing.length > 0) { %>
             <p class="stat-sub-header">Missing Accessories<span data-tippy-content='Missing accessories that are <strong>not</strong> upgrades of another accessory.'></span></p>
-            
+
             <% for (const [index, accessory] of calculated.accessories.missing.entries()) { %>
               <div tabindex="0" data-missing-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
                 <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
@@ -188,7 +188,7 @@ function itemIcon(item, classes) { %>
           <!-- Missing Accessory Upgrades -->
           <% if (calculated.accessories.upgrades.length > 0) { %>
             <p class="stat-sub-header">Missing Accessory Upgrades<span data-tippy-content='Missing accessories that are upgrades of a lower tier accessory.'></span></p>
-            
+
             <% for (const [index, accessory] of calculated.accessories.upgrades.entries()) { %>
               <div tabindex="0" data-upgrade-accessory-index="<%= index %>" class="rich-item piece piece-<%= accessory.rarity %>-bg missing-accessory">
                 <div style='background-image: url("<%= accessory.texture_path %>")' class="piece-icon item-icon custom-icon"></div>
