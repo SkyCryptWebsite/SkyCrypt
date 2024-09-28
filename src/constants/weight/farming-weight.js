@@ -1,117 +1,109 @@
 const CROP_TO_PEST = {
-	"CACTUS": "Mite",
-	"CARROT_ITEM": "Cricket",
-	"INK_SACK:3": "Moth",
-	"MELON": "Earthworm",
-	"MUSHROOM_COLLECTION": "Slug",
-	"NETHER_STALK": "Beetle",
-	"POTATO_ITEM": "Locust",
-	"PUMPKIN": "Rat",
-	"SUGAR_CANE": "Mosquito",
-	"WHEAT": "Fly",
+  CACTUS: "Mite",
+  CARROT_ITEM: "Cricket",
+  "INK_SACK:3": "Moth",
+  MELON: "Earthworm",
+  MUSHROOM_COLLECTION: "Slug",
+  NETHER_STALK: "Beetle",
+  POTATO_ITEM: "Locust",
+  PUMPKIN: "Rat",
+  SUGAR_CANE: "Mosquito",
+  WHEAT: "Fly",
 };
 
-const PEST_COLLECTION_BRACKETS = [
-	0,
-	50,
-	100,
-	250,
-	500,
-	750,
-	1000,
-];
+const PEST_COLLECTION_BRACKETS = [0, 50, 100, 250, 500, 750, 1000];
 
 const PEST_COLLECTION_ADJUSTMENTS = {
-	"Mite": {
-		0: 0,
-		50: 1285.333312988281,
-		100: 1898.6666259765625,
-		250: 2512,
-		500: 3125.333251953125,
-		750: 3493.333251953125,
-		1000: 3861.3333740234375,
-	},
-	"Cricket": {
-		0: 0,
-		50: 1430.3999755859375,
-		100: 2086.399951171875,
-		250: 2742.4,
-		500: 3398.39990234375,
-		750: 3791.99990234375,
-		1000: 4185.600048828125,
-	},
-	"Moth": {
-		0: 0,
-		50: 1430.3999755859375,
-		100: 2086.399951171875,
-		250: 2742.4,
-		500: 3398.39990234375,
-		750: 3791.99990234375,
-		1000: 4185.600048828125,
-	},
-	"Earthworm": {
-		0: 0,
-		50: 2010.6666259765625,
-		100: 2837.333251953125,
-		250: 3664,
-		500: 4490.66650390625,
-		750: 4986.66650390625,
-		1000: 5482.666748046875,
-	},
-	"Slug": {
-		0: 0,
-		50: 632.5333312988281,
-		100: 1053.8666625976562,
-		250: 1475.2,
-		500: 1896.5333251953125,
-		750: 2149.3333251953127,
-		1000: 2402.133337402344,
-	},
-	"Beetle": {
-		0: 0,
-		50: 1647.9999694824216,
-		100: 2367.9999389648438,
-		250: 3088,
-		500: 3807.9998779296875,
-		750: 4239.9998779296875,
-		1000: 4672.000061035156,
-	},
-	"Locust": {
-		0: 0,
-		50: 1647.9999694824216,
-		100: 2367.9999389648438,
-		250: 3088,
-		500: 3807.9998779296875,
-		750: 4239.9998779296875,
-		1000: 4672.000061035156,
-	},
-	"Rat": {
-		0: 0,
-		50: 922.6666564941406,
-		100: 1429.333312988281,
-		250: 1936,
-		500: 2442.6666259765625,
-		750: 2746.6666259765625,
-		1000: 3050.6666870117188,
-	},
-	"Mosquito": {
-		0: 0,
-		50: 1285.333312988281,
-		100: 1898.6666259765625,
-		250: 2512,
-		500: 3125.333251953125,
-		750: 3493.333251953125,
-		1000: 3861.3333740234375,
-	},
-	"Fly": {
-		0: 0,
-		50: 7179.839925842285,
-		100: 11197.43985168457,
-		250: 15215.04,
-		500: 19232.63970336914,
-		750: 21643.19970336914,
-		1000: 24053.76014831543,
-	},
+  Mite: {
+    0: 0,
+    50: 1285.333312988281,
+    100: 1898.6666259765625,
+    250: 2512,
+    500: 3125.333251953125,
+    750: 3493.333251953125,
+    1000: 3861.3333740234375,
+  },
+  Cricket: {
+    0: 0,
+    50: 1430.3999755859375,
+    100: 2086.399951171875,
+    250: 2742.4,
+    500: 3398.39990234375,
+    750: 3791.99990234375,
+    1000: 4185.600048828125,
+  },
+  Moth: {
+    0: 0,
+    50: 1430.3999755859375,
+    100: 2086.399951171875,
+    250: 2742.4,
+    500: 3398.39990234375,
+    750: 3791.99990234375,
+    1000: 4185.600048828125,
+  },
+  Earthworm: {
+    0: 0,
+    50: 2010.6666259765625,
+    100: 2837.333251953125,
+    250: 3664,
+    500: 4490.66650390625,
+    750: 4986.66650390625,
+    1000: 5482.666748046875,
+  },
+  Slug: {
+    0: 0,
+    50: 632.5333312988281,
+    100: 1053.8666625976562,
+    250: 1475.2,
+    500: 1896.5333251953125,
+    750: 2149.3333251953127,
+    1000: 2402.133337402344,
+  },
+  Beetle: {
+    0: 0,
+    50: 1647.9999694824216,
+    100: 2367.9999389648438,
+    250: 3088,
+    500: 3807.9998779296875,
+    750: 4239.9998779296875,
+    1000: 4672.000061035156,
+  },
+  Locust: {
+    0: 0,
+    50: 1647.9999694824216,
+    100: 2367.9999389648438,
+    250: 3088,
+    500: 3807.9998779296875,
+    750: 4239.9998779296875,
+    1000: 4672.000061035156,
+  },
+  Rat: {
+    0: 0,
+    50: 922.6666564941406,
+    100: 1429.333312988281,
+    250: 1936,
+    500: 2442.6666259765625,
+    750: 2746.6666259765625,
+    1000: 3050.6666870117188,
+  },
+  Mosquito: {
+    0: 0,
+    50: 1285.333312988281,
+    100: 1898.6666259765625,
+    250: 2512,
+    500: 3125.333251953125,
+    750: 3493.333251953125,
+    1000: 3861.3333740234375,
+  },
+  Fly: {
+    0: 0,
+    50: 7179.839925842285,
+    100: 11197.43985168457,
+    250: 15215.04,
+    500: 19232.63970336914,
+    750: 21643.19970336914,
+    1000: 24053.76014831543,
+  },
 };
 
 const crops = {
@@ -157,34 +149,34 @@ const crops = {
   },
 };
 function calculatePestCrops(pest) {
-	let kills = pest?.kills ?? 0;
-	let pestCount = 0;
-	let pestCropCount = 0;
-	for (let i = 0; i < PEST_COLLECTION_BRACKETS.length; i++) {
-		const bracket = PEST_COLLECTION_BRACKETS[i];
+  let kills = pest?.kills ?? 0;
+  let pestCount = 0;
+  let pestCropCount = 0;
+  for (let i = 0; i < PEST_COLLECTION_BRACKETS.length; i++) {
+    const bracket = PEST_COLLECTION_BRACKETS[i];
 
-		if (kills <= 0) break;
+    if (kills <= 0) break;
 
-		const bracketCrops = PEST_COLLECTION_ADJUSTMENTS[pest.name][bracket];
+    const bracketCrops = PEST_COLLECTION_ADJUSTMENTS[pest.name][bracket];
 
-		if (i === PEST_COLLECTION_BRACKETS.length - 1) {
-			pestCropCount += Math.ceil(bracketCrops * kills);
-			break;
-		}
+    if (i === PEST_COLLECTION_BRACKETS.length - 1) {
+      pestCropCount += Math.ceil(bracketCrops * kills);
+      break;
+    }
 
-		const nextBracket = PEST_COLLECTION_BRACKETS.at(i + 1);
+    const nextBracket = PEST_COLLECTION_BRACKETS.at(i + 1);
 
-		pestCount = Math.min(nextBracket - pestCount, kills);
+    pestCount = Math.min(nextBracket - pestCount, kills);
 
-		if (bracketCrops === 0) {
-			kills -= pestCount;
-			continue;
-		}
+    if (bracketCrops === 0) {
+      kills -= pestCount;
+      continue;
+    }
 
-		kills -= pestCount;
-		pestCropCount += Math.ceil(bracketCrops * pestCount);
-	}
-	return pestCropCount;
+    kills -= pestCount;
+    pestCropCount += Math.ceil(bracketCrops * pestCount);
+  }
+  return pestCropCount;
 }
 
 export function calculateFarmingWeight(userProfile) {
@@ -200,14 +192,14 @@ export function calculateFarmingWeight(userProfile) {
   };
 
   const farmingCollection = userProfile?.collections?.farming?.collections;
-	const pests = userProfile?.bestiary?.categories?.garden?.mobs;
+  const pests = userProfile?.bestiary?.categories?.garden?.mobs;
   if (farmingCollection !== undefined) {
     let weight = 0;
     for (const [name, crop] of Object.entries(crops)) {
       const { amount = 0 } = farmingCollection.find((a) => a.id === name);
 
-			const pest = pests.find((a) => a.name === CROP_TO_PEST[name]);
-			const pestCrops = calculatePestCrops(pest);
+      const pest = pests.find((a) => a.name === CROP_TO_PEST[name]);
+      const pestCrops = calculatePestCrops(pest);
 
       const calculated = Math.max(amount - pestCrops, 0) / crop.weight;
 
@@ -276,7 +268,7 @@ export function calculateFarmingWeight(userProfile) {
     const goldMedalBonus = goldMedals * 0.25;
 
     const contestMedals = goldMedals + platinumMedals + diamondMedals;
-    const contestMedalBonus = goldMedalBonus + platinumMedalBonus + diamondMedalBonus
+    const contestMedalBonus = goldMedalBonus + platinumMedalBonus + diamondMedalBonus;
 
     output.bonuses.contest_medals = {
       medals: contestMedals,
