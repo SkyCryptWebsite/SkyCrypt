@@ -131,6 +131,10 @@ const crops = {
     name: "Melon",
     weight: 485_308.47,
   },
+  MUSHROOM_COLLECTION: {
+    name: "Mushroom",
+    weight: 90_178.06,
+  },
   NETHER_STALK: {
     name: "Nether Wart",
     weight: 250_000,
@@ -221,7 +225,7 @@ export function calculateFarmingWeight(userProfile) {
 
     const mushroomCollection = farmingCollection.find((a) => a.id === "MUSHROOM_COLLECTION")?.amount ?? 0;
 
-    const total = output.weight + mushroomCollection / mushroomScaling;
+    const total = output.weight;
     const doubleBreakRatio = total <= 0 ? 0 : (output.crops.CACTUS.weight + output.crops.SUGAR_CANE.weight) / total;
     const normalRatio = total <= 0 ? 0 : (total - output.crops.CACTUS.weight - output.crops.SUGAR_CANE.weight) / total;
 
@@ -229,10 +233,8 @@ export function calculateFarmingWeight(userProfile) {
       doubleBreakRatio * (mushroomCollection / (2 * mushroomScaling)) +
       normalRatio * (mushroomCollection / mushroomScaling);
 
-    output.crops.MUSHROOM_COLLECTION = {
-      name: "Mushroom",
-      weight: mushroomWeight,
-    };
+    output.weight -= output.crops.MUSHROOM_COLLECTION.weight;
+    output.crops.MUSHROOM_COLLECTION.weight = mushroomWeight;
     output.weight += mushroomWeight;
   }
 
