@@ -188,7 +188,7 @@ export async function getStats(
     bingo: { fn: stats.getBingoData, args: { bingoProfile } },
     user_data: { fn: stats.getUserData, args: { userProfile } },
     currencies: { fn: stats.getCurrenciesData, args: { userProfile, profile } },
-    weight: { fn: stats.getWeight, args: { output }, promise: true },
+    weight: { fn: stats.getWeight, args: { output }, promise: true, awaitPromises: true },
     accessories: { fn: stats.getMissingAccessories, args: { output, packs }, promise: true, awaitPromises: true },
     temp_stats: { fn: stats.getTempStats, args: { userProfile } },
     rift: { fn: stats.getRift, args: { userProfile } },
