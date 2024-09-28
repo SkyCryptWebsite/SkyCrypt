@@ -3,17 +3,17 @@
   <h2 class="stat-header">Bestiary</h2>
   <div class="stat-content">
     <p class="stat-raw-values">
-      <% max = calculated.bestiary.milestone === calculated.bestiary.maxMilestone ? 'golden-text' : ''; %> 
+      <% max = calculated.bestiary.milestone === calculated.bestiary.maxMilestone ? 'golden-text' : ''; %>
       <span class="stat-name <%= max %>">Bestiary Level: </span>
       <span class="stat-value <%= max %>"><%= calculated.bestiary.milestone / 10 %> / <%= calculated.bestiary.maxMilestone / 10 %></span>
       <br>
 
-      <% max = calculated.bestiary.familiesUnlocked === calculated.bestiary.totalFamilies ? 'golden-text' : ''; %> 
+      <% max = calculated.bestiary.familiesUnlocked === calculated.bestiary.totalFamilies ? 'golden-text' : ''; %>
       <span class="stat-name <%= max %>">Families Unlocked: </span>
       <span class="stat-value <%= max %>"><%= calculated.bestiary.familiesUnlocked %> / <%= calculated.bestiary.totalFamilies %></span>
       <br>
 
-      <% max = calculated.bestiary.familiesMaxed === calculated.bestiary.totalFamilies ? 'golden-text' : ''; %> 
+      <% max = calculated.bestiary.familiesMaxed === calculated.bestiary.totalFamilies ? 'golden-text' : ''; %>
       <span class="stat-name <%= max %>">Families Completed: </span>
       <span class="stat-value <%= max %>"><%= calculated.bestiary.familiesMaxed %> / <%= calculated.bestiary.totalFamilies  %></span>
       <br>
@@ -37,7 +37,7 @@
             <div class="chip-icon-wrapper">
               <div style="background-image:url(<%= family.texture %>)" class="item-icon custom-icon"></div>
             </div>
-            
+
             <div class="chip-text">
               <% max = family.tier >= family.maxTier ? 'max-stat' : ''; %>
               <div class="bestiary-name <%= max %>"><span class="stat-name"><%= family.name %> </span><span class="stat-value"><%= family.tier %></span></div>

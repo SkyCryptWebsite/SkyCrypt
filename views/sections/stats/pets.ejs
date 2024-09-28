@@ -23,8 +23,8 @@
           <table>
             <% for (const [score, data] of Object.entries(constants.PET_REWARDS)) { %>
               <tr><td><%= score %> Score: </td><td><span class='color-magic-find grey-text'>+<%= data.magic_find %> Magic Find</span>
-                
-              <% if (data.magic_find === calculated.pets.pet_score.amount) { %> 
+
+              <% if (data.magic_find === calculated.pets.pet_score.amount) { %>
                 <span style='color: var(--§5);' class='grey-text'> «</span>
               <% } %>
 
@@ -51,7 +51,7 @@
         <span class="stat-name">Total Pet XP: </span>
         <span class="stat-value"><%= helper.formatNumber(calculated.pets.total_pet_xp, true) %></span>
         <br>
-      
+
         <% const activePet = calculated.pets.pets.find(pet => pet.active === true) %>
         <% if (activePet !== undefined) { %>
           <p class="stat-sub-header">Active Pet</p>
@@ -69,7 +69,7 @@
               <div class="pet-level">Level <%= activePet.level.level %></div>
             </div>
           </div>
-          
+
           <div data-bonus-stats="pet"></div>
         <% } %>
       </p>
@@ -82,12 +82,12 @@
 
         <div class="pieces">
           <% for (const [index, pet] of uniquePets.entries()) {
-            if (pet.active === true) { 
+            if (pet.active === true) {
               continue;
             } %>
 
             <div tabindex="0" data-pet-index="<%= calculated.pets.pets.indexOf(pet) %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
-            
+
               <% if (rarityOrder.indexOf(pet.rarity) <= 4) { %>
                 <div class="piece-shine"></div>
               <% } %>
@@ -101,17 +101,17 @@
 
       <!-- Other Pets -->
       <% const otherPets = calculated.pets.pets.filter(pet => !uniquePets.includes(pet));
-      if (otherPets.length > 0) { %> 
+      if (otherPets.length > 0) { %>
         <button class="stat-sub-header extender" aria-controls="showmore-pets" aria-expanded="false">Show More Pets</button>
         <div class="pieces extendable" id="showmore-pets">
-          <div class="pieces"> 
+          <div class="pieces">
             <% for (const [index, pet] of otherPets.entries()) {
-              if (pet.active === true) { 
+              if (pet.active === true) {
                 continue;
               } %>
 
               <div tabindex="0" data-pet-index="<%= calculated.pets.pets.indexOf(pet) %>" class="other-pet rich-item piece piece-<%= pet.rarity %>-bg <%= getRarityUpgradeClass(pet) %>">
-            
+
                 <% if (rarityOrder.indexOf(pet.rarity) <= 4) { %>
                   <div class="piece-shine"></div>
                 <% } %>
