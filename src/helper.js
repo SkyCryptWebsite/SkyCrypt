@@ -610,7 +610,7 @@ export function parseItemGems(gems, rarity) {
 
   const slots = {
     normal: Object.keys(GEMSTONES),
-    special: ["UNIVERSAL", "COMBAT", "OFFENSIVE", "DEFENSIVE", "MINING"],
+    special: ["UNIVERSAL", "COMBAT", "OFFENSIVE", "DEFENSIVE", "MINING", "CHISEL"],
     ignore: ["unlocked_slots"],
   };
 
