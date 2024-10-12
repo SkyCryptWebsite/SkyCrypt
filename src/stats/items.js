@@ -70,7 +70,7 @@ export async function getItems(
       }
     });
 
-    let [
+    const [
       armor,
       equipment,
       inventory,

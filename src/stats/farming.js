@@ -91,7 +91,7 @@ export function getFarming(userProfile) {
         crop: crop,
         collected: data.collected,
         claimed: data.claimed_rewards || false,
-        medal: null,
+        medal: data.claimed_medal || null,
       };
 
       const placing = {};
@@ -102,18 +102,18 @@ export function getFarming(userProfile) {
         const participants = data.claimed_participants;
 
         // Use the claimed medal if it exists and is valid
-        if (contest.claimed_medal) {
-          contest.medal = contest.claimed_medal;
-        } else if (placing.position <= Math.floor(participants * 0.02)) {
-          contest.medal = "diamond";
-        } else if (placing.position <= Math.floor(participants * 0.05)) {
-          contest.medal = "platinum";
-        } else if (placing.position <= Math.floor(participants * 0.1)) {
-          contest.medal = "gold";
-        } else if (placing.position <= Math.floor(participants * 0.3)) {
-          contest.medal = "silver";
-        } else if (placing.position <= Math.floor(participants * 0.6)) {
-          contest.medal = "bronze";
+        if (!contest.medal) {
+          if (placing.position <= Math.floor(participants * 0.02)) {
+            contest.medal = "diamond";
+          } else if (placing.position <= Math.floor(participants * 0.05)) {
+            contest.medal = "platinum";
+          } else if (placing.position <= Math.floor(participants * 0.1)) {
+            contest.medal = "gold";
+          } else if (placing.position <= Math.floor(participants * 0.3)) {
+            contest.medal = "silver";
+          } else if (placing.position <= Math.floor(participants * 0.6)) {
+            contest.medal = "bronze";
+          }
         }
 
         // Count the medal if it exists

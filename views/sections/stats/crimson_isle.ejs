@@ -1,4 +1,4 @@
-<% 
+<%
 
 function getDojoRank(points) {
     if (points >= 1000) return 'S'
@@ -23,13 +23,13 @@ function getDojoRank(points) {
       <span class="stat-name">Selected Faction: </span>
       <span class="stat-value"><%= calculated.crimson_isle.factions.selected_faction %></span>
       <br>
-      
+
       <!-- Mage Faction Reputation  -->
       <% max = calculated.crimson_isle.factions.mages_reputation >= 12000 ? 'golden-text' : '' %>
       <span class="stat-name <%= max %>">Mage Reputation: </span>
       <span class="stat-value <%= max %>"><%= calculated.crimson_isle.factions.mages_reputation.toLocaleString() %></span>
       <br>
-      
+
       <!-- Barbarian Faction Reputation -->
       <% max = calculated.crimson_isle.factions.barbarians_reputation >= 12000 ? 'golden-text' : '' %>
       <span class="stat-name <%= max %>">Barbarian Reputation: </span>
@@ -67,7 +67,7 @@ function getDojoRank(points) {
 
     <% if (calculated.crimson_isle.dojo?.total_points) { %>
       <p class="stat-sub-header">Dojo Completions</p>
-        
+
       <!-- Dojo Points -->
       <% max = calculated.crimson_isle.dojo.total_points >= 7000 ? 'golden-text' : '' %>
       <span class="stat-name <%= max %>">Total Points: </span>

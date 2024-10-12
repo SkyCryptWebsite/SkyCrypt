@@ -1,4 +1,4 @@
-<% if ('effects' in calculated.misc) { 
+<% if ('effects' in calculated.misc) {
   if (Object.keys(calculated.misc.effects).some((key) => Object.keys(calculated.misc.effects[key]).length > 0)) { %>
     <div class="category-header">
       <div class="category-icon">
@@ -20,12 +20,12 @@
           const potionData = constants.POTION_EFFECTS[potion.effect];
           if (potionData === undefined) { %>
             <script>
-                console.log("Unknown potion effect: <%= potion.effect %>")    
+                console.log("Unknown potion effect: <%= potion.effect %>")
             </script>
           <% }
           continue;
-        
-            
+
+
           effects_tooltips[key].push(`
             <span class="stat-value">${potionData.name ?? helper.titleCase(potion.effect.replace("_", " "))}</span>
             <br>
@@ -40,7 +40,7 @@
         }
       }
     } %>
-    
+
     <p class="stat-raw-values">
       <!-- Active Potion Effects -->
       <% if (calculated.misc.effects.active.length > 0) { %>

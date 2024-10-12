@@ -2,11 +2,11 @@
   <a class="stat-anchor" id="Collections"></a>
   <h2 class="stat-header">Collections</h2>
   <div class="stat-content">
-    
+
     <% max = calculated.collections.maxedCollections === calculated.collections.totalCollections ? 'golden-text' : ''; %>
     <span class="stat-name <%= max %>">Maxed Collections: </span>
     <span class="stat-value <%= max %>"><%= calculated.collections.maxedCollections %> / <%= calculated.collections.totalCollections %></span>
-    
+
     <% for (const [category, categoryData] of Object.entries(calculated.collections)) { %>
       <% if (categoryData.collections === undefined || categoryData.collections.length === 0) {
         continue;
@@ -23,11 +23,11 @@
           <span class="category-header-detail">(<%= categoryData.maxTiers %> / <%= categoryData.totalTiers %> max)</span>
         <% } %>
       </div>
-      <div class="collections">  
-        <% for (const collection of categoryData.collections) { 
+      <div class="collections">
+        <% for (const collection of categoryData.collections) {
           let amountsTooltip = "";
 
-          if (collection.amounts !== undefined) { 
+          if (collection.amounts !== undefined) {
             amountsTooltip = collection.amounts.map(amount => `<span class="stat-name">${amount.username}: </span><span class="stat-value">${amount.amount.toLocaleString()}</span>`).join('<br>') + `<br><br><span class="stat-name">Total: </span><span class="stat-value">${collection.totalAmount.toLocaleString()}</span>`;
           } else if (collection.rewards !== undefined) {
             amountsTooltip = `<span class="stat-name">Rewards:</span>`;

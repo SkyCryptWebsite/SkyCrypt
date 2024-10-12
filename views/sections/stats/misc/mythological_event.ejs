@@ -3,10 +3,10 @@
     <div class="category-icon">
       <div class="item-icon custom-icon" style="background-image: url(/head/4c27e3cb52a64968e60c861ef1ab84e0a0cb5f07be103ac78da67761731f00c8)"></div>
     </div>
-    
+
     <span class="category-name">Mythological Event</span>
   </div>
-  
+
   <p class="stat-raw-values">
     <!-- Mytholocial Event Kills -->
     <% if (calculated.misc.mythological_event.kills !== undefined) { %>
@@ -15,7 +15,7 @@
       <br>
     <% } %>
 
-    <%  
+    <%
     const burrow_naming = {
         burrows_chains_complete: "Chains Completed",
         burrows_dug_treasure: "Dug Treasure",
@@ -27,13 +27,13 @@
         continue;
       }
 
-      
+
       let tooltip = "";
       for (const rarity in calculated.misc.mythological_event[key]) {
         if (rarity === "null" || rarity === "total") {
           continue;
         }
-  
+
         tooltip += `<span class="stat-name piece-${rarity.toLowerCase()}-fg">${helper.capitalizeFirstLetter(rarity)}: </span><span class="stat-value">${calculated.misc.mythological_event[key][rarity].toLocaleString()}</span><br>`;
       } %>
 

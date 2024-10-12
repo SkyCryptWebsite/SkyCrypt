@@ -1,4 +1,4 @@
-<% 
+<%
 
 const badgeOrder = ["diamond", "platinum", "gold", "silver", "bronze"];
 
@@ -36,7 +36,7 @@ function itemIcon(item, classes) { %>
            if (crop.weight === 0) {
             continue;
           } %>
-            
+
           <span class='stat-name'><%= crop.name %>: </span>
           <span class='stat-value'> <%= parseFloat(crop.weight.toFixed(2)).toLocaleString() %> </span><br/>
         <% } %>
@@ -56,13 +56,13 @@ function itemIcon(item, classes) { %>
     <% } %>
 
     <!-- Pelts -->
-    <% if (calculated.farming.pelts !== undefined) { %> 
+    <% if (calculated.farming.pelts !== undefined) { %>
       <span class="stat-name">Pelts: </span>
       <span class="stat-value"><%= calculated.farming.pelts.toLocaleString() %></span>
       <br>
     <% } %>
 
-    <% 
+    <%
     const farming = calculated.farming;
     if (farming.talked && farming.contests.attended_contests > 0) { %>
       <!-- Contests Attended -->
@@ -128,8 +128,8 @@ function itemIcon(item, classes) { %>
         <span class="stat-name">Active Tool: </span><span class="stat-active-hoe stat-value piece-common-fg">None</span>
       </p>
     <% } %>
- 
-    <div class="pieces"> 
+
+    <div class="pieces">
       <% for (const item of items.farming_tools.tools) { %>
         <div tabindex="0" data-item-id="<%= item.itemId %>" class="rich-item piece piece-<%= item.rarity %>-bg <%= getRarityUpgradeClass(item) %>">
           <% if (rarityOrder.indexOf(item.rarity) <= 4) { %>
@@ -141,7 +141,7 @@ function itemIcon(item, classes) { %>
       <% } %>
     </div>
   <% } %>
-    
+
   <!-- Farming Crops -->
   <% if (farming.talked) { %>
     <% if (Object.keys(calculated.farming.crops).length > 0) { %>
@@ -176,7 +176,7 @@ function itemIcon(item, classes) { %>
                 <small class="stat-name">Personal Best: </small>
                 <small class="stat-value"><%= helper.formatNumber(crop.personal_best, true) %></small>
                 <br>
-                
+
                 <small class="stat-name">Contests: </small>
                 <small class="stat-value"><%= crop.contests.toLocaleString() %></small>
                 <br>
