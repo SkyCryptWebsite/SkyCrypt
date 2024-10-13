@@ -365,6 +365,20 @@ export const STATS_DATA = {
     nameTiny: "CR",
     symbol: "❄",
   },
+  mining_spread: {
+    name: "Mining Spread",
+    nameLore: "Mining Spread",
+    nameShort: "Mining Spread",
+    nameTiny: "MS",
+    symbol: "▚",
+  },
+  heat_resistance: {
+    name: "Heat Resistance",
+    nameLore: "Heat Resistance",
+    nameShort: "Heat Resistance",
+    nameTiny: "HR",
+    symbol: "♨",
+  },
 };
 
 export const HIDDEN_STATS = [
