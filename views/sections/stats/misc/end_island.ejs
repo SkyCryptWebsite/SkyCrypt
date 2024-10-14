@@ -29,17 +29,20 @@
     <!-- Fastest Kill -->
     <% if (calculated.misc.dragons.fastest_kill !== undefined && Object.keys(calculated.misc.dragons.fastest_kill).length) { %>
       <%  tooltip = "";
+
+      const formatTime = (ms) => (ms < 1000 ? `0.${ms}` : moment.duration(ms, "milliseconds").format("m:ss.SSS")) + "s";
+
       for (const key in calculated.misc.dragons.fastest_kill) {
         if (key === "best") {
           continue;
         }
 
-        tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${moment.duration(calculated.misc.dragons.fastest_kill[key], "milliseconds").format("m:ss.SSS")}s</span><br>`;
+        tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${formatTime(calculated.misc.dragons.fastest_kill[key])}</span><br>`;
       } %>
 
-        <% if (tooltip) { %><span data-tippy-content='<%= tooltip %>'><% } else { %><span><% } %>
+      <% if (tooltip) { %><span data-tippy-content='<%= tooltip %>'><% } else { %><span><% } %>
         <span class="stat-name">Fastest Kill: </span>
-        <span class="stat-value"><%= moment.duration(calculated.misc.dragons.fastest_kill.best, "milliseconds").format("m:ss.SSS") %>s</span>
+        <span class="stat-value"><%= formatTime(calculated.misc.dragons.fastest_kill.best) %></span>
       </span>
       <br>
     <% } %>
