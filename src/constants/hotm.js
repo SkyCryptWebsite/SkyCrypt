@@ -184,6 +184,7 @@ const rewards = {
  * @type {{[id: string]: string}}
  */
 const nodeNames = {
+  // HOTM 10
   gemstone_infusion: "Gemstone Infusion",
   crystalline: "Crystalline",
   gifts_from_the_departed: "Gifts from the Departed",
@@ -191,9 +192,11 @@ const nodeNames = {
   hungry_for_more: "Dead Man's Chest",
   vanguard_seeker: "Vanguard Seeker",
   sheer_force: "Sheer Force",
+  // HOTM 9
   metal_head: "Metal Head",
   rags_to_riches: "Rags to Riches",
   eager_adventurer: "Eager Adventurer",
+  // HOTM 8
   miners_blessing: "Miner's Blessing",
   no_stone_unturned: "No Stone Unturned",
   strong_arm: "Strong Arm",
@@ -201,9 +204,11 @@ const nodeNames = {
   warm_hearted: "Warm Heart",
   surveyor: "Surveyor",
   mineshaft_mayhem: "Mineshaft Mayhem",
+  // HOTM 7
   mining_speed_2: "Speedy Mineman",
   powder_buff: "Powder Buff",
   mining_fortune_2: "Fortunate Mineman",
+  // HOTM 6
   anomalous_desire: "Anomalous Desire",
   blockhead: "Block Head",
   subterranean_fisher: "Subterranean Fisher",
@@ -211,9 +216,11 @@ const nodeNames = {
   lonesome_miner: "Lonesome Miner",
   great_explorer: "Great Explorer",
   maniac_miner: "Maniac Miner",
+  // HOTM 5
   daily_grind: "Daily Grind",
   special_0: "Core of the Mountain",
   daily_powder: "Daily Powder",
+  // HOTM 4
   daily_effect: "Sky Mall",
   old_school: "Old-School",
   professional: "Professional",
@@ -221,14 +228,17 @@ const nodeNames = {
   fortunate: "Gem Lover",
   mining_experience: "Seasoned Mineman",
   front_loaded: "Front Loaded",
+  // HOTM 3
   random_event: "Luck of the Cave",
   efficient_miner: "Efficient Miner",
   forge_time: "Quick Forge",
+  // HOTM 2
   mining_speed_boost: "Mining Speed Boost",
   precision_mining: "Precision Mining",
   mining_fortune: "Mining Fortune",
   titanium_insanium: "Titanium Insanium",
   pickaxe_toss: "Pickobulus",
+  // HOTM 1
   mining_speed: "Mining Speed",
 };
 
@@ -537,6 +547,7 @@ class Node {
   }
 }
 
+// HOTM 10
 class GemstoneInfusion extends Node {
   constructor(data) {
     super(data);
@@ -725,6 +736,7 @@ class SheerForce extends Node {
   }
 }
 
+// HOTM 9
 class MetalHead extends Node {
   constructor(data) {
     super(data);
@@ -794,6 +806,7 @@ class EagerAdventurer extends Node {
   }
 }
 
+// HOTM 8
 class MinersBlessing extends Node {
   constructor(data) {
     super(data);
@@ -960,6 +973,7 @@ class MineshaftMayhem extends Node {
   }
 }
 
+// HOTM 7
 class SpeedyMineman extends Node {
   constructor(data) {
     super(data);
@@ -1029,6 +1043,7 @@ class FortunateMineman extends Node {
   }
 }
 
+// HOTM 6
 class AnomalousDesire extends Node {
   constructor(data) {
     super(data);
@@ -1229,6 +1244,7 @@ class ManiacMiner extends Node {
   }
 }
 
+// HOTM 5
 class DailyGrind extends Node {
   constructor(data) {
     super(data);
@@ -1352,6 +1368,7 @@ class DailyPowder extends Node {
   }
 }
 
+// HOTM 4
 class SkyMall extends Node {
   constructor(data) {
     super(data);
@@ -1525,6 +1542,7 @@ class FrontLoaded extends Node {
   }
 }
 
+// HOTM 3
 class LuckOfTheCave extends Node {
   constructor(data) {
     super(data);
@@ -1601,6 +1619,7 @@ class QuickForge extends Node {
   }
 }
 
+// HOTM 2
 class MiningSpeedBoost extends Node {
   constructor(data) {
     super(data);
@@ -1735,6 +1754,7 @@ class Pickobulus extends Node {
   }
 }
 
+// HOTM 1
 class MiningSpeed extends Node {
   constructor(data) {
     super(data);
@@ -1957,7 +1977,7 @@ const nodeClasses = {
   mining_master: MiningMaster,
   hungry_for_more: DeadMansChest,
   vanguard_seeker: VanguardSeeker,
-  _sheer_force: SheerForce,
+  sheer_force: SheerForce,
   // HOTM 9
   metal_head: MetalHead,
   rags_to_riches: RagsToRiches,
