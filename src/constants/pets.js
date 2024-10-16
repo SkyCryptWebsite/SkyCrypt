@@ -960,7 +960,13 @@ export const PET_ITEMS = {
     name: "Green Bandana",
     tier: "EPIC",
     description: `§7Grants §6+4 ${SYMBOLS.farming_fortune} Farming Fortune§7 for each Garden Level unlocked.`,
-    // TODO: Add statsPerLevel once Garden data comes to the API
+    // TODO: Add levelling stats based off garden level
+  },
+  BROWN_BANDANA: {
+    name: "Brown Bandana",
+    tier: "RARE",
+    description: `§7Gain §2+0.2 ${SYMBOLS.bonus_pest_chance} Bonus Pest Chance §7for §7every Pest §3Bestiary §7tier unlocked.`,
+  // TODO: add levelling stats based off average pest bestiary
   },
   DEAD_CAT_FOOD: {
     name: "Dead Cat Food",
