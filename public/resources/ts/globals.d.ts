@@ -305,7 +305,6 @@ declare const calculated: SkyCryptPlayer & {
         };
       };
     };
-    dungeonsWeight: number;
     journals: {
       journal_entries: {
         name: string;
@@ -362,7 +361,6 @@ declare const calculated: SkyCryptPlayer & {
     unlocked_collections: boolean;
     used_classes: boolean;
   };
-  dungeonsWeight: number;
   enchanting: {
     experimented: true;
     experiments: {
@@ -593,8 +591,6 @@ declare const calculated: SkyCryptPlayer & {
   };
   purse: number;
   rank_prefix: string;
-  skillWeight: number;
-  slayerWeight: number;
   slayer_coins_spent: {
     spider: number;
     total: number;
@@ -619,7 +615,6 @@ declare const calculated: SkyCryptPlayer & {
           currentLevel: number;
           maxLevel: number;
           progress: number;
-          weight: { weight: number; weight_overflow: number };
           xp: number;
           xpForNext: number;
         };
@@ -648,7 +643,6 @@ declare const calculated: SkyCryptPlayer & {
       [key in StatName]: number;
     };
   };
-  weight: number;
   century_cakes: {
     stat: string;
     amount: number;
