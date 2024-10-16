@@ -9,7 +9,7 @@
 
   <p class="stat-raw-values">
     <!-- Most Damage -->
-    <% if (calculated.misc.dragons.most_damage !== undefined) { %>
+    <% if (calculated.misc.dragons.most_damage !== undefined && Object.keys(calculated.misc.dragons.most_damage).length) { %>
       <%  let tooltip = "";
       for (const key in calculated.misc.dragons.most_damage) {
         if (key === "best") {
@@ -19,7 +19,7 @@
         tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${Math.floor(calculated.misc.dragons.most_damage[key]).toLocaleString()}</span><br>`;
       } %>
 
-      <span data-tippy-content='<%= tooltip %>'>
+      <% if (tooltip) { %><span data-tippy-content='<%= tooltip %>'><% } else { %><span><% } %>
         <span class="stat-name">Most Damage: </span>
         <span class="stat-value"><%= Math.floor(calculated.misc.dragons.most_damage.best).toLocaleString() %></span>
       </span>
@@ -27,26 +27,29 @@
     <% } %>
 
     <!-- Fastest Kill -->
-    <% if (calculated.misc.dragons.fastest_kill !== undefined) { %>
+    <% if (calculated.misc.dragons.fastest_kill !== undefined && Object.keys(calculated.misc.dragons.fastest_kill).length) { %>
       <%  tooltip = "";
+
+      const formatTime = (ms) => (ms < 1000 ? `0.${ms}` : moment.duration(ms, "milliseconds").format("m:ss.SSS")) + "s";
+
       for (const key in calculated.misc.dragons.fastest_kill) {
         if (key === "best") {
           continue;
         }
 
-        tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${moment.duration(calculated.misc.dragons.fastest_kill[key], "milliseconds").format("m:ss.SSS")}s</span><br>`;
+        tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${formatTime(calculated.misc.dragons.fastest_kill[key])}</span><br>`;
       } %>
 
-      <span data-tippy-content='<%= tooltip %>'>
+      <% if (tooltip) { %><span data-tippy-content='<%= tooltip %>'><% } else { %><span><% } %>
         <span class="stat-name">Fastest Kill: </span>
-        <span class="stat-value"><%= moment.duration(calculated.misc.dragons.fastest_kill.best, "milliseconds").format("m:ss.SSS") %>s</span>
+        <span class="stat-value"><%= formatTime(calculated.misc.dragons.fastest_kill.best) %></span>
       </span>
       <br>
     <% } %>
 
 
     <!-- Last Hits (Kills) -->
-    <% if (calculated.misc.dragons.kills !== undefined) { %>
+    <% if (calculated.misc.dragons.kills !== undefined && Object.keys(calculated.misc.dragons.kills).length) { %>
       <% tooltip = "";
       for (const key in calculated.misc.dragons.kills) {
         if (key === "total") {
@@ -56,7 +59,7 @@
         tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${calculated.misc.dragons.kills[key].toLocaleString()}</span><br>`;
       } %>
 
-      <span data-tippy-content='<%= tooltip %>'>
+      <% if (tooltip) { %><span data-tippy-content='<%= tooltip %>'><% } else { %><span><% } %>
         <span class="stat-name">Last Hits: </span>
         <span class="stat-value"><%= calculated.misc.dragons.kills.total.toLocaleString() %></span>
       </span>
@@ -64,7 +67,7 @@
     <% } %>
 
     <!-- Deaths -->
-    <% if (calculated.misc.dragons.deaths !== undefined) { %>
+    <% if (calculated.misc.dragons.deaths !== undefined && Object.keys(calculated.misc.dragons.deaths).length) { %>
       <% tooltip = "";
       for (const key in calculated.misc.dragons.deaths) {
         if (key === "total") {
@@ -73,7 +76,8 @@
 
         tooltip += `<span class="stat-name">${helper.capitalizeFirstLetter(key)}: </span><span class="stat-value">${calculated.misc.dragons.deaths[key].toLocaleString()}</span><br>`;
       } %>
-      <span data-tippy-content='<%= tooltip %>'>
+
+      <% if (tooltip) { %><span data-tippy-content='<%= tooltip %>'><% } else { %><span><% } %>
         <span class="stat-name">Deaths: </span>
         <span class="stat-value"><%= calculated.misc.dragons.deaths.total.toLocaleString() %></span>
       </span>
