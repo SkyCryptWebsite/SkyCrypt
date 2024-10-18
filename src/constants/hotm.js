@@ -1282,7 +1282,7 @@ class CoreOfTheMountain extends Node {
     this.name = nodeNames[this.id];
     this.position = 49;
     this.max_level = 10;
-    this.upgrade_type = data.level < 4 ? "mithril_powder" : data.level < 8 ? "gemstone_powder" : "glacite_powder"; // Mithril -> 1-3, Gemstone -> 4-7, Glacite -> 8-10
+    this.upgrade_type = data.level < 3 ? "mithril_powder" : data.level < 7 ? "gemstone_powder" : "glacite_powder"; // Mithril -> 1-3, Gemstone -> 4-7, Glacite -> 8-10
     this.requires = ["mole" /*, "keep_it_cool"*/];
     this.nodeType = "special";
     this.positionType = "peak_of_the_mountain";
