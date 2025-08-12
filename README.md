@@ -1,3 +1,6 @@
+> [!WARNING] 
+> This repository has been archived in favor of [SkyCrypt V2](https://github.com/SkyCryptWebsite/SkyCryptv2)
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: light)" srcset="public/resources/img/logo_black.png">
